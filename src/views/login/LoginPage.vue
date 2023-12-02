@@ -1,17 +1,43 @@
 <script setup>
-import { userLogin } from '@/api/user.js'
+// 登录接口
+import { userLogin, GetNavigationBar, getInfoByToken } from '@/api/user.js'
 // 图标
 import { User, Lock } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
-//响应式
-import { ref } from 'vue'
+// 响应式
+import { ref, watch } from 'vue'
+// 记住我
+import { useUserStore } from '@/stores';
+import router from '@/router'
+import { onMounted } from 'vue';
+
 
 // 登录信息
 const formData = ref({
   name: '',
   pass: ''
 })
-//校验信息
+const userStore = useUserStore()
+// mounted生命周期
+onMounted(() => {
+  console.info('进入onMounted生命周期')
+  // 记住我
+  if (userStore.isRemember) {
+    console.info("isRemember", userStore.isRemember)
+    console.info("name", userStore.name)
+    console.info("pass", userStore.pass)
+
+    formData.value.name = userStore.name
+    formData.value.pass = userStore.pass
+  }
+})
+// 监听变量
+watch(() => userStore.isRemember, () => {
+  userStore.name = ''
+  userStore.pass = ''
+  userStore.token = ''
+  userStore.token_type = ''
+})
+// 校验信息
 const formRules = {
   name: [{ required: true, message: '请输入账号', trigger: 'blur' }],
   pass: [{ required: true, message: '请输入密码', trigger: 'blur' }]
@@ -24,19 +50,113 @@ const login = () => {
       console.info('表单验证成功', res)
       userLogin(formData.value)
         .then((resUser) => {
-          if(resUser){
-            ElMessage.success('登录成功')
+
+
+          ElMessage.success('登录成功')
+          console.info("登录信息", resUser)
+          // 记住我
+          if (userStore.isRemember) {
+            userStore.token = resUser.data.response.token
+            userStore.token_type = resUser.data.response.token_type
+            userStore.name = formData.value.name
+            userStore.pass = formData.value.pass
           }
-          
+          // 获取用户信息
+          getInfoByToken({ token: userStore.token }).then((userInfo) => {
+            userStore.uid = userInfo.data.response.uID
+            // 获取菜单
+            GetNavigationBar({ uid: userStore.uid }).then((menuInfo) => {
+              userStore.menu = menuInfo.data.response.children
+              // 添加vue router路由
+
+
+              // {
+              //   path: '/Permission',
+              //   component: () => import('@/views/layout/LayoutContainer.vue'),
+              //   redirect: '/Permission/Module',
+              //   children: [
+              //     {
+              //       path: '/Permission/Module',
+              //       component: () => import('@/views/Permission/Module.vue')
+              //     }
+              //   ]
+              // },
+
+              for (let index = 0; index < userStore.menu.length; index++) {
+                const item = userStore.menu[index];
+                if (item.children && item.children.filter(t => !t.IsButton && !t.IsHide).length > 0) {
+
+
+                  for (let kk = 0; kk < item.children.length; kk++) {
+                    //二级路由
+                    const child = item.children[kk];
+                    if (child.children && child.children.filter(t => !t.IsButton && !t.IsHide).length > 0) {
+                      //此处可递归
+                    } else if (!child.IsButton && !child.IsHide) {
+                      //路由
+                      router.addRoute({
+                        path: child.path,
+                        component: () => import('@/views/layout/LayoutContainer.vue'),
+                        redirect: child.path,
+                        children: [
+                          {
+                            path: child.path,
+                            component: () => import('@/views' + child.path +'.vue')
+                          }
+                        ]
+                      });
+                    } else {
+
+                    }
+                  }
+
+                } else if (!item.IsButton && !item.IsHide) {
+                  //路由
+                  router.addRoute({
+                    path: item.path,
+                    component: () => import('@/views/layout/LayoutContainer.vue'),
+                    redirect: item.path,
+                    children: [
+                      {
+                        path: item.path,
+                        component: () => import('@/views' + item.path)
+                      }
+                    ]
+                  });
+                } else {
+
+                }
+
+              }
+
+
+
+
+              // 跳转路由
+              router.replace('/')
+            })
+          })
+
+
+
         })
         .catch((errUser) => {
-          // console.info('登录失败', errUser)
+
+          // 在这里处理登录失败的额外操作
+          console.info('登录失败', errUser)
+
           // ElMessage.error('登录失败');
         })
     })
     .catch((err) => {
+      ElMessage.error('请填信息');
       console.info('表单验证失败', err)
     })
+}
+// 测试信息
+const inputDemoAccount = (name, pass) => {
+  formData.value.name = name
+  formData.value.pass = pass
 }
 </script>
 <template>
@@ -47,40 +167,23 @@ const login = () => {
     </ul>
     <div class="bg bg-blur" style="display: none"></div>
     <div style="height: 10%"></div>
-    <el-form
-      ref="refForm"
-      :rules="formRules"
-      :model="formData"
-      label-position="left"
-      label-width="0px"
-      class="demo-ruleForm login-container"
-    >
+    <el-form ref="refForm" :rules="formRules" :model="formData" label-position="left" label-width="0px"
+      class="demo-ruleForm login-container">
       <h3 class="title">系统登录</h3>
       <el-form-item prop="name">
-        <el-input
-          v-model="formData.name"
-          :prefix-icon="User"
-          type="text"
-          auto-complete="off"
-          placeholder="账号"
-        ></el-input>
+        <el-input v-model="formData.name" :prefix-icon="User" type="text" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="pass">
-        <el-input
-          v-model="formData.pass"
-          :prefix-icon="Lock"
-          auto-complete="off"
-          show-password
-          placeholder="密码"
-        ></el-input>
+        <el-input v-model="formData.pass" :prefix-icon="Lock" auto-complete="off" show-password
+          placeholder="密码"></el-input>
       </el-form-item>
-      <el-checkbox checked class="remember">记住我</el-checkbox>
+      <el-checkbox class="remember" v-model="userStore.isRemember">记住我</el-checkbox>
 
       <div style="margin-bottom: 20px" class="count-test">
         <el-radio-group>
-          <el-radio-button label="账号1"></el-radio-button>
-          <el-radio-button label="账号2"></el-radio-button>
-          <el-radio-button label="管理员"></el-radio-button>
+          <el-radio-button label="账号1" @click="inputDemoAccount('test', 'test')"></el-radio-button>
+          <el-radio-button label="账号2" @click="inputDemoAccount('test2', 'test2')"></el-radio-button>
+          <el-radio-button label="管理员" @click="inputDemoAccount('blogadmin', 'blogadmin')"></el-radio-button>
         </el-radio-group>
       </div>
       <el-form-item style="width: 100%">
@@ -90,6 +193,12 @@ const login = () => {
       </el-form-item>
       <el-form-item style="width: 100%">
         <el-button style="width: 100%">Mock登录 </el-button>
+        <el-row>
+          <el-col>token: {{ userStore.token }}</el-col>
+          <el-col>name: {{ userStore.name }}</el-col>
+          <el-col>pass: {{ userStore.pass }}</el-col>
+          <el-col>isRemember: {{ userStore.isRemember }}</el-col>
+        </el-row>
       </el-form-item>
     </el-form>
   </div>

@@ -1,5 +1,5 @@
 <template>
   <page-container>
-    重置密码
+    首页
   </page-container>
 </template>

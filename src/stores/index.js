@@ -1,4 +1,4 @@
-// pinia独立维护
+// pinia独立维护并持久化
 import { createPinia } from 'pinia'
 import persist from 'pinia-plugin-persistedstate'
 const pinia = createPinia()
@@ -10,3 +10,4 @@ export default pinia
 // export { useUserStore }
 // 简介写法
 export * from './modules/user'
+export * from './modules/setting'

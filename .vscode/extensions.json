@@ -1,8 +1,0 @@
-{
-  //Eslint插件+vscode配置实现保存格式化修改费
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  }
-  //关闭保存的时候自动格式化
-  "editor.formatOnSave": false,
-}
