@@ -381,7 +381,7 @@ const handleUnbindMini = (row) => {
 const handleRefresh = (row) => {
     ElMessageBox.confirm("确认重启刷新[" + row.name + "]的NS服务？")
         .then(() => {
-            Refresh({ id: row.Id }).then(res => {
+            RefreshNightscout({ id: row.Id }).then(res => {
                 ElMessage.success(res.data.msg || '刷新成功')
                 HandleSearch();
             })
