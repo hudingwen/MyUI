@@ -19,7 +19,7 @@ const router = createRouter({
       children: [
         {
           path: '/',
-          component: () => import('@/views/front/frontPage.vue')
+          component: () => import('@/views/front/FrontPage.vue')
         }
       ]
     },
