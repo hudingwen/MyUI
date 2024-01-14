@@ -7,8 +7,13 @@ import { User, Lock } from '@element-plus/icons-vue'
 import { ref, watch } from 'vue'
 // 记住我
 import { useUserStore } from '@/stores';
+//路由
 import router from '@/router'
+import { addDynamicRoutes } from '@/router'
 import { onMounted } from 'vue';
+
+
+
 
 
 // 登录信息
@@ -22,20 +27,14 @@ onMounted(() => {
   console.info('进入onMounted生命周期')
   // 记住我
   if (userStore.isRemember) {
-    console.info("isRemember", userStore.isRemember)
-    console.info("name", userStore.name)
-    console.info("pass", userStore.pass)
-
     formData.value.name = userStore.name
     formData.value.pass = userStore.pass
   }
 })
 // 监听变量
 watch(() => userStore.isRemember, () => {
-  userStore.name = ''
-  userStore.pass = ''
-  userStore.token = ''
-  userStore.token_type = ''
+  userStore.setName('')
+  userStore.setPass('')
 })
 // 校验信息
 const formRules = {
@@ -51,89 +50,33 @@ const login = () => {
       userLogin(formData.value)
         .then((resUser) => {
 
-
           ElMessage.success('登录成功')
           console.info("登录信息", resUser)
+
+          userStore.setToken(resUser.data.response.token)
+          userStore.setTokenType(resUser.data.response.token_type)
           // 记住我
           if (userStore.isRemember) {
-            userStore.token = resUser.data.response.token
-            userStore.token_type = resUser.data.response.token_type
-            userStore.name = formData.value.name
-            userStore.pass = formData.value.pass
+            userStore.setName(formData.value.name)
+            userStore.setPass(formData.value.pass)
           }
           // 获取用户信息
           getInfoByToken({ token: userStore.token }).then((userInfo) => {
-            userStore.uid = userInfo.data.response.uID
+            userStore.setUid(userInfo.data.response.uID)
+
             // 获取菜单
             GetNavigationBar({ uid: userStore.uid }).then((menuInfo) => {
-              userStore.menu = menuInfo.data.response.children
+              userStore.setMenu(menuInfo.data.response.children)
+
               // 添加vue router路由
-
-
-              // {
-              //   path: '/Permission',
-              //   component: () => import('@/views/layout/LayoutContainer.vue'),
-              //   redirect: '/Permission/Module',
-              //   children: [
-              //     {
-              //       path: '/Permission/Module',
-              //       component: () => import('@/views/Permission/Module.vue')
-              //     }
-              //   ]
-              // },
-
-              for (let index = 0; index < userStore.menu.length; index++) {
-                const item = userStore.menu[index];
-                if (item.children && item.children.filter(t => !t.IsButton && !t.IsHide).length > 0) {
-
-
-                  for (let kk = 0; kk < item.children.length; kk++) {
-                    //二级路由
-                    const child = item.children[kk];
-                    if (child.children && child.children.filter(t => !t.IsButton && !t.IsHide).length > 0) {
-                      //此处可递归
-                    } else if (!child.IsButton && !child.IsHide) {
-                      //路由
-                      router.addRoute({
-                        path: child.path,
-                        component: () => import('@/views/layout/LayoutContainer.vue'),
-                        redirect: child.path,
-                        children: [
-                          {
-                            path: child.path,
-                            component: () => import('@/views' + child.path +'.vue')
-                          }
-                        ]
-                      });
-                    } else {
-
-                    }
-                  }
-
-                } else if (!item.IsButton && !item.IsHide) {
-                  //路由
-                  router.addRoute({
-                    path: item.path,
-                    component: () => import('@/views/layout/LayoutContainer.vue'),
-                    redirect: item.path,
-                    children: [
-                      {
-                        path: item.path,
-                        component: () => import('@/views' + item.path)
-                      }
-                    ]
-                  });
-                } else {
-
-                }
-
+              addDynamicRoutes(userStore.menu) 
+              if (userStore.curPage.path) { 
+                router.replace(userStore.curPage.path)
+                userStore.setOneActiveTag(userStore.curPage)
+              } else {
+                // 跳转路由
+                router.replace('/')
               }
-
-
-
-
-              // 跳转路由
-              router.replace('/')
             })
           })
 
@@ -149,10 +92,13 @@ const login = () => {
         })
     })
     .catch((err) => {
-      ElMessage.error('请填信息');
+      ElMessage.error('请填写信息');
       console.info('表单验证失败', err)
     })
 }
+
+
+
 // 测试信息
 const inputDemoAccount = (name, pass) => {
   formData.value.name = name
@@ -166,9 +112,10 @@ const inputDemoAccount = (name, pass) => {
       <ol v-for="m in 5" :key="m + 'm'"></ol>
     </ul>
     <div class="bg bg-blur" style="display: none"></div>
-    <div style="height: 10%"></div>
+  </div>
+  <div class="login-box">
     <el-form ref="refForm" :rules="formRules" :model="formData" label-position="left" label-width="0px"
-      class="demo-ruleForm login-container">
+      class="login-container">
       <h3 class="title">系统登录</h3>
       <el-form-item prop="name">
         <el-input v-model="formData.name" :prefix-icon="User" type="text" auto-complete="off" placeholder="账号"></el-input>
@@ -193,30 +140,33 @@ const inputDemoAccount = (name, pass) => {
       </el-form-item>
       <el-form-item style="width: 100%">
         <el-button style="width: 100%">Mock登录 </el-button>
-        <el-row>
-          <el-col>token: {{ userStore.token }}</el-col>
-          <el-col>name: {{ userStore.name }}</el-col>
-          <el-col>pass: {{ userStore.pass }}</el-col>
-          <el-col>isRemember: {{ userStore.isRemember }}</el-col>
-        </el-row>
       </el-form-item>
     </el-form>
   </div>
 </template>
 <style scoped>
+.login-box {
+  /* flex布局 */
+  display: flex;
+  /* 垂直居中 */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* 登录样式 */
 .login-container {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   background-clip: padding-box;
-  margin: auto;
   width: 350px;
   padding: 35px 35px 15px 35px;
   background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
-  z-index: 9999;
-  position: relative;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .login-container .title {
@@ -226,9 +176,12 @@ const inputDemoAccount = (name, pass) => {
 }
 
 .login-container .remember {
-  margin: 0px 0px 25px 0px;
+  margin: 0px 0px 15px 0px;
 }
 
+
+
+/* 背景样式 */
 .wrapper {
   background: #50a3a2;
   background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
@@ -237,31 +190,9 @@ const inputDemoAccount = (name, pass) => {
   position: absolute;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
-}
-
-.wrapper.form-success .containerLogin h1 {
-  -webkit-transform: translateY(85px);
-  -ms-transform: translateY(85px);
-  transform: translateY(85px);
-}
-
-.containerLogin {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 80px 0;
-  height: 400px;
-  text-align: center;
-}
-
-.containerLogin h1 {
-  font-size: 40px;
-  -webkit-transition-duration: 1s;
-  transition-duration: 1s;
-  -webkit-transition-timing-function: ease-in-put;
-  transition-timing-function: ease-in-put;
-  font-weight: 200;
+  z-index: -1;
 }
 
 .bg-bubbles {
@@ -269,7 +200,7 @@ const inputDemoAccount = (name, pass) => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   z-index: 1;
 }
 
@@ -302,7 +233,6 @@ ol {
 .bg-bubbles ol:nth-child(12) {
   left: 20%;
   top: 40%;
-
   width: 60px;
   height: 60px;
 }
@@ -310,7 +240,6 @@ ol {
 .bg-bubbles ol:nth-child(13) {
   left: 65%;
   top: 30%;
-
   width: 100px;
   height: 60px;
 }
