@@ -474,7 +474,26 @@ const handleSummary = () => {
         summary.value.account = res.data.response.account
     })
 }
+// 切换整体网络
+const handleCDN = () => {
+    if (!filters.value.cdn) {
+        ElMessage.error('请选择要切换的CDN服务网络!')
+        return;
+    }
+    var findRow = cdnList.value.find(t => t.key == filters.value.cdn)
 
+    ElMessageBox.confirm("确定把所有默认的CDN网络切换至[" + findRow.name + "]吗?")
+        .then(() => {
+            ChangeCDN({ cdnCode: filters.value.cdn }).then(res => {
+                ElMessage.success(res.data.msg || '切换成功')
+                HandleSearch();
+            })
+        })
+        .catch((err) => {
+            console.info(err)
+        })
+
+}
 </script>
 <template>
     <!-- 搜索 -->
@@ -502,6 +521,9 @@ const handleSummary = () => {
                 </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleAdd">添加</el-button>
+                </el-form-item>
+                <el-form-item class="flexItem">
+                    <el-button type="danger" plain @click="handleCDN">切换整体网络</el-button>
                 </el-form-item>
                 <!-- <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleEdit(currentRow)">修改</el-button>
