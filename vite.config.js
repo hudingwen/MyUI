@@ -5,7 +5,8 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-
+// 打包时间错
+const timestamp = new Date().getTime()
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -27,6 +28,7 @@ export default defineConfig({
   },
   // 反向代理
   server: {
+    open: true, // 服务启动时是否自动打开浏览器
     proxy: {
       "/api": {
         target: "http://localhost:9291",
@@ -36,4 +38,16 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // 入口文件名
+        entryFileNames: `assets/[name].${timestamp}.js`,
+        // 块文件名
+        chunkFileNames: `assets/[name]-[hash].${timestamp}.js`,
+        // 资源文件名 css 图片等等
+        assetFileNames: `assets/[name]-[hash].${timestamp}.[ext]`,
+      },
+    },
+  }
 })
