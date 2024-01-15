@@ -8,6 +8,7 @@ const instance = axios.create({
   baseURL,
   timeout: 30000
 })
+var loadingCount = 0
 var loadingInstance = null
 // 请求拦截
 instance.interceptors.request.use(
@@ -18,6 +19,7 @@ instance.interceptors.request.use(
         text: '系统正在加载数据中...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
+      loadingCount++;
     }
     // 携带token
     const userStore = useUserStore()
@@ -32,7 +34,12 @@ instance.interceptors.request.use(
 // 响应拦截
 instance.interceptors.response.use(
   (res) => {
-    if (loadingInstance) loadingInstance.close();
+    if (loadingCount > 0) {
+      loadingCount--;
+      if (loadingCount <= 0) {
+        loadingInstance.close();
+      }
+    }
     // 业务拦截
     if (res.data.success) {
       return res
@@ -42,7 +49,12 @@ instance.interceptors.response.use(
     return Promise.reject(res.data)
   },
   (err) => {
-    if (loadingInstance) loadingInstance.close();
+    if (loadingCount > 0) {
+      loadingCount--;
+      if (loadingCount <= 0) {
+        loadingInstance.close();
+      }
+    }
     // 响应出错
     // 处理401错误
     if (err.response?.status === 401) {

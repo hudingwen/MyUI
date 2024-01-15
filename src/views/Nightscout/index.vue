@@ -485,14 +485,14 @@ const handleSummary = () => {
                     <el-input class="flexContent" v-model="filters.key" placeholder="请输入搜索关键词" clearable />
                 </el-form-item>
                 <el-form-item label="服务器" class="flexItem" label-width="90">
-                    <el-select clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
+                    <el-select class="flexContent" clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
                         <el-option v-for="item in nsServer" :key="item.Id"
                             :label="item.serverName + '(' + item.count + '/' + item.holdCount + ')'" :value="item.Id">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="服务网络" class="flexItem" label-width="90">
-                    <el-select clearable v-model="filters.cdn" placeholder="请选择要搜索的服务网络类型">
+                    <el-select class="flexContent" clearable v-model="filters.cdn" placeholder="请选择要搜索的服务网络类型">
                         <el-option v-for="item in cdnList" :key="item.cdn" :label="item.name" :value="item.key">
                         </el-option>
                     </el-select>
@@ -509,31 +509,24 @@ const handleSummary = () => {
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleDel(currentRow)">删除</el-button>
                 </el-form-item> -->
-                <el-form-item class="flexItem">
-                    <el-row>
-                        <el-col>
-                            <strong>状态:</strong>
-                            <el-badge :max="999999999" :style="{ 'margin-left': index === 0 ? '0px' : '30px' }"
-                                :key="item.name" v-for="(item, index) in summary.status" :value="item.count" class="item">
+                <el-form-item label="状态" class="flexItem" label-width="90">
+
+                    <el-row :gutter="30">
+                        <el-col :span="1.5" :key="item.name" v-for="(item, index) in summary.status">
+                            <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleTag(item.name)"
                                     style="cursor:pointer;width: 60px;text-align: center;">{{
                                         (item.name ? item.name : '未确认') }}</el-tag>
                             </el-badge>
                         </el-col>
-                        <el-col style="margin-top:10px">
-                            <strong>来源:</strong>
-                            <el-badge :max="999999999" :style="{ 'margin-left': index === 0 ? '0px' : '30px' }"
-                                :key="item.name" v-for="(item, index) in summary.resource" :value="item.count" class="item">
-                                <el-tag @click="HandleTag(item.name)" style="cursor:pointer;width: 60px;text-align: center;"
-                                    type="info">{{ (item.name ?
-                                        item.name : '未确认')
-                                    }}</el-tag>
-                            </el-badge>
-                        </el-col>
-                        <el-col style="margin-top:10px">
-                            <strong>账单:</strong>
-                            <el-badge :max="999999999" :style="{ 'margin-left': index === 0 ? '0px' : '30px' }"
-                                :key="item.name" v-for="(item, index) in summary.account" :value="item.count" class="item">
+                    </el-row>
+
+                </el-form-item>
+
+                <el-form-item label="来源" class="flexItem" label-width="90">
+                    <el-row :gutter="30">
+                        <el-col :span="1.5" :key="item.name" v-for="(item, index) in summary.resource">
+                            <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleTag(item.name)" style="cursor:pointer;width: 60px;text-align: center;"
                                     type="info">{{ (item.name ?
                                         item.name : '未确认')
@@ -541,6 +534,22 @@ const handleSummary = () => {
                             </el-badge>
                         </el-col>
                     </el-row>
+
+                </el-form-item>
+
+                <el-form-item label="账单" class="flexItem" label-width="90">
+                    <el-row :gutter="30">
+                        <el-col :span="1.5" :key="item.name" v-for="(item, index) in summary.account">
+                            <el-badge :max="999999999" :value="item.count">
+                                <el-tag @click="HandleTag(item.name)" style="cursor:pointer;width: 60px;text-align: center;"
+                                    type="info">{{ (item.name ?
+                                        item.name : '未确认')
+                                    }}</el-tag>
+                            </el-badge>
+                        </el-col>
+                    </el-row>
+
+
                 </el-form-item>
             </el-form>
 
@@ -668,7 +677,7 @@ const handleSummary = () => {
         </el-col>
     </el-row>
     <!-- 弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="550px" :before-close="handleClose">
+    <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" :before-close="handleClose">
         <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="200px" status-icon label-position="top">
 
             <el-tooltip class="item" content="如不填写,则自动生成" placement="top">

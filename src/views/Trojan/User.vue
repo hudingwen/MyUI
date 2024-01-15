@@ -424,7 +424,7 @@ const HandleLink = (row) => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
-    <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon>
+    <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon label-position="top">
 
       <el-form-item label="用户名" prop="username">
         <el-input v-model="formData.username" auto-complete="off"></el-input>

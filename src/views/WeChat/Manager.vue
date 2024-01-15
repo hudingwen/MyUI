@@ -379,7 +379,7 @@ const HandleSubmitMedia = (row) => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="!isAdd ? '编辑' : '添加'" width="550px" :before-close="handleClose">
-    <el-form ref="refFocus" :model="formData" :rules="ruleForm" label-width="150px" status-icon>
+    <el-form ref="refFocus" :model="formData" :rules="ruleForm" label-width="150px" status-icon label-position="top">
 
       <el-form-item label="微信公众号ID" prop="publicAccount">
         <el-input v-model="formData.publicAccount" auto-complete="off" :disabled="!isAdd"></el-input>
@@ -428,13 +428,12 @@ const HandleSubmitMedia = (row) => {
 
   <!-- 编辑关注 -->
   <el-dialog v-model="visibleFocus" title="编辑关注" width="550px" :before-close="handleClose">
-    <el-form ref="refForm" :model="formData" :rules="ruleFocus" label-width="150px" status-icon>
-
+    <el-form ref="refForm" :model="formData" :rules="ruleFocus" label-width="150px" status-icon label-position="top">
       <el-form-item label="微信公众号ID" prop="publicAccount">
-        <el-input v-model="formData.publicAccount" auto-complete="off" :disabled="!isAdd"></el-input>
+        <el-input v-model="formData.publicAccount" auto-complete="off" :disabled="!isAdd" ></el-input>
       </el-form-item>
       <el-form-item label="微信公众号名称" prop="publicNick">
-        <el-input v-model="formData.publicNick" auto-complete="off"></el-input>
+        <el-input v-model="formData.publicNick" auto-complete="off" :disabled="!isAdd"></el-input>
       </el-form-item>
       <el-form-item label="是否关注回复" prop="isFocusReply">
         <el-radio v-model="formData.isFocusReply" :label="true">是</el-radio>

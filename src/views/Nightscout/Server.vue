@@ -242,7 +242,7 @@ onMounted(() => {
     </el-row>
     <!-- 弹窗 -->
     <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
-        <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon>
+        <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon label-position="top">
 
             <el-form-item label="服务器名称" prop="serverName">
                 <el-input v-model="formData.serverName" auto-complete="off"></el-input>

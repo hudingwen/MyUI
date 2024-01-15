@@ -431,7 +431,7 @@ const HandleSearch = (page) => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="550px" :before-close="handleClose">
-    <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="90px" status-icon>
+    <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="90px" status-icon label-position="top">
       <el-form-item label="任务组" prop="JobGroup">
         <el-input v-model="formData.JobGroup" auto-complete="off"></el-input>
       </el-form-item>
