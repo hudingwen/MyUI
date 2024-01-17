@@ -112,7 +112,7 @@ onMounted(() => {
 })
 
 
-
+import { ElMessageBox, ElMessage } from 'element-plus'
 </script>
 <template>
   <!-- 搜索 -->
@@ -120,7 +120,7 @@ onMounted(() => {
     <el-col>
       <el-form :inline="true" class="flexBox">
         <el-form-item class="flexItem">
-          <el-select @change="GetTemplate" v-model="selectWeChat" placeholder="请选择要操作的公众号" style="width: 350px;">
+          <el-select v-model="selectWeChat" placeholder="请选择要操作的公众号" style="width: 350px;">
             <el-option class="flexItem" v-for="item in wechats" :key="item.publicAccount" :label="item.publicNick"
               :value="item.publicAccount">
               <span>{{ item.publicNick }}</span>(<span>{{ item.publicAccount }}</span>)

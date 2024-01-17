@@ -11,7 +11,7 @@ import {
   GetWeChatMediaList,
   updateWeChatAccountFocus
 } from '@/api/wechat.js'
-
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 // 表格初始化
 const tableData = ref([])
@@ -430,7 +430,7 @@ const HandleSubmitMedia = (row) => {
   <el-dialog v-model="visibleFocus" title="编辑关注" width="550px" :before-close="handleClose">
     <el-form ref="refForm" :model="formData" :rules="ruleFocus" label-width="150px" status-icon label-position="top">
       <el-form-item label="微信公众号ID" prop="publicAccount">
-        <el-input v-model="formData.publicAccount" auto-complete="off" :disabled="!isAdd" ></el-input>
+        <el-input v-model="formData.publicAccount" auto-complete="off" :disabled="!isAdd"></el-input>
       </el-form-item>
       <el-form-item label="微信公众号名称" prop="publicNick">
         <el-input v-model="formData.publicNick" auto-complete="off" :disabled="!isAdd"></el-input>

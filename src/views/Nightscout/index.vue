@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import {
     getNightscout,
     delNightscout,

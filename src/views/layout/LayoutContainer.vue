@@ -227,7 +227,9 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
         </div>
       </el-header>
       <el-main style="border: 1px solid #f0f0f0;  margin: 5px;  padding: 10px;box-sizing:border-box;">
-        <router-view></router-view>
+        <el-scrollbar height="100%">
+          <router-view></router-view>
+        </el-scrollbar>
       </el-main>
       <el-footer>©2023 Create 繁星 & Power Vue3</el-footer>
     </el-container>

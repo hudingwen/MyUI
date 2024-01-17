@@ -12,12 +12,12 @@ export default defineConfig({
   plugins: [
     vue(),
     // 按需自动导入elementPlus,不需要手动import否则样式会出错 
-    AutoImport({
-      resolvers: [ElementPlusResolver()]
-    }),
-    Components({
-      resolvers: [ElementPlusResolver()]
-    })
+    // AutoImport({
+    //   resolvers: [ElementPlusResolver()]
+    // }),
+    // Components({
+    //   resolvers: [ElementPlusResolver()]
+    // })
   ],
   base: '/', //路由前缀
   resolve: {

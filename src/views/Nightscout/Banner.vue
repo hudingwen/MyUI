@@ -10,7 +10,7 @@ import {
     disableAllBanner
 } from '@/api/nightscout.js'
 
-
+import { ElMessageBox, ElMessage } from 'element-plus'
 // 表格初始化
 const tableData = ref([])
 const tableTotal = ref(0)

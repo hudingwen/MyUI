@@ -6,7 +6,7 @@ import {
   , getWeChatCompany
 } from '@/api/wechat.js'
 
-
+import { ElMessageBox } from 'element-plus'
 
 const wechats = ref([])
 const selectWeChat = ref(null)

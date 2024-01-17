@@ -7,7 +7,7 @@ import {
   pushCardMsg
 } from '@/api/wechat.js'
 
-
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const wechats = ref([])
 const selectWeChat = ref(null)
@@ -113,7 +113,7 @@ const HandleSubmit = () => {
       } else {
         formData.value.newMsg = {}
       }
-      
+
       pushCardMsg(formData.value)
         .then(res => {
           ElMessage.success(res.data.msg || '推送成功')

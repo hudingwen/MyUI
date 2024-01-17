@@ -7,7 +7,7 @@ import {
   updateWeChatCompany,
   batchDeleteWeChatCompany,
 } from '@/api/wechat.js'
-
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 // 表格初始化
 const tableData = ref([])

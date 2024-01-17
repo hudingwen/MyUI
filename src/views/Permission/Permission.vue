@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import {
   getPermissionTable,
   removePermission,
@@ -84,7 +85,7 @@ const ruleForm = {
   Name: [
     { required: true, message: '菜单名称不能为空', trigger: 'change' },
   ],
-  
+
   Pid: [
     { required: true, message: '父级菜单不能为空', trigger: 'change' },
   ]
@@ -338,7 +339,7 @@ const HandleSearch = (page) => {
         <el-switch v-model="formData.IsHide"></el-switch>
       </el-form-item>
 
-      <el-form-item prop="Pid" label="父级菜单" >
+      <el-form-item prop="Pid" label="父级菜单">
         <el-tree-select v-model="formData.Pid" :data="menuTrees" filterable clearable check-strictly=true />
       </el-form-item>
       <el-form-item prop="Mid" label="API接口">

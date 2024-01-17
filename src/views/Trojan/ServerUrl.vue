@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import {
-  getTrojanUrlServer, 
+  getTrojanUrlServer,
   delTrojanUrlServer,
   delBatchTrojanUrlServer,
   addTrojanUrlServer,
@@ -9,7 +9,7 @@ import {
   GetAllTrojanUser
 } from '@/api/trojan.js'
 
-
+import { ElMessageBox, ElMessage } from 'element-plus'
 // 表格初始化
 const tableData = ref([])
 const tableTotal = ref(0)

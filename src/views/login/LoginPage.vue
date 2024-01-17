@@ -3,6 +3,8 @@
 import { userLogin, GetNavigationBar, getInfoByToken } from '@/api/user.js'
 // 图标
 import { User, Lock } from '@element-plus/icons-vue'
+
+import { ElMessage } from 'element-plus'
 // 响应式
 import { ref, watch } from 'vue'
 // 记住我
@@ -11,7 +13,6 @@ import { useUserStore } from '@/stores';
 import router from '@/router'
 import { addDynamicRoutes } from '@/router'
 import { onMounted } from 'vue';
-
 
 
 
@@ -69,8 +70,8 @@ const login = () => {
               userStore.setMenu(menuInfo.data.response.children)
 
               // 添加vue router路由
-              addDynamicRoutes(userStore.menu) 
-              if (userStore.curPage.path) { 
+              addDynamicRoutes(userStore.menu)
+              if (userStore.curPage.path) {
                 router.replace(userStore.curPage.path)
                 userStore.setOneActiveTag(userStore.curPage)
               } else {
@@ -121,7 +122,7 @@ const inputDemoAccount = (name, pass) => {
         <el-input v-model="formData.name" :prefix-icon="User" type="text" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="pass">
-        <el-input v-model="formData.pass" :prefix-icon="Lock" auto-complete="off" show-password
+        <el-input @keyup.enter="login" v-model="formData.pass" :prefix-icon="Lock" auto-complete="off" show-password
           placeholder="密码"></el-input>
       </el-form-item>
       <el-checkbox class="remember" v-model="userStore.isRemember">记住我</el-checkbox>

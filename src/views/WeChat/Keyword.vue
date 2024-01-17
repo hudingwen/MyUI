@@ -11,7 +11,7 @@ import {
   GetWeChatMediaList
 } from '@/api/wechat.js'
 
-
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const wechats = ref([])
 const selectWeChat = ref(null)
@@ -186,7 +186,7 @@ const handleClose = (done) => {
     })
 }
 
- 
+
 const HandleChangeFocus = () => {
   formData.value.title = ''
   formData.value.description = ''
@@ -355,8 +355,7 @@ watch(() => filters.value.size, () => {
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item v-if="formData.media_type != 'text' && formData.media_type == 'video'"
-        label="视频标题" prop="title">
+      <el-form-item v-if="formData.media_type != 'text' && formData.media_type == 'video'" label="视频标题" prop="title">
         <el-input style="width:calc(100% - 100px);margin-left: 5px;" v-model="formData.title"
           auto-complete="off"></el-input>
       </el-form-item>
