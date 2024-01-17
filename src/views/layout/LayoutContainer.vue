@@ -14,6 +14,7 @@ import {
   Close,
   ArrowDown
 } from '@element-plus/icons-vue'
+import { ElMessageBox } from 'element-plus'
 import avatar from '@/assets/img/default.png'
 import { useUserStore, useSettingStore } from '@/stores'
 import { onMounted, ref } from 'vue'

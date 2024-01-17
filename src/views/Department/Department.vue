@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { getDepartmentTreeTable, removeDepartment, removeBatchDepartment, editDepartment, addDepartment, getDepartmentTree } from '@/api/dep.js'
 
-
+import {  ElMessageBox, ElMessage } from 'element-plus'
 // 表格初始化
 const tableData = ref([])
 const tableTotal = ref(0)
