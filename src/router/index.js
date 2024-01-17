@@ -28,20 +28,20 @@ const router = createRouter({
       component: () => import('@/views/login/LoginPage.vue')
     },
     {
-      path: '/article',
+      path: '/test',
       component: () => import('@/views/layout/LayoutContainer.vue'),
-      redirect: '/article/manage',
+      redirect: '/test/manage',
       children: [
         {
-          path: '/User/profile',
+          path: '/test/profile',
           component: () => import('@/views/user/UserProfile.vue')
         },
         {
-          path: '/User/avatar',
+          path: '/test/avatar',
           component: () => import('@/views/user/UserAvatar.vue')
         },
         {
-          path: '/User/password',
+          path: '/test/password',
           component: () => import('@/views/user/UserPassword.vue')
         }
       ]

@@ -77,7 +77,7 @@ const handleCommand = async (key, name) => {
   } else {
     // 跳转操作
     userStore.setOneActiveTag({
-      path: `/user/${key}`,
+      path: `/test/${key}`,
       title: name
     })
   }
