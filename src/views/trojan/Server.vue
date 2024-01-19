@@ -195,9 +195,9 @@ const GetSelectUsers = () => {
   <!-- 搜索 -->
   <el-row>
     <el-col>
-      <el-form :inline="true" :model="filters" class="flexBox">
+      <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
         <el-form-item label="关键词" class="flexItem" label-width="90">
-          <el-input class="flexContent" v-model="filters.key" placeholder="请输入搜索关键词" clearable />
+          <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
         </el-form-item>
         <el-form-item class="flexItem">
           <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
@@ -266,7 +266,7 @@ const GetSelectUsers = () => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
-    <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon label-position="top">
+    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon label-position="top">
 
       <el-form-item label="服务器名称" prop="servername">
         <el-input v-model="formData.servername" auto-complete="off"></el-input>

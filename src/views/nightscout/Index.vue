@@ -499,9 +499,9 @@ const handleCDN = () => {
     <!-- 搜索 -->
     <el-row>
         <el-col>
-            <el-form :inline="true" :model="filters" class="flexBox">
+            <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
                 <el-form-item label="关键词" class="flexItem" label-width="90">
-                    <el-input class="flexContent" v-model="filters.key" placeholder="请输入搜索关键词" clearable />
+                    <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
                 </el-form-item>
                 <el-form-item label="服务器" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
@@ -700,7 +700,7 @@ const handleCDN = () => {
     </el-row>
     <!-- 弹窗 -->
     <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" :before-close="handleClose">
-        <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="200px" status-icon label-position="top">
+        <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="200px" status-icon label-position="top">
 
             <el-tooltip class="item" content="如不填写,则自动生成" placement="top">
                 <el-form-item label="名称" prop="name">

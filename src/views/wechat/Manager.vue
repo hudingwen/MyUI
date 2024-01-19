@@ -170,8 +170,8 @@ const HandleSearch = (page) => {
 
   if (page) filters.value.page = page
 
-  HandleClearTable()
-
+  HandleClearTable()   
+  
   getWeChatAccount(filters.value).then(res => {
     tableData.value = res.data.response.data;
     tableTotal.value = res.data.response.dataCount;
@@ -308,9 +308,9 @@ const HandleSubmitMedia = (row) => {
   <!-- 搜索 -->
   <el-row>
     <el-col>
-      <el-form :inline="true" :model="filters" class="flexBox">
+      <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
         <el-form-item label="关键词" class="flexItem" label-width="90">
-          <el-input class="flexContent" v-model="filters.key" placeholder="请输入搜索关键词" clearable />
+          <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
         </el-form-item>
         <el-form-item class="flexItem">
           <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
@@ -379,7 +379,7 @@ const HandleSubmitMedia = (row) => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="!isAdd ? '编辑' : '添加'" width="550px" :before-close="handleClose">
-    <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="150px" status-icon label-position="top">
+    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="150px" status-icon label-position="top">
 
       <el-form-item label="微信公众号ID" prop="publicAccount">
         <el-input v-model="formData.publicAccount" auto-complete="off" :disabled="!isAdd"></el-input>
@@ -428,7 +428,7 @@ const HandleSubmitMedia = (row) => {
 
   <!-- 编辑关注 -->
   <el-dialog v-model="visibleFocus" title="编辑关注" width="550px" :before-close="handleClose">
-    <el-form ref="refFocus" :model="formData" :rules="ruleFocus" label-width="150px" status-icon label-position="top">
+    <el-form @submit.prevent ref="refFocus" :model="formData" :rules="ruleFocus" label-width="150px" status-icon label-position="top">
       <el-form-item label="微信公众号ID" prop="publicAccount">
         <el-input v-model="formData.publicAccount" auto-complete="off" :disabled="!isAdd"></el-input>
       </el-form-item>

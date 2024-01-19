@@ -221,12 +221,12 @@ const HandleSearch = (page) => {
   <!-- 搜索 -->
   <el-row>
     <el-col>
-      <el-form :inline="true" :model="filters" class="flexBox">
-        <el-form-item label="关键词" class="flexItem" label-width="90">
-          <el-input class="flexContent" v-model="filters.key" placeholder="请输入搜索关键词" clearable />
-        </el-form-item>
+      <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
+        <!-- <el-form-item label="关键词" class="flexItem" label-width="90">
+          <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
+        </el-form-item> -->
         <el-form-item class="flexItem">
-          <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
+          <el-button type="primary" plain @click="HandleSearch(1)">刷新</el-button>
         </el-form-item>
         <el-form-item class="flexItem">
           <el-button type="primary" plain @click="HandleAdd">添加</el-button>
@@ -292,7 +292,7 @@ const HandleSearch = (page) => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="550px" :before-close="handleClose">
-    <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon label-position="top">
+    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon label-position="top">
 
       <el-form-item label="菜单名称" prop="Name">
         <el-input v-model="formData.Name" auto-complete="off"></el-input>

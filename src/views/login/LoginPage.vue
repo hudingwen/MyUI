@@ -111,7 +111,7 @@ const inputDemoAccount = (name, pass) => {
 </script>
 <template>
   <div class="login-box">
-    <el-form ref="refForm" :rules="formRules" :model="formData" label-position="left" label-width="0px"
+    <el-form @submit.prevent ref="refForm" :rules="formRules" :model="formData" label-position="left" label-width="0px"
       class="login-container">
       <h3 class="title">系统登录</h3>
       <el-form-item prop="name">
