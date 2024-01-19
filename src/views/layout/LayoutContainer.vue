@@ -128,8 +128,8 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
 }
 </script>
 
-<template> 
-  <el-container   class="layout-container" style="height: 100%;">
+<template>
+  <el-container class="layout-container" style="height: 100%;">
     <el-aside v-if="!isMobile" ref="myLeft" :width="settingStore.isCollapse ? '65px' : '200px'">
       <!-- 左侧菜单 -->
       <div class="left-logo" v-show="!settingStore.isCollapse">繁星</div>
@@ -140,7 +140,7 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
         </el-menu>
       </el-scrollbar>
     </el-aside>
-    <el-aside v-if="isMobile && showDiyElement" class="overlay-body">
+    <el-aside v-if="isMobile && showDiyElement" class="overlay-aside">
       <!-- 左侧菜单(手机) -->
       <el-scrollbar class="overlay-body">
         <el-menu :collapse-transition="false" active-text-color="#ffd04b" background-color="#2f3e52"
@@ -227,9 +227,8 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
           </div>
         </div>
       </el-header>
-      <el-main
-        style="border: 1px solid #f0f0f0;  margin: 5px;  padding: 10px;box-sizing:border-box;height: calc(100% -120px);">
-        <el-scrollbar height="100%">
+      <el-main style="padding: 10px;margin: 5px;border: 1px solid #f0f0f0; ">
+        <el-scrollbar>
           <router-view></router-view>
         </el-scrollbar>
       </el-main>
@@ -402,12 +401,19 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
   z-index: 9999;
 }
 
-.overlay-body {
+.overlay-aside {
   position: fixed;
-  z-index: 10000000;
+  z-index: 99999;
   top: 0;
   left: 0;
   width: 200px;
   height: 100vh;
+  background-color: #2f3e52;
+}
+
+.overlay-body {
+  z-index: 99999;
+  height: calc(100vh - 55px);
+  background-color: #2f3e52;
 }
 </style>

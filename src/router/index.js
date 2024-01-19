@@ -23,31 +23,48 @@ const router = createRouter({
     },
     {
       path: '/login',
+      isCheckToken: false,
       component: () => import('@/views/login/LoginPage.vue')
     },
     {
       path: '/test/test',
+      isCheckToken: false,
       component: () => import('@/views/test/test.vue')
     },
     {
       path: '/test',
+      isCheckToken: false,
       component: () => import('@/views/layout/LayoutContainer.vue'),
       redirect: '/test/test',
       children: [
         {
           path: '/test/profile',
+          isCheckToken: false,
           component: () => import('@/views/user/UserProfile.vue')
         },
         {
           path: '/test/avatar',
+          isCheckToken: false,
           component: () => import('@/views/user/UserAvatar.vue')
         },
         {
           path: '/test/password',
+          isCheckToken: false,
           component: () => import('@/views/user/UserPassword.vue')
         }
       ]
-    }
+    },
+    {
+      path: '/404',
+      isCheckToken: false,
+      component: () => import('@/views/error/404.vue')
+    },
+    // 空白路由重定向到404页面
+    {
+      path: '/:catchAll(.*)',
+      isCheckToken: false,
+      component: () => import('@/views/error/404.vue')
+    },
   ]
 })
 
@@ -57,7 +74,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   // 如果没有token,且访问的是非登录页面,拦截到登录页面
   const userStore = useUserStore()
-  if (!userStore.token && to.path != '/login') {
+  if (to.isCheckToken === false && !userStore.token && to.path != '/login') {
     return '/login'
   }
   //路由变化事件
