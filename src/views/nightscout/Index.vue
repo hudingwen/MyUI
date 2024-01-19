@@ -126,8 +126,6 @@ const ruleForm = {
 }
 //新增
 const HandleAdd = () => {
-    HandleAllNsServer()
-
     let startTime = formatDate(new Date());
     let endTime = formatDate(new Date(), 365);
     formData.value = { nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: [], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 0, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认', accountStatus: '未开启' }
@@ -140,7 +138,6 @@ const HandleEdit = (row) => {
         return;
     }
     formData.value = JSON.parse(JSON.stringify(row))
-
     // 位置转换
     if (formData.value.position) {
         formData.value.position_arr = JSON.parse(formData.value.position)
@@ -195,6 +192,7 @@ const HandleSubmit = () => {
                     updateNightscout(formData.value).then((res) => {
                         HandleSearch()
                         dialogVisible.value = false
+                        HandleAllNsServer()
                         ElMessage.success(res.data.msg || '添加成功')
                     })
                 } else {
@@ -202,6 +200,7 @@ const HandleSubmit = () => {
                     addNightscout(formData.value).then((res) => {
                         HandleSearch()
                         dialogVisible.value = false
+                        HandleAllNsServer()
                         ElMessage.success(res.data.msg || '编辑成功')
                     })
                 }

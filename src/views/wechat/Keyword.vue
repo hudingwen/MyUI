@@ -332,7 +332,7 @@ watch(() => filters.value.size, () => {
     <el-form ref="refForm" :model="formData" :rules="ruleForm" label-width="150px" status-icon label-position="top">
 
       <el-form-item label="触发关键词" prop="key">
-        <el-input v-model="formData.key" auto-complete="off" :disabled="!isAdd"></el-input>
+        <el-input v-model="formData.key" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="回复类型" prop="media_type">
         <el-select clearable v-model="formData.media_type" placeholder="请选择" @change="HandleChangeFocus">

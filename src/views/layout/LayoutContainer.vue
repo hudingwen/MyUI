@@ -133,25 +133,28 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
     <el-aside v-if="!isMobile" ref="myLeft" :width="settingStore.isCollapse ? '65px' : '200px'">
       <!-- 左侧菜单 -->
       <div class="left-logo" v-show="!settingStore.isCollapse">繁星</div>
-      <el-scrollbar :style="{ height: (settingStore.isCollapse ? 'calc(100vh)' : 'calc(100vh - 70px)') }">
-        <el-menu :collapse-transition="false" active-text-color="#ffd04b" background-color="#2f3e52"
-          :default-active="$route.path" text-color="#fff" router :collapse="settingStore.isCollapse">
-          <MenuItemContainer :data="userStore.menu"></MenuItemContainer>
-        </el-menu>
-      </el-scrollbar>
+      <!-- <el-scrollbar :style="{ height: (settingStore.isCollapse ? 'calc(100vh)' : 'calc(100vh - 70px)') }"> -->
+      <el-menu :collapse-transition="false" active-text-color="#ffd04b" background-color="#2f3e52"
+        :default-active="$route.path" text-color="#fff" router :collapse="settingStore.isCollapse">
+        <MenuItemContainer :data="userStore.menu"></MenuItemContainer>
+      </el-menu>
+      <!-- </el-scrollbar> -->
     </el-aside>
     <el-aside v-if="isMobile && showDiyElement" class="overlay-aside">
       <!-- 左侧菜单(手机) -->
+
+      <!-- 遮罩层 -->
+      <div class="diy-element">
+        <div v-if="showDiyElement" class="overlay" @click="hideDiyElement"></div>
+      </div>
       <el-scrollbar class="overlay-body">
-        <el-menu :collapse-transition="false" active-text-color="#ffd04b" background-color="#2f3e52"
+        <el-menu style="padding-bottom: 60px;" :collapse-transition="false" active-text-color="#ffd04b" background-color="#2f3e52"
           :default-active="$route.path" text-color="#fff" router :collapse="settingStore.isCollapse">
           <MenuItemContainer :data="userStore.menu"></MenuItemContainer>
         </el-menu>
       </el-scrollbar>
-      <!-- 遮罩层 -->
-      <div v-if="showDiyElement" class="diy-element">
-        <div class="overlay" @click="hideDiyElement"></div>
-      </div>
+
+
     </el-aside>
     <el-container style="height: 100%;">
       <!-- 顶部 -->
@@ -172,7 +175,6 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
                 <el-breadcrumb separator="/" class="header-item">
                   <el-breadcrumb-item v-for="(item, index) in getBreadcrumb(router.currentRoute)" :key="index"><span
                       class="header-nav-title">{{ item }}</span></el-breadcrumb-item>
-
                 </el-breadcrumb>
               </div>
             </el-scrollbar>
@@ -202,7 +204,7 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
       <el-header class="el-header-two">
         <div class="tags">
           <!-- 窗口列表 -->
-          <el-scrollbar>
+          <el-scrollbar style="padding-bottom: 5px;">
             <div class="tags-left">
               <span :class="{ 'active': tag.active, 'tags-item': true }" v-for="(tag, index) in userStore.tagsList"
                 :key="tag.path" @click="userStore.setOneActiveTag(tag, index)" class="tags-view-item">
@@ -227,10 +229,11 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
           </div>
         </div>
       </el-header>
+      <!-- 内容 -->
       <el-main style="padding: 10px;margin: 5px;border: 1px solid #f0f0f0; ">
-        <el-scrollbar>
-          <router-view></router-view>
-        </el-scrollbar>
+        <!-- <el-scrollbar> -->
+        <router-view></router-view>
+        <!-- </el-scrollbar> -->
       </el-main>
       <el-footer>©2023 Create 繁星 & Power Vue3</el-footer>
     </el-container>
@@ -384,11 +387,7 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
 
 .diy-element {
   position: fixed;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
   z-index: 9999;
-  /* 其他样式 */
 }
 
 .overlay {
@@ -403,17 +402,17 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
 
 .overlay-aside {
   position: fixed;
-  z-index: 99999;
+  z-index: 9999;
   top: 0;
   left: 0;
   width: 200px;
-  height: 100vh;
-  background-color: #2f3e52;
 }
 
 .overlay-body {
+  position: fixed;
+  width: 200px;
   z-index: 99999;
-  height: calc(100vh - 55px);
+  height: 100vh;
   background-color: #2f3e52;
 }
 </style>

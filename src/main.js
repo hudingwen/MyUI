@@ -5,6 +5,8 @@ import App from '@/App.vue'
 import router from '@/router'
 
 const app = createApp(App)
+// 引入持久化
+import pinia from '@/stores'
 // 使用持久化
 app.use(pinia)
 // 网页刷新后动态路由添加
@@ -20,8 +22,7 @@ if (userStore.token && userStore.menu) {
 app.use(router)
 
 
-// 引入持久化
-import pinia from '@/stores'
+
 // 引入全局样式
 import '@/assets/css/main.scss'
 // 引入awesome图标样式

@@ -28,7 +28,7 @@ export const useUserStore = defineStore(
     const tagsList = ref([firstPage])
 
     // 设置一个激活导航
-    const setOneActiveTag = (newTag) => { 
+    const setOneActiveTag = (newTag, isReplace) => {
       console.info("newTag", newTag)
       //点了自己
       if (newTag.path === curPage.value.path) return;
@@ -49,8 +49,12 @@ export const useUserStore = defineStore(
       newTag.active = true;
 
       if (!isRealNew) tagsList.value.push(newTag)
+      if (isReplace) {
+        router.replace(newTag.path)
+      } else {
+        router.push(newTag.path)
+      }
 
-      router.push(newTag.path)
       curPage.value = newTag
 
     }
