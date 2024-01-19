@@ -22,6 +22,7 @@ export const useUserStore = defineStore(
     }
     //上页
     const prePage = ref({})
+    // 当前页
     const curPage = ref({})
     // 列表
     const tagsList = ref([firstPage])

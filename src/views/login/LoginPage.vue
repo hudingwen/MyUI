@@ -145,14 +145,13 @@ const inputDemoAccount = (name, pass) => {
     </el-form>
   </div>
 </template>
-<style scoped>
+<style lang="scss" scoped>
 .login-box {
   /* flex布局 */
   display: flex;
   /* 垂直居中 */
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: center; 
 }
 
 /* 登录样式 */
@@ -190,8 +189,7 @@ const inputDemoAccount = (name, pass) => {
   opacity: 0.8;
   position: absolute;
   left: 0;
-  width: 100%;
-  height: 100vh;
+  width: 100%; 
   overflow: hidden;
   z-index: -1;
 }
@@ -200,8 +198,7 @@ const inputDemoAccount = (name, pass) => {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100vh;
+  width: 100%; 
   z-index: 1;
 }
 

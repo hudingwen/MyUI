@@ -128,8 +128,8 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
 }
 </script>
 
-<template>
-  <el-container class="layout-container">
+<template> 
+  <el-container   class="layout-container" style="height: 100%;">
     <el-aside v-if="!isMobile" ref="myLeft" :width="settingStore.isCollapse ? '65px' : '200px'">
       <!-- 左侧菜单 -->
       <div class="left-logo" v-show="!settingStore.isCollapse">繁星</div>
@@ -140,7 +140,7 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
         </el-menu>
       </el-scrollbar>
     </el-aside>
-    <div v-if="isMobile && showDiyElement">
+    <el-aside v-if="isMobile && showDiyElement" class="overlay-body">
       <!-- 左侧菜单(手机) -->
       <el-scrollbar class="overlay-body">
         <el-menu :collapse-transition="false" active-text-color="#ffd04b" background-color="#2f3e52"
@@ -152,8 +152,8 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
       <div v-if="showDiyElement" class="diy-element">
         <div class="overlay" @click="hideDiyElement"></div>
       </div>
-    </div>
-    <el-container>
+    </el-aside>
+    <el-container style="height: 100%;">
       <!-- 顶部 -->
       <el-header class="el-header-one">
         <div class="header-top">
@@ -227,7 +227,8 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
           </div>
         </div>
       </el-header>
-      <el-main style="border: 1px solid #f0f0f0;  margin: 5px;  padding: 10px;box-sizing:border-box;">
+      <el-main
+        style="border: 1px solid #f0f0f0;  margin: 5px;  padding: 10px;box-sizing:border-box;height: calc(100% -120px);">
         <el-scrollbar height="100%">
           <router-view></router-view>
         </el-scrollbar>
@@ -236,31 +237,30 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
     </el-container>
   </el-container>
 </template>
-<style>
-.fa {
-  vertical-align: baseline;
-  margin-right: 10px;
-}
-
-.el-menu--collapse i {
-  font-size: 20px !important;
-}
-
-.el-menu--collapse span,
-.el-menu--collapse .el-sub-menu__icon-arrow {
-  display: none !important;
-}
-</style>
 <style lang="scss" scoped>
+// .fa {
+//   vertical-align: baseline;
+//   margin-right: 10px;
+// }
+
+// .el-menu--collapse i {
+//   font-size: 20px !important;
+// }
+
+// .el-menu--collapse span,
+// .el-menu--collapse .el-sub-menu__icon-arrow {
+//   display: none !important;
+// }
+
+
 .layout-container {
-  height: 100vh;
 
   .el-aside {
     background-color: #2f3e52;
 
     .left-logo {
       height: 70px;
-      // background: url('@/assets/img/default2.png') no-repeat center / 120px auto;
+      // background: url('@/assets/img/default.png') no-repeat center / 120px auto;
 
       line-height: 70px;
       text-align: center;
@@ -404,7 +404,7 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
 
 .overlay-body {
   position: fixed;
-  z-index: 10000;
+  z-index: 10000000;
   top: 0;
   left: 0;
   width: 200px;

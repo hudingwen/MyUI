@@ -10,8 +10,6 @@ import { useUserStore } from '@/stores/modules/user'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-
-
     {
       path: '/',
       component: () => import('@/views/layout/LayoutContainer.vue'),
@@ -28,9 +26,13 @@ const router = createRouter({
       component: () => import('@/views/login/LoginPage.vue')
     },
     {
+      path: '/test/test',
+      component: () => import('@/views/test/test.vue')
+    },
+    {
       path: '/test',
       component: () => import('@/views/layout/LayoutContainer.vue'),
-      redirect: '/test/manage',
+      redirect: '/test/test',
       children: [
         {
           path: '/test/profile',
@@ -58,6 +60,8 @@ router.beforeEach((to, from) => {
   if (!userStore.token && to.path != '/login') {
     return '/login'
   }
+  //路由变化事件
+
 })
 
 // vue文件列表
