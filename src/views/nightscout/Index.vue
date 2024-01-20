@@ -501,7 +501,7 @@ const handleCDN = () => {
         <el-col>
             <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
                 <el-form-item label="关键词" class="flexItem" label-width="90">
-                    <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
+                    <el-input @keyup.enter="HandleSearch(1)" class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
                 </el-form-item>
                 <el-form-item label="服务器" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
