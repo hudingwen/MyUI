@@ -368,7 +368,7 @@ const handleUnbind = (row) => {
 const handleUnbindMini = (row) => {
     ElMessageBox.confirm("确定解除[" + row.name + "]的小程序绑定吗？")
         .then(() => {
-            UnbindWeChatMini({ id: row.Id }).then(res => {
+            UnbindWeChatMini({ nsid: row.Id }).then(res => {
                 ElMessage.success(res.data.msg || '解除成功')
                 HandleSearch();
             })

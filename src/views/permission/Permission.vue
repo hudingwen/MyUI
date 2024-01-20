@@ -91,14 +91,10 @@ const ruleForm = {
   ]
 }
 const clkTypeEdit = () => {
-  formData.value.IsButton = false;
-  if (formData.value.MenuType == "页面") {
-    formData.value.Code = "";
-  } else if (formData.value.MenuType == "目录") {
-    formData.value.Code = "-";
-  } else if (formData.value.MenuType == "按钮") {
-    formData.value.Code = " ";
-    formData.value.IsButton = true;
+  formData.value.IsButton = false
+
+  if (formData.value.MenuType == "button") {
+    formData.value.IsButton = true
   }
 }
 //新增
@@ -292,7 +288,8 @@ const HandleSearch = (page) => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="550px" :before-close="handleClose">
-    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon label-position="top">
+    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon
+      label-position="top">
 
       <el-form-item label="菜单名称" prop="Name">
         <el-input v-model="formData.Name" auto-complete="off"></el-input>
@@ -300,9 +297,10 @@ const HandleSearch = (page) => {
 
       <el-form-item label="菜单类型">
         <el-radio-group @change="clkTypeEdit" v-model="formData.MenuType">
-          <el-radio label="目录"></el-radio>
-          <el-radio label="页面"></el-radio>
-          <el-radio label="按钮"></el-radio>
+          <el-radio label="catalog">目录</el-radio>
+          <el-radio label="page">页面</el-radio>
+          <el-radio label="button">按钮</el-radio>
+          <el-radio label="url">网址</el-radio>
         </el-radio-group>
       </el-form-item>
 
@@ -329,13 +327,13 @@ const HandleSearch = (page) => {
       <el-form-item label="排序" prop="OrderSort">
         <el-input v-model.number="formData.OrderSort" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item prop="IsButton" label="是否按钮">
+      <el-form-item prop="IsButton" label="是否按钮" v-if="false">
         <el-switch v-model="formData.IsButton"></el-switch>
       </el-form-item>
-      <el-form-item label="按钮事件" prop="Func">
+      <el-form-item label="按钮事件" prop="Func" v-if="formData.MenuType == 'button'">
         <el-input v-model="formData.Func" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item prop="IsHide" label="隐藏菜单" width>
+      <el-form-item prop="IsHide" label="隐藏菜单">
         <el-switch v-model="formData.IsHide"></el-switch>
       </el-form-item>
 
