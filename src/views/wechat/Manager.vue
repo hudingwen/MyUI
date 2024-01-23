@@ -357,7 +357,7 @@ const HandleSubmitMedia = (row) => {
     <el-table-column prop="tokenExpiration" label="token过期时间" width="180"></el-table-column>
     <el-table-column prop="Enabled" label="状态" width="" sortable>
       <template #default="{ row }">
-        <el-tag :type="row.Enabled ? 'success' : 'danger'" disable-transitions>{{ row.Enabled ? "正常" : "禁用"
+        <el-tag :type="row.Enabled ? 'success' : 'danger'" disable-transitions>{{ row.Enabled ? "激活" : "禁用"
         }}
         </el-tag>
       </template>

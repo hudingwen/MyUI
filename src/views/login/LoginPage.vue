@@ -72,10 +72,12 @@ const login = () => {
               // 添加vue router路由
               addDynamicRoutes(userStore.menu)
               if (userStore.curPage.path && userStore.curPage.path != '/login') {
-                router.replace(userStore.curPage)
-                userStore.setOneActiveTag(userStore.curPage, true)
+                console.info("跳转:", userStore.curPage.path)
+                router.replace(userStore.curPage.path)
+                userStore.setOneActiveTag(userStore.curPage.path, true)
               } else {
                 // 跳转路由
+                console.info("跳转:", "/")
                 router.replace('/')
               }
             })

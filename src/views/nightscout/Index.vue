@@ -501,7 +501,8 @@ const handleCDN = () => {
         <el-col>
             <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
                 <el-form-item label="关键词" class="flexItem" label-width="90">
-                    <el-input @keyup.enter="HandleSearch(1)" class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
+                    <el-input @keyup.enter="HandleSearch(1)" class="flexContent" v-model.trim="filters.key"
+                        placeholder="请输入搜索关键词" clearable />
                 </el-form-item>
                 <el-form-item label="服务器" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
@@ -700,7 +701,8 @@ const handleCDN = () => {
     </el-row>
     <!-- 弹窗 -->
     <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" :before-close="handleClose">
-        <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="200px" status-icon label-position="top">
+        <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="200px" status-icon
+            label-position="top">
 
             <el-tooltip class="item" content="如不填写,则自动生成" placement="top">
                 <el-form-item label="名称" prop="name">
@@ -834,7 +836,9 @@ const handleCDN = () => {
             </el-form-item>
             <el-form-item label="ns版本号" prop="nsVersion">
                 <el-select v-model="formData.nsVersion" filterable placeholder="请选择版本号">
-                    <el-option v-for="item in nsVersion" :label="item.name" :value="item.content"></el-option>
+                    <el-option v-for="item in nsVersion" :label="item.name" :value="item.content">
+                        <span>{{ item.content }}</span>(<span>{{ item.name }}</span>)
+                    </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="ns预设内存/单位/M" prop="nsMemory">

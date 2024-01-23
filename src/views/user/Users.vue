@@ -233,7 +233,7 @@ const HandleSearch = (page) => {
     <el-table-column prop="birth" label="生日" width="200"></el-table-column>
     <el-table-column prop="uStatus" label="状态" width="90" align="center">
       <template #default="{ row }">
-        <el-tag :type="row.uStatus == 0 ? 'success' : 'danger'" disable-transitions>{{ row.uStatus == 0 ? "正常" :
+        <el-tag :type="row.uStatus == 0 ? 'success' : 'danger'" disable-transitions>{{ row.uStatus == 0 ? "激活" :
           "禁用" }}
         </el-tag>
       </template>

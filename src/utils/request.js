@@ -15,12 +15,12 @@ var loadingInstance = null
 instance.interceptors.request.use(
   (config) => {
     if (config.ext === undefined || config.ext.loading === undefined || config.ext.loading === true) {
+      loadingCount++;
       loadingInstance = ElLoading.service({
         lock: true,
         text: '系统正在加载数据中...',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      loadingCount++;
     }
     // 携带token
     const userStore = useUserStore()

@@ -207,7 +207,7 @@ const HandleSearch = (page) => {
     <el-table-column prop="Description" label="说明" min-width="200"></el-table-column>
     <el-table-column prop="Enabled" label="状态" width="90" align="center">
       <template #default="{ row }">
-        <el-tag :type="row.Enabled ? 'success' : 'danger'" disable-transitions>{{ row.Enabled ? "正常" : "禁用"
+        <el-tag :type="row.Enabled ? 'success' : 'danger'" disable-transitions>{{ row.Enabled ? "激活" : "禁用"
         }}</el-tag>
       </template>
     </el-table-column>
