@@ -68,10 +68,7 @@ const refForm = ref()
 const ruleForm = {
     name: [
         { required: true, message: '字典名称不能为空', trigger: 'change' },
-    ],
-    content: [
-        { required: true, message: '字典内容不能为空', trigger: 'change' },
-    ],
+    ], 
     codeOrder: [
         { required: true, message: '排序不能为空', trigger: 'change' },
     ]
@@ -236,9 +233,11 @@ const handleAllDicType = () => {
         @row-click="HandleClickRow" border>
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column prop="name" label="字典名称" width="250"></el-table-column>
+        <el-table-column prop="code" label="字典code" width="250"></el-table-column>
         <el-table-column prop="content" label="字典内容" min-width="200"></el-table-column>
         <el-table-column prop="codeOrder" label="排序" min-width="200"></el-table-column>
         <el-table-column prop="description" label="字典描述" width="200"></el-table-column>
+        <el-table-column prop="pCode" label="字典类型" width="200"></el-table-column>
 
         <el-table-column prop="content2" label="字典内容2" width="200"></el-table-column>
         <el-table-column prop="content3" label="字典内容3" width="200"></el-table-column>
@@ -267,6 +266,9 @@ const handleAllDicType = () => {
             </el-form-item>
             <el-form-item label="字典名称" prop="name">
                 <el-input v-model="formData.name" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="字典code" prop="code">
+                <el-input v-model="formData.code" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="字典内容" prop="content">
                 <el-input v-model="formData.content" auto-complete="off"></el-input>

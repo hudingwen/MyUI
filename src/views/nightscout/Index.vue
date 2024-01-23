@@ -834,16 +834,20 @@ const handleCDN = () => {
                     v-model="formData.position_arr">
                 </el-cascader>
             </el-form-item>
-            <el-form-item label="ns版本号" prop="nsVersion">
-                <el-select v-model="formData.nsVersion" filterable placeholder="请选择版本号">
-                    <el-option v-for="item in nsVersion" :label="item.name" :value="item.content">
-                        <span>{{ item.content }}</span>(<span>{{ item.name }}</span>)
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="ns预设内存/单位/M" prop="nsMemory">
-                <el-input v-model.number="formData.nsMemory"></el-input>
-            </el-form-item>
+            <el-tooltip content="设置版本号后,需要重启ns实例一次" placement="top">
+                <el-form-item label="ns版本号" prop="nsVersion">
+                    <el-select v-model="formData.nsVersion" filterable placeholder="请选择版本号">
+                        <el-option v-for="item in nsVersion" :label="item.name" :value="item.content">
+                            <span>{{ item.content }}</span>(<span>{{ item.name }}</span>)
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-tooltip>
+            <el-tooltip content="设置内存后,需要重启ns实例一次" placement="top">
+                <el-form-item label="ns预设内存/单位/M" prop="nsMemory">
+                    <el-input v-model.number="formData.nsMemory"></el-input>
+                </el-form-item>
+            </el-tooltip>
             <el-form-item label="启用组件" prop="plugins_arr">
                 <el-select filterable style="width: 100%;" clearable multiple v-model="formData.plugins_arr"
                     placeholder="请选择要启用的组件">
