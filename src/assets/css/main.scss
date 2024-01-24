@@ -13,8 +13,13 @@ body {
 // 手机端自适应
 @media screen and (max-width:600px) {
 
-  // 弹窗
+  // 弹窗宽度
   .el-dialog {
+    width: 90% !important;
+  }
+  // 移动端宽度
+  .mobile-box{
+    
     width: 90% !important;
   }
 

@@ -338,7 +338,7 @@ const HandleSearch = (page) => {
       </el-form-item>
 
       <el-form-item prop="Pid" label="父级菜单">
-        <el-tree-select v-model="formData.Pid" :data="menuTrees" filterable clearable check-strictly=true />
+        <el-tree-select v-model="formData.Pid" :data="menuTrees" filterable clearable :check-strictly="true" />
       </el-form-item>
       <el-form-item prop="Mid" label="API接口">
         <el-select style="width: 100%" v-model="formData.Mid" placeholder="请选择API" filterable>

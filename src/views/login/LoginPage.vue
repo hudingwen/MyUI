@@ -63,18 +63,19 @@ const login = () => {
           }
           // 获取用户信息
           getInfoByToken({ token: userStore.token }).then((userInfo) => {
-            userStore.setUid(userInfo.data.response.uID)
+            userStore.setUid(userInfo.data.response.Id)
+            userStore.setUserInfo(userInfo.data.response)
 
             // 获取菜单
             GetNavigationBar({ uid: userStore.uid }).then((menuInfo) => {
-              userStore.setMenu(menuInfo.data.response.children)
+              userStore.setMenu( menuInfo.data.response.children)
 
               // 添加vue router路由
               addDynamicRoutes(userStore.menu)
               if (userStore.curPage.path && userStore.curPage.path != '/login') {
                 console.info("跳转:", userStore.curPage.path)
                 router.replace(userStore.curPage.path)
-                userStore.setOneActiveTag(userStore.curPage.path, true)
+                userStore.setOneActiveTag({ path: userStore.curPage.path }, true)
               } else {
                 // 跳转路由
                 console.info("跳转:", "/")

@@ -21,6 +21,7 @@ import { onMounted, ref } from 'vue'
 import router from '@/router'
 import MenuItemContainer from '@/views/layout/components/MenuItemContainer.vue'
 
+
 const userStore = useUserStore()
 const settingStore = useSettingStore()
 
@@ -132,7 +133,7 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
   <el-container class="layout-container" style="height: 100%;">
     <el-aside v-if="!isMobile" ref="myLeft" :width="settingStore.isCollapse ? '65px' : '200px'">
       <!-- 左侧菜单 -->
-      <div class="left-logo" v-show="!settingStore.isCollapse">繁星</div>
+      <div class="left-logo" v-show="!settingStore.isCollapse">{{ userStore.userInfo.RealName }}</div>
       <!-- <el-scrollbar :style="{ height: (settingStore.isCollapse ? 'calc(100vh)' : 'calc(100vh - 70px)') }"> -->
       <el-menu :collapse-transition="false" active-text-color="#ffd04b" background-color="#2f3e52"
         :default-active="$route.path" text-color="#fff" router :collapse="settingStore.isCollapse">
@@ -148,8 +149,9 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
         <div v-if="showDiyElement" class="overlay" @click="hideDiyElement"></div>
       </div>
       <el-scrollbar class="overlay-body">
-        <el-menu style="padding-bottom: 60px;" :collapse-transition="false" active-text-color="#ffd04b" background-color="#2f3e52"
-          :default-active="$route.path" text-color="#fff" router :collapse="settingStore.isCollapse">
+        <el-menu style="padding-bottom: 60px;" :collapse-transition="false" active-text-color="#ffd04b"
+          background-color="#2f3e52" :default-active="$route.path" text-color="#fff" router
+          :collapse="settingStore.isCollapse">
           <MenuItemContainer :data="userStore.menu"></MenuItemContainer>
         </el-menu>
       </el-scrollbar>
