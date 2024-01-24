@@ -185,7 +185,7 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
             <!-- 个人设置 -->
             <el-dropdown placement="bottom-end">
               <span class="el-dropdown__box">
-                <el-avatar :src="avatar" />
+                <el-avatar :src="userStore.userInfo.logo||avatar" />
                 <el-icon>
                   <CaretBottom />
                 </el-icon>

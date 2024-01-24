@@ -330,7 +330,7 @@ const SubmitReset = () => {
         </el-select>
       </el-form-item>
       <el-form-item label="性别" prop="Sex">
-        <el-radio-group v-model="formData.sex">
+        <el-radio-group v-model="formData.Sex">
           <el-radio class="radio" :label="1">男</el-radio>
           <el-radio class="radio" :label="0">女</el-radio>
         </el-radio-group>
