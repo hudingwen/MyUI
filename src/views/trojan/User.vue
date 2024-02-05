@@ -467,7 +467,7 @@ const HandleLink = (row) => {
       </el-form-item>
       <el-form-item label="单节点选择">
         <el-form-item>
-          <el-select v-model="linkData.selectServerId" placeholder="请选择要链接的服务器" filterable clearable>
+          <el-select style="width: 350px;" v-model="linkData.selectServerId" placeholder="请选择要链接的服务器" filterable clearable>
             <el-option v-for="item in linkData.servers ? linkData.servers : []" :key="item.name" :label="item.name"
               :value="item.value">
               <span>{{ item.name }}</span>
