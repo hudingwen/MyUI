@@ -193,9 +193,15 @@ onMounted(() => {
     <el-row>
         <el-col>
             <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
-                <!-- <el-form-item label="关键词" class="flexItem" label-width="90">
+                <el-form-item label="关键词" class="flexItem" label-width="90">
                     <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
-                </el-form-item> -->
+                </el-form-item>
+                <el-form-item label="状态" class="flexItem" label-width="90">
+                    <el-select class="flexContent" clearable v-model="filters.status" placeholder="请选择要搜索的状态">
+                        <el-option label="已激活" :value="1"></el-option>
+                        <el-option label="未启用" :value="0"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
                 </el-form-item>
