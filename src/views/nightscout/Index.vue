@@ -641,6 +641,10 @@ const handleCDN = () => {
         <el-table-column show-overflow-tooltip prop="nsMemory" label="ns预设内存/单位/M" width="120"></el-table-column>
 
 
+        <el-table-column prop="sslCerName" label="证书cer地址" width="180">
+        </el-table-column>
+        <el-table-column prop="sslKeyName" label="证书key地址" width="180">
+        </el-table-column>
         <el-table-column prop="CreateTime" label="创建时间" width="180">
         </el-table-column>
         <el-table-column prop="ModifyTime" label="更新时间" width="180">
@@ -848,6 +852,12 @@ const handleCDN = () => {
                     <el-input v-model.number="formData.nsMemory"></el-input>
                 </el-form-item>
             </el-tooltip>
+            <el-form-item label="证书cer地址" prop="sslCerName">
+                    <el-input v-model="formData.sslCerName"></el-input>
+                </el-form-item>
+            <el-form-item label="证书key地址" prop="sslKeyName">
+                    <el-input v-model="formData.sslKeyName"></el-input>
+                </el-form-item>
             <el-form-item label="启用组件" prop="plugins_arr">
                 <el-select filterable style="width: 100%;" clearable multiple v-model="formData.plugins_arr"
                     placeholder="请选择要启用的组件">
