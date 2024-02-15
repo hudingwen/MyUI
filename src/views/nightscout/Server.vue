@@ -6,7 +6,8 @@ import {
     delNsServer,
     delBatchNsServer,
     addNsServer,
-    updateNsServer
+    updateNsServer,
+    getAllNsServer
 } from '@/api/nightscout.js'
 
 
@@ -174,9 +175,27 @@ const HandleSearch = (page) => {
 
 // 其他
 onMounted(() => {
-
+    HandleAllNsServer()
 })
-
+//服务器列表
+const nsServer = ref([])
+//获取所有服务器列表
+const HandleAllNsServer = () => {
+    getAllNsServer().then(res => {
+        nsServer.value = res.data.response
+    })
+}
+//获取ns的服务器名称
+const getServerName = (serverId) => {
+    let findRow = nsServer.value.find(t => t.Id === serverId)
+    let tag = "";
+    if (findRow) {
+        tag += findRow.serverName 
+    }else{
+        tag =  serverId
+    }
+    return tag;
+}
 </script>
 <template>
     <!-- 搜索 -->
@@ -210,7 +229,8 @@ onMounted(() => {
         @row-click="HandleClickRow" border>
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column prop="serverName" label="服务器名称" width="250"></el-table-column>
-        <el-table-column prop="serverIp" label="服务器地址" width="150"></el-table-column>
+        <el-table-column prop="serverIp" label="服务器ip" width="150"></el-table-column>
+        <el-table-column prop="serverHost" label="服务器host" width="150"></el-table-column>
         <el-table-column prop="serverLoginName" label="服务器账号" width="100"></el-table-column>
         <el-table-column prop="serverLoginPassword" label="服务器密码" width="150"></el-table-column>
         <el-table-column prop="serverPort" label="服务器端口" width="100"></el-table-column>
@@ -225,6 +245,12 @@ onMounted(() => {
         <el-table-column prop="mongoPort" label="数据库端口" width="100"></el-table-column>
         <el-table-column prop="holdCount" label="理论实例数量" width="120"></el-table-column>
         <el-table-column prop="remark" label="备注" width="200"></el-table-column>
+        <el-table-column prop="mongoServerId" label="关联ssh服务-数据库" width="250">
+            <template #default="{ row }">{{ getServerName(row.mongoServerId) }}</template>
+        </el-table-column>
+        <el-table-column prop="nginxServerId" label="关联ssh服务-网关" width="250">
+            <template #default="{ row }">{{ getServerName(row.nginxServerId) }}</template>
+        </el-table-column>
 
         <el-table-column prop="CreateTime" label="创建时间" width="180">
         </el-table-column>
@@ -243,13 +269,17 @@ onMounted(() => {
     </el-row>
     <!-- 弹窗 -->
     <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
-        <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon label-position="top">
+        <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon
+            label-position="top">
 
             <el-form-item label="服务器名称" prop="serverName">
                 <el-input v-model="formData.serverName" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="服务器地址" prop="serverIp">
+            <el-form-item label="服务器ip" prop="serverIp">
                 <el-input v-model="formData.serverIp" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="服务器host" prop="serverIp">
+                <el-input v-model="formData.serverHost" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="服务器登录账号" prop="serverLoginName">
                 <el-input v-model="formData.serverLoginName" auto-complete="off"></el-input>
@@ -257,10 +287,6 @@ onMounted(() => {
             <el-form-item label="服务器登录密码" prop="serverLoginPassword">
                 <el-input v-model="formData.serverLoginPassword" auto-complete="off"></el-input>
             </el-form-item>
-
-
-
-
             <el-form-item label="服务器端口" prop="serverPort">
                 <el-input v-model="formData.serverPort" auto-complete="off"></el-input>
             </el-form-item>
@@ -290,6 +316,20 @@ onMounted(() => {
             </el-form-item>
             <el-form-item label="数据库密码" prop="mongoLoginPassword">
                 <el-input v-model="formData.mongoLoginPassword" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="关联ssh服务-数据库" prop="mongoLoginPassword">
+                <el-select class="flexContent" clearable v-model="formData.mongoServerId" placeholder="请选择服务器">
+                    <el-option v-for="item in nsServer" :key="item.Id"
+                        :label="item.serverName + '(' + item.count + '/' + item.holdCount + ')'" :value="item.Id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="关联ssh服务-网关" prop="mongoLoginPassword">
+                <el-select class="flexContent" clearable v-model="formData.nginxServerId" placeholder="请选择服务器">
+                    <el-option v-for="item in nsServer" :key="item.Id"
+                        :label="item.serverName + '(' + item.count + '/' + item.holdCount + ')'" :value="item.Id">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="理论实例数量" prop="holdCount">
                 <el-input v-model="formData.holdCount" auto-complete="off"></el-input>
