@@ -98,7 +98,6 @@ export const vueFilePathList = {
 
 // 动态添加路由
 export const addRoute = (item, parent) => {
-  console.info("添加路由", item)
   let meta = { ...item.meta, ...{ parent } }
   router.addRoute({
     path: item.path + "_self",

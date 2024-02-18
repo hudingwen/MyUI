@@ -39,18 +39,21 @@ export const useUserStore = defineStore(
       tagsList.value.forEach(t => {
         t.active = false
       })
-      if (findTag) {
-        findTag.title = findRoute.meta.title
-      } else {
-        findTag = {}
-        findTag.title = findRoute.meta.title
-        findTag.path = findRoute.path
-        tagsList.value.push(findTag)
+      if (findRoute) {
+        if (findTag) {
+          findTag.title = findRoute.meta.title
+        } else {
+          findTag = {}
+          findTag.title = findRoute.meta.title
+          findTag.path = findRoute.path
+          tagsList.value.push(findTag)
+        }
+        findTag.active = true
+        curPage.value = findTag
       }
-      findTag.active = true
       if (prePath) {
         let findPreRoute = allRoutes.find(t => t.path === prePath)
-        prePage.value = findPreRoute
+        if (findPreRoute) prePage.value = findPreRoute
       }
     }
 

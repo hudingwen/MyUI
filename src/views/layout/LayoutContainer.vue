@@ -131,7 +131,6 @@ const getBreadcrumb = (curRoute, isDeep, breadcrumbList) => {
 }
 
 const tagPush = (tag) => {
-  console.info("tag", tag)
   router.push(tag.path) 
 }
 const tagRemove = (tag) => {
