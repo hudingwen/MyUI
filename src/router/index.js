@@ -82,7 +82,7 @@ router.beforeEach((to, from) => {
   }
   //路由变化事件  
 
-  if (to.path != '/login' || to.path !== '/test/test')
+  if (to.path != '/login' && to.path != '/test/test' && to.path != '/404')
     userStore.setOneActiveTag(to.path, from.path)
 
 })
