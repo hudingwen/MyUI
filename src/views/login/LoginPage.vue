@@ -90,9 +90,7 @@ const login = () => {
         .catch((errUser) => {
 
           // 在这里处理登录失败的额外操作
-          console.info('登录失败', errUser)
-
-          ElMessage.error('登录失败:' + errUser);
+          console.info('登录失败', errUser) 
         })
     })
     .catch((err) => {
