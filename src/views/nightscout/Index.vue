@@ -129,7 +129,7 @@ const ruleForm = {
 const HandleAdd = () => {
     let startTime = formatDate(new Date());
     let endTime = formatDate(new Date(), 365);
-    formData.value = { nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: [], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 0, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认', accountStatus: '未开启' }
+    formData.value = { customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: [], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 0, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认', accountStatus: '未开启' }
     dialogVisible.value = true
 }
 //编辑
@@ -280,7 +280,8 @@ const plugins = ref([])
 const summary = ref({
     status: [],
     resource: [],
-    account: []
+    account: [],
+    customer: []
 })
 // 公众号绑定显示
 const showBind = ref(false)
@@ -314,19 +315,28 @@ const HandleCDNList = () => {
 //获取ns的服务器名称
 const getServerName = (row) => {
     let findRow = nsServer.value.find(t => t.Id === row.serverId)
-    let tag = "";
+    let tag = row.serverId;
     if (findRow) {
-        tag += findRow.serverName
+        tag = findRow.serverName
         if (row.exposedPort > 0) {
             tag += "(" + row.exposedPort + ")";
         }
     }
     return tag;
 }
+//获取ns的所属客户名称
+const getCustomerName = (row) => {
+    let findRow = customerList.value.find(t => t.Id === row.customerId)
+    let tag = "";
+    if (findRow) {
+        tag = findRow.name
+    }
+    return tag;
+}
 //获取ns的cdn名称
 const getCDNName = (row) => {
     let findRow = cdnList.value.find(t => t.key === row.cdn)
-    let tag = "";
+    let tag = row.cdn;
     if (findRow) {
         tag = findRow.name
     }
@@ -335,6 +345,15 @@ const getCDNName = (row) => {
 //状态筛选
 const HandleTag = (key) => {
     filters.value.key = key;
+    filters.value.customerId = null;
+    filters.value.serverId = null;
+    filters.value.cdn = null
+    HandleSearch(1);
+}
+// 筛选所属客户
+const HandleCustomer = (customerId) => {
+    filters.value.key = null;
+    filters.value.customerId = customerId;
     filters.value.serverId = null;
     filters.value.cdn = null
     HandleSearch(1);
@@ -470,10 +489,9 @@ const handleSummary = () => {
     summary.value.status = []
     summary.value.resource = []
     summary.value.account = []
+    summary.value.customer = []
     GetSummary().then(res => {
-        summary.value.status = res.data.response.status
-        summary.value.resource = res.data.response.resource
-        summary.value.account = res.data.response.account
+        summary.value = res.data.response
     })
 }
 // 切换整体网络
@@ -499,10 +517,11 @@ const handleCDN = () => {
 
 // ns客户列表
 const customerList = ref([])
-const GetNsList = ()=>{
-  getNsCustomer({size:9999}).then(res => {
-    customerList.value = res.data.response.data; 
-  });
+const GetNsList = () => {
+    getNsCustomer({ size: 9999 }).then(res => {
+        customerList.value = res.data.response.data;
+        customerList.value.unshift({ Id: "0", name: '默认' })
+    });
 }
 
 </script>
@@ -525,6 +544,12 @@ const GetNsList = ()=>{
                 <el-form-item label="服务网络" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.cdn" placeholder="请选择要搜索的服务网络类型">
                         <el-option v-for="item in cdnList" :key="item.cdn" :label="item.name" :value="item.key">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="所属客户" class="flexItem" label-width="90">
+                    <el-select class="flexContent" clearable v-model="filters.customerId" placeholder="请选择要搜索的所属客户">
+                        <el-option v-for="item in customerList" :key="item.cdn" :label="item.name" :value="item.Id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -582,8 +607,20 @@ const GetNsList = ()=>{
                             </el-badge>
                         </el-col>
                     </el-row>
+                </el-form-item>
 
+                <el-form-item label="客户" class="flexItem" label-width="90">
+                    <el-row :gutter="30">
 
+                        <el-col :span="1.5" :key="item.customerId" v-for="(item, index) in summary.customer">
+                            <el-badge :max="999999999" :value="item.count">
+                                <el-tag @click="HandleCustomer(item.customerId)"
+                                    style="cursor:pointer;width: auto;text-align: center;" type="info">{{ (item.customerId
+                                        === "0" ? "默认" : getCustomerName({ customerId: item.customerId }))
+                                    }}</el-tag>
+                            </el-badge>
+                        </el-col>
+                    </el-row>
                 </el-form-item>
             </el-form>
 
@@ -649,6 +686,11 @@ const GetNsList = ()=>{
         <el-table-column show-overflow-tooltip prop="remark" label="备注" width="120"></el-table-column>
         <el-table-column show-overflow-tooltip prop="tel" label="电话" width="120"></el-table-column>
         <el-table-column show-overflow-tooltip prop="nsVersion" label="ns版本号" width="120"></el-table-column>
+
+        <el-table-column show-overflow-tooltip prop="customerId" label="所属客户" width="200">
+            <template #default="{ row }">{{ getCustomerName(row) }}</template>
+        </el-table-column>
+
         <el-table-column show-overflow-tooltip prop="nsMemory" label="ns预设内存/单位/M" width="120"></el-table-column>
 
 
@@ -859,8 +901,8 @@ const GetNsList = ()=>{
                 </el-form-item>
             </el-tooltip>
             <el-tooltip content="设置所属客户后,需要重启ns实例一次" placement="top">
-                <el-form-item label="所属客户" prop="nsVersion">
-                    <el-select v-model="formData.customerId" filterable clearable placeholder="请选择客户">
+                <el-form-item label="所属客户" prop="customerId">
+                    <el-select v-model="formData.customerId" filterable placeholder="请选择客户">
                         <el-option v-for="item in customerList" :label="item.name" :value="item.Id">
                             <span>{{ item.name }}</span>
                         </el-option>
@@ -873,11 +915,11 @@ const GetNsList = ()=>{
                 </el-form-item>
             </el-tooltip>
             <el-form-item label="证书cer地址" prop="sslCerName">
-                    <el-input v-model="formData.sslCerName"></el-input>
-                </el-form-item>
+                <el-input v-model="formData.sslCerName"></el-input>
+            </el-form-item>
             <el-form-item label="证书key地址" prop="sslKeyName">
-                    <el-input v-model="formData.sslKeyName"></el-input>
-                </el-form-item>
+                <el-input v-model="formData.sslKeyName"></el-input>
+            </el-form-item>
             <el-form-item label="启用组件" prop="plugins_arr">
                 <el-select filterable style="width: 100%;" clearable multiple v-model="formData.plugins_arr"
                     placeholder="请选择要启用的组件">
