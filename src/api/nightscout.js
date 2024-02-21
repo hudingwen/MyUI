@@ -122,3 +122,24 @@ export const ChangeCDN = params => {
     return request.get('/api/Nightscout/ChangeCDN', { params: params });
 };
 
+
+//获取ns客户
+export const getNsCustomer = params => {
+  return request.get('/api/Nightscout/getNsCustomer', { params: params });
+};
+//删除ns客户 
+export const delNsCustomer = params => {
+  return request.delete('/api/Nightscout/delNsCustomer', { params: params });
+};
+//删除ns客户
+export const delBatchNsCustomer = params => {
+  return request.post('/api/Nightscout/delBatchNsCustomer', params);
+};
+//更新ns客户
+export const updateNsCustomer = params => {
+  return request.put('/api/Nightscout/updateNsCustomer', params);
+};
+//添加ns客户
+export const addNsCustomer = params => {
+  return request.post('/api/Nightscout/addNsCustomer', params);
+};

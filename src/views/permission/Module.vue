@@ -204,8 +204,8 @@ const HandleSearch = (page) => {
   <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
     @row-click="HandleClickRow" border>
     <el-table-column type="selection" width="50"></el-table-column>
-    <el-table-column prop="LinkUrl" label="接口地址" width="250"></el-table-column>
-    <el-table-column prop="Name" label="描述" min-width="200"></el-table-column>
+    <el-table-column prop="Name" label="描述" width="250"></el-table-column>
+    <el-table-column prop="LinkUrl" label="接口地址" min-width="300"></el-table-column>
     <el-table-column prop="CreateTime" label="创建时间" width="180">
     </el-table-column>
     <el-table-column prop="ModifyTime" label="更新时间" width="180">
@@ -225,11 +225,12 @@ const HandleSearch = (page) => {
   <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon label-position="top">
 
-      <el-form-item label="接口地址" prop="LinkUrl">
-        <el-input v-model="formData.LinkUrl" auto-complete="off"></el-input>
-      </el-form-item>
+  
       <el-form-item label="接口描述" prop="Name">
         <el-input v-model="formData.Name" auto-complete="off"></el-input>
+      </el-form-item>    
+      <el-form-item label="接口地址" prop="LinkUrl">
+        <el-input v-model="formData.LinkUrl" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item label="状态" prop="Enabled">
         <el-select v-model="formData.Enabled" placeholder="请选择角色状态">

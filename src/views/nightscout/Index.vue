@@ -18,7 +18,8 @@ import {
     GetPlugins,
     getAllNsServer,
     GetCDNList,
-    ChangeCDN
+    ChangeCDN,
+    getNsCustomer
 } from '@/api/nightscout.js'
 import {
     GetDic,
@@ -242,6 +243,7 @@ onMounted(() => {
     HandleCDNList()
     handleSummary()
     GetDicList()
+    GetNsList()
 })
 
 const GetDicList = () => {
@@ -494,6 +496,15 @@ const handleCDN = () => {
         })
 
 }
+
+// ns客户列表
+const customerList = ref([])
+const GetNsList = ()=>{
+  getNsCustomer({size:9999}).then(res => {
+    customerList.value = res.data.response.data; 
+  });
+}
+
 </script>
 <template>
     <!-- 搜索 -->
@@ -843,6 +854,15 @@ const handleCDN = () => {
                     <el-select v-model="formData.nsVersion" filterable placeholder="请选择版本号">
                         <el-option v-for="item in nsVersion" :label="item.name" :value="item.content">
                             <span>{{ item.content }}</span>(<span>{{ item.name }}</span>)
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-tooltip>
+            <el-tooltip content="设置所属客户后,需要重启ns实例一次" placement="top">
+                <el-form-item label="所属客户" prop="nsVersion">
+                    <el-select v-model="formData.customerId" filterable placeholder="请选择客户">
+                        <el-option v-for="item in customerList" :label="item.name" :value="item.Id">
+                            <span>{{ item.name }}</span>
                         </el-option>
                     </el-select>
                 </el-form-item>
