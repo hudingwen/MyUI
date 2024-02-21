@@ -816,7 +816,7 @@ const GetNsList = ()=>{
                 </el-select>
             </el-form-item>
             <el-form-item label="来源" prop="resource">
-                <el-select clearable v-model="formData.resource" placeholder="请选择来源">
+                <el-select v-model="formData.resource" placeholder="请选择来源">
                     <el-option label="自来" value="自来"></el-option>
                     <el-option label="推广" value="推广"></el-option>
                     <el-option label="介绍" value="介绍"></el-option>
@@ -825,7 +825,7 @@ const GetNsList = ()=>{
                 </el-select>
             </el-form-item>
             <el-form-item label="分账" prop="accountStatus">
-                <el-select clearable v-model="formData.accountStatus" placeholder="请选择来源">
+                <el-select v-model="formData.accountStatus" placeholder="请选择来源">
                     <el-option label="已分账" value="已分账"></el-option>
                     <el-option label="未分账" value="未分账"></el-option>
                     <el-option label="无账单" value="无账单"></el-option>
@@ -851,7 +851,7 @@ const GetNsList = ()=>{
             </el-form-item>
             <el-tooltip content="设置版本号后,需要重启ns实例一次" placement="top">
                 <el-form-item label="ns版本号" prop="nsVersion">
-                    <el-select v-model="formData.nsVersion" filterable placeholder="请选择版本号">
+                    <el-select v-model="formData.nsVersion" filterable clearable placeholder="请选择版本号">
                         <el-option v-for="item in nsVersion" :label="item.name" :value="item.content">
                             <span>{{ item.content }}</span>(<span>{{ item.name }}</span>)
                         </el-option>
@@ -860,7 +860,7 @@ const GetNsList = ()=>{
             </el-tooltip>
             <el-tooltip content="设置所属客户后,需要重启ns实例一次" placement="top">
                 <el-form-item label="所属客户" prop="nsVersion">
-                    <el-select v-model="formData.customerId" filterable placeholder="请选择客户">
+                    <el-select v-model="formData.customerId" filterable clearable placeholder="请选择客户">
                         <el-option v-for="item in customerList" :label="item.name" :value="item.Id">
                             <span>{{ item.name }}</span>
                         </el-option>

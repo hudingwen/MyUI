@@ -208,7 +208,7 @@ onMounted(() => {
         @row-click="HandleClickRow" border>
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column prop="name" label="客户名称" width="250"></el-table-column>
-        <el-table-column prop="logo" label="客户logo" min-width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="logo" label="客户logo" min-width="250" show-overflow-tooltip></el-table-column>
         <el-table-column prop="remark" label="备注" width="150" show-overflow-tooltip></el-table-column>
 
         <el-table-column prop="CreateTime" label="创建时间" width="180">
