@@ -236,8 +236,8 @@ const handleUpload = () => {
             var uploadName = uploadInfo.value.find(t => t.code == 'uploadName')
             var uploadPass = uploadInfo.value.find(t => t.code == 'uploadPass')
 
-            // var url = uploadUrl.content;
-            var url ="http://localhost:82";
+            var url = uploadUrl.content;
+            // var url ="http://localhost:82";
             var data = { uploadName: uploadName.content, uploadPass: uploadPass.content, base64Image: option.value.catImg }
             upload(url + "/api/Upload/upBase64Image", data).then(res => {
                 console.info("res", res)
