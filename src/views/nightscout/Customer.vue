@@ -235,9 +235,13 @@ const handleUpload = () => {
             var uploadUrl = uploadInfo.value.find(t => t.code == 'uploadUrl')
             var uploadName = uploadInfo.value.find(t => t.code == 'uploadName')
             var uploadPass = uploadInfo.value.find(t => t.code == 'uploadPass')
-            upload(uploadUrl.content + "/api/Upload/up?uploadName=" + encodeURIComponent(uploadName.content) + "&uploadPass=" + encodeURIComponent(uploadPass.content), file).then(res => {
+
+            // var url = uploadUrl.content;
+            var url ="http://localhost:82";
+            var data = { uploadName: uploadName.content, uploadPass: uploadPass.content, base64Image: option.value.catImg }
+            upload(url + "/api/Upload/upBase64Image", data).then(res => {
                 console.info("res", res)
-                formData.logo = es.data.response
+                formData.value.logo = res.data.response
             })
         })
         .catch((err) => {
