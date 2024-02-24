@@ -282,7 +282,20 @@ const handleUpload = () => {
         @row-click="HandleClickRow" border>
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column prop="name" label="客户名称" width="250"></el-table-column>
-        <el-table-column prop="logo" label="客户logo" min-width="250" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="logo" label="客户logo" min-width="250" show-overflow-tooltip>
+
+            <template #default="{ row }">
+                <el-image style="width: 40px; height: 40px;margin-top: 5px;border: 1px solid silver;" :src="row.logo"
+                    :preview-src-list="[row.logo]">
+                    <template #error>
+                        <div class="image-slot">
+                            还未上传
+                        </div>
+                    </template>
+                </el-image>
+                {{ row.logo }}
+            </template>
+        </el-table-column>
         <el-table-column prop="remark" label="备注" width="150" show-overflow-tooltip></el-table-column>
 
         <el-table-column prop="CreateTime" label="创建时间" width="180">
@@ -314,7 +327,7 @@ const handleUpload = () => {
             <el-form-item label="客户logo" prop="logo">
                 <el-input v-model="formData.logo" auto-complete="off"></el-input>
                 <el-image style="width: 200px; height: 200px;margin-top: 5px;border: 1px solid silver;"
-                    :src="formData.logo">
+                    :src="formData.logo" :preview-src-list="[formData.logo]">
                     <template #error>
                         <div class="image-slot">
                             还未上传
@@ -344,9 +357,7 @@ const handleUpload = () => {
                     <el-image style="width: 200px; height: 200px;margin-top: 5px;border: 1px solid silver;"
                         :src="option.catImg">
                         <template #error>
-
                             <div class="image-slot">
-
                             </div>
                         </template>
                     </el-image>
