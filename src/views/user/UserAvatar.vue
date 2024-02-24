@@ -87,10 +87,11 @@ const option = ref({
             :autoCrop="option.autoCrop" :autoCropWidth="option.autoCropWidth" :autoCropHeight="option.autoCropHeight"
             :fixedBox="option.fixedBox" :fixed="option.fixed" :fixedNumber="option.fixedNumber">
         </vue-cropper>
-        <el-image style="width: 200px; height: 200px;margin-top: 5px;" :src="option.catImg">
+        <div>截取头像预览</div>
+        <el-image style="width: 200px; height: 200px;margin-top: 5px;border: 1px solid silver;" :src="option.catImg">
             <template #error>
                 <div class="image-slot">
-                    头像预览
+                   
                 </div>
             </template>
         </el-image>
