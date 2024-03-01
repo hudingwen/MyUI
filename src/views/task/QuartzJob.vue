@@ -432,7 +432,8 @@ const HandleSearch = (page) => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="550px" :before-close="handleClose">
-    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="90px" status-icon label-position="top">
+    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="90px" status-icon
+      label-position="top">
       <el-form-item label="任务组" prop="JobGroup">
         <el-input v-model="formData.JobGroup" auto-complete="off"></el-input>
       </el-form-item>
@@ -465,7 +466,7 @@ const HandleSearch = (page) => {
         <el-input class="textarea" type="textarea" :rows="6" v-model="formData.JobParams"></el-input>
       </el-form-item>
       <el-form-item prop="TriggerType" label="是否Cron">
-        <el-switch v-model="formData.TriggerType"> </el-switch>
+        <el-switch v-model="formData.TriggerType" :active-value="1" :inactive-value="0"> </el-switch>
         <span style="margin-left: 5px; color: #aaa">(1：Cron模式，0：Simple模式)</span>
       </el-form-item>
       <el-form-item label="Cron表达式" v-if="formData.TriggerType" prop="Cron">
