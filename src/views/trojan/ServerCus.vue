@@ -179,12 +179,20 @@ onMounted(() => {
 const trojanUsers = ref([])
 const GetSelectUsers = () => {
   GetAllTrojanUser().then(res => {
-    res.data.response.unshift({
-      id: 0,
-      username: '所有用户'
-    });
+    // res.data.response.unshift({
+    //   id: 0,
+    //   username: '所有用户'
+    // });
     trojanUsers.value = res.data.response;
   });
+}
+//获取用户名称
+const getUserName = (uid)=>{
+    let user = trojanUsers.value.find(t=>t.id == uid)
+    if(user){
+      return user.username
+    }
+    return uid;
 }
 
 </script>
@@ -220,14 +228,7 @@ const GetSelectUsers = () => {
     @row-click="HandleClickRow" border>
     <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column prop="servername" label="服务器名称" width="250"></el-table-column>
-    <el-table-column prop="userid" label="绑定用户" width="150" sortable>
-      <template #default="{ row }">
-        <el-select :disabled="true" v-model="row.userid">
-          <el-option v-for="item in trojanUsers" :key="item.id" :label="item.username" :value="item.id">
-          </el-option>
-        </el-select>
-      </template>
-    </el-table-column>
+ 
 
     <el-table-column prop="serveraddress" label="链接地址" min-width="200"></el-table-column>
     <el-table-column prop="serverremark" label="备注" width="100"></el-table-column>
@@ -237,6 +238,21 @@ const GetSelectUsers = () => {
         <el-tag v-else type="danger">禁用</el-tag>
       </template>
     </el-table-column>
+
+    <el-table-column prop="isAllUser" label="是否面向所有用户" width="150">
+      <template #default="{ row }">
+        <el-tag v-if="row.isAllUser" type="success">是</el-tag>
+        <el-tag v-else type="danger">否</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column prop="bindUsers" label="绑定用户" width="250">
+      <template #default="{ row }">
+        <el-row :gutter="2">
+          <el-col :span="1.5" v-for="uid in row.bindUsers"><el-tag>{{getUserName(uid)}}</el-tag> </el-col>
+        </el-row>
+      </template>
+    </el-table-column>
+
     <el-table-column prop="CreateTime" label="创建时间" width="180">
     </el-table-column>
     <el-table-column prop="ModifyTime" label="更新时间" width="180">
@@ -265,8 +281,11 @@ const GetSelectUsers = () => {
       <el-form-item label="是否启用" prop="serverenable">
         <el-switch v-model="formData.serverenable" auto-complete="off"></el-switch>
       </el-form-item>
-      <el-form-item label="绑定用户" prop="userid">
-        <el-select filterable v-model="formData.userid" placeholder="请选择绑定用户">
+      <el-form-item label="是否面向所有用户" prop="isAllUser">
+        <el-switch v-model="formData.isAllUser" auto-complete="off"></el-switch>
+      </el-form-item>
+      <el-form-item label="绑定用户" prop="bindUsers" v-if="!formData.isAllUser">
+        <el-select filterable multiple v-model="formData.bindUsers" placeholder="请选择绑定用户">
           <el-option v-for="item in trojanUsers" :key="item.id" :label="item.username" :value="item.id">
           </el-option>
         </el-select>
