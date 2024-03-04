@@ -86,7 +86,7 @@ onMounted(() => {
 //新增&编辑操作
 const dialogVisible = ref(false)
 const formData = ref(
-    { cdn: '', position_arr: [], plugins_arr: [], Enabled: true, money: 0, startTime: '', endTime: '', isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认', accountStatus: '未开启' }
+    { cdn: '', position_arr: [], plugins_arr: [], Enabled: true, money: 0, startTime: '', endTime: '', isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认'}
 )
 const refForm = ref()
 const ruleForm = {
@@ -129,7 +129,7 @@ const ruleForm = {
 const HandleAdd = () => {
     let startTime = formatDate(new Date());
     let endTime = formatDate(new Date(), 365);
-    formData.value = { customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: [], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 0, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认', accountStatus: '未开启' }
+    formData.value = { customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: [], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 0, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认'}
     dialogVisible.value = true
 }
 //编辑
@@ -280,7 +280,6 @@ const plugins = ref([])
 const summary = ref({
     status: [],
     resource: [],
-    account: [],
     customer: []
 })
 // 公众号绑定显示
@@ -488,7 +487,6 @@ const copy = (data) => {
 const handleSummary = () => {
     summary.value.status = []
     summary.value.resource = []
-    summary.value.account = []
     summary.value.customer = []
     GetSummary().then(res => {
         summary.value = res.data.response
@@ -553,6 +551,12 @@ const GetNsList = () => {
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="运行状态" class="flexItem" label-width="90">
+                    <el-select class="flexContent" clearable v-model="filters.isStop" placeholder="请选择要搜索的运行状态">
+                        <el-option label="运行" :value="false"></el-option>
+                        <el-option label="停止" :value="true"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
                 </el-form-item>
@@ -596,19 +600,6 @@ const GetNsList = () => {
 
                 </el-form-item>
 
-                <el-form-item label="账单" class="flexItem" label-width="90">
-                    <el-row :gutter="30">
-                        <el-col :span="1.5" :key="item.name" v-for="(item, index) in summary.account">
-                            <el-badge :max="999999999" :value="item.count">
-                                <el-tag @click="HandleTag(item.name)" style="cursor:pointer;width: 60px;text-align: center;"
-                                    type="info">{{ (item.name ?
-                                        item.name : '未确认')
-                                    }}</el-tag>
-                            </el-badge>
-                        </el-col>
-                    </el-row>
-                </el-form-item>
-
                 <el-form-item label="客户" class="flexItem" label-width="90">
                     <el-row :gutter="30">
 
@@ -648,6 +639,11 @@ const GetNsList = () => {
         <el-table-column show-overflow-tooltip prop="cdn" label="服务网络" width="150">
             <template #default="{ row }">{{ getCDNName(row) }}</template>
         </el-table-column>
+        <el-table-column prop="isRefresh" label="实例状态" width="100">
+            <template #default="{ row }">
+                <el-tag :type="row.isStop ? 'warning' : 'success'">{{ row.isStop ? '停止' : '运行' }}</el-tag>
+            </template>
+        </el-table-column>
         <el-table-column prop="isRefresh" label="自动重启" width="100">
             <template #default="{ row }">
                 <el-tag :type="row.isRefresh ? 'warning' : ''">{{ row.isRefresh ? '是' : '否' }}</el-tag>
@@ -675,7 +671,6 @@ const GetNsList = () => {
         </el-table-column>
         <el-table-column show-overflow-tooltip prop="status" label="状态" width="90"></el-table-column>
         <el-table-column show-overflow-tooltip prop="resource" label="来源" width="90"></el-table-column>
-        <el-table-column show-overflow-tooltip prop="accountStatus" label="分账" width="90"></el-table-column>
         <el-table-column show-overflow-tooltip prop="money" label="费用/元" width="90"></el-table-column>
         <el-table-column show-overflow-tooltip prop="position" label="用户所在区域" width="150"></el-table-column>
         <el-table-column show-overflow-tooltip prop="backupurl" label="备用访问" width="350">
@@ -864,14 +859,6 @@ const GetNsList = () => {
                     <el-option label="介绍" value="介绍"></el-option>
                     <el-option label="分成" value="分成"></el-option>
                     <el-option label="未确认" value="未确认"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="分账" prop="accountStatus">
-                <el-select v-model="formData.accountStatus" placeholder="请选择来源">
-                    <el-option label="已分账" value="已分账"></el-option>
-                    <el-option label="未分账" value="未分账"></el-option>
-                    <el-option label="无账单" value="无账单"></el-option>
-                    <el-option label="未开启" value="未开启"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="费用/元" prop="money">
