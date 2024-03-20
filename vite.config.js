@@ -5,12 +5,13 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-// 打包时间错
+// 打包时间戳,防止打包部署后用户页面出现缓存问题
 const timestamp = new Date().getTime()
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    // 暂时取消按需导入,因为按需导入会出现用户等待时间,不友好
     // 按需自动导入elementPlus,不需要手动import否则样式会出错 
     // AutoImport({
     //   resolvers: [ElementPlusResolver()]

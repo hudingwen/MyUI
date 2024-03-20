@@ -1,8 +1,8 @@
 <script setup>
 // 登录接口
-import { userLogin, GetNavigationBar, getInfoByToken } from '@/api/user.js'
+import { userLogin, GetNavigationBar, getInfoByToken, getCode } from '@/api/user.js'
 // 图标
-import { User, Lock } from '@element-plus/icons-vue'
+import { User, Lock, Picture } from '@element-plus/icons-vue'
 
 import { ElMessage } from 'element-plus'
 // 响应式
@@ -20,8 +20,12 @@ import { onMounted } from 'vue';
 // 登录信息
 const formData = ref({
   name: '',
-  pass: ''
+  pass: '',
+  code: '',
+  key: ''
 })
+//验证码
+const imgStr = ref('')
 const userStore = useUserStore()
 // mounted生命周期
 onMounted(() => {
@@ -31,6 +35,7 @@ onMounted(() => {
     formData.value.name = userStore.name
     formData.value.pass = userStore.pass
   }
+  refreshCode()
 })
 // 监听变量
 watch(() => userStore.isRemember, () => {
@@ -40,7 +45,8 @@ watch(() => userStore.isRemember, () => {
 // 校验信息
 const formRules = {
   name: [{ required: true, message: '请输入账号', trigger: 'blur' }],
-  pass: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+  pass: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
 }
 const refForm = ref()
 const login = () => {
@@ -88,9 +94,9 @@ const login = () => {
 
         })
         .catch((errUser) => {
-
+          refreshCode()
           // 在这里处理登录失败的额外操作
-          console.info('登录失败', errUser) 
+          console.info('登录失败', errUser)
         })
     })
     .catch((err) => {
@@ -102,6 +108,13 @@ const login = () => {
 const reg = () => {
   ElMessage.error('别乱点');
 }
+const refreshCode = () => {
+  getCode().then(res => {
+    formData.value.code = ''
+    formData.value.key = res.data.response.key
+    imgStr.value = 'data:image/png;base64,' + res.data.response.code
+  })
+}
 
 
 // 测试信息
@@ -110,17 +123,36 @@ const inputDemoAccount = (name, pass) => {
   formData.value.pass = pass
 }
 </script>
+
 <template>
   <div class="login-box">
     <el-form @submit.prevent ref="refForm" :rules="formRules" :model="formData" label-position="left" label-width="0px"
       class="login-container">
       <h3 class="title">系统登录</h3>
       <el-form-item prop="name">
-        <el-input v-model="formData.name" :prefix-icon="User" type="text" auto-complete="off" placeholder="账号"></el-input>
+        <el-input v-model="formData.name" :prefix-icon="User" type="text" auto-complete="off"
+          placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="pass">
-        <el-input @keyup.enter="login" v-model="formData.pass" :prefix-icon="Lock" auto-complete="off" show-password
+        <el-input v-model="formData.pass" :prefix-icon="Lock" auto-complete="off" show-password
           placeholder="密码"></el-input>
+      </el-form-item>
+      <el-form-item prop="code">
+        <el-row :gutter="5">
+          <el-col :span="1.5"><el-input @keyup.enter="login" v-model="formData.code" :prefix-icon="Picture"
+              auto-complete="off" placeholder="验证码"></el-input></el-col>
+          <el-col :span="1.5">
+            <el-image @click="refreshCode" style="height: 35px;cursor:pointer;" :src="imgStr">
+              <template #error>
+                <div class="image-slot">
+                  <el-icon>
+                    <Picture />
+                  </el-icon>
+                </div>
+              </template>
+            </el-image>
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-checkbox class="remember" v-model="userStore.isRemember">记住我</el-checkbox>
 
@@ -142,6 +174,7 @@ const inputDemoAccount = (name, pass) => {
     </el-form>
   </div>
 </template>
+
 <style lang="scss" scoped>
 .login-box {
   /* flex布局 */

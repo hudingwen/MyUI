@@ -5,6 +5,11 @@ export const userLogin = (params) => {
   return request.get('/api/Login/JWTToken3.0', { params: params })
 }
 
+// 获取验证码
+export const getCode = (params) => {
+  return request.get('/api/Login/getCode', { params: params })
+}
+
 // 获取用户信息
 export const getInfoByToken = (params) => {
   return request.get('/api/user/getInfoByToken', { params: params })
