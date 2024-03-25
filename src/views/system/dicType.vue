@@ -246,16 +246,16 @@ const HandleDicData = (row) => {
                 <el-input v-model="formData.name" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="字典内容" prop="content">
-                <el-input v-model="formData.content" auto-complete="off"></el-input>
+                <el-input v-model="formData.content" auto-complete="off" type="textarea"></el-input>
             </el-form-item>
             <el-form-item label="说明" prop="description">
                 <el-input v-model="formData.description" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="字典内容2" prop="content2">
-                <el-input v-model="formData.content2" auto-complete="off"></el-input>
+                <el-input v-model="formData.content2" auto-complete="off" type="textarea"></el-input>
             </el-form-item>
             <el-form-item label="字典内容3" prop="content3">
-                <el-input v-model="formData.content3" auto-complete="off"></el-input>
+                <el-input v-model="formData.content3" auto-complete="off" type="textarea"></el-input>
             </el-form-item>
         </el-form>
 
