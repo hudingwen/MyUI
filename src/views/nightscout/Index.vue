@@ -86,7 +86,7 @@ onMounted(() => {
 //新增&编辑操作
 const dialogVisible = ref(false)
 const formData = ref(
-    { cdn: '', position_arr: [], plugins_arr: [], Enabled: true, money: 0, startTime: '', endTime: '', isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认'}
+    { cdn: '', position_arr: [], plugins_arr: [], Enabled: true, money: 0, startTime: '', endTime: '', isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认' }
 )
 const refForm = ref()
 const ruleForm = {
@@ -129,7 +129,7 @@ const ruleForm = {
 const HandleAdd = () => {
     let startTime = formatDate(new Date());
     let endTime = formatDate(new Date(), 365);
-    formData.value = { customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: [], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 0, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认'}
+    formData.value = { isNeedPassword: false, customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: [], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 0, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认' }
     dialogVisible.value = true
 }
 //编辑
@@ -579,7 +579,7 @@ const GetNsList = () => {
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleTag(item.name)"
                                     style="cursor:pointer;width: 60px;text-align: center;">{{
-                                        (item.name ? item.name : '未确认') }}</el-tag>
+                (item.name ? item.name : '未确认') }}</el-tag>
                             </el-badge>
                         </el-col>
                     </el-row>
@@ -590,9 +590,9 @@ const GetNsList = () => {
                     <el-row :gutter="30">
                         <el-col :span="1.5" :key="item.name" v-for="(item, index) in summary.resource">
                             <el-badge :max="999999999" :value="item.count">
-                                <el-tag @click="HandleTag(item.name)" style="cursor:pointer;width: 60px;text-align: center;"
-                                    type="info">{{ (item.name ?
-                                        item.name : '未确认')
+                                <el-tag @click="HandleTag(item.name)"
+                                    style="cursor:pointer;width: 60px;text-align: center;" type="info">{{ (item.name ?
+                item.name : '未确认')
                                     }}</el-tag>
                             </el-badge>
                         </el-col>
@@ -606,9 +606,10 @@ const GetNsList = () => {
                         <el-col :span="1.5" :key="item.customerId" v-for="(item, index) in summary.customer">
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleCustomer(item.customerId)"
-                                    style="cursor:pointer;width: auto;text-align: center;" type="info">{{ (item.customerId
-                                        === "0" ? "默认" : getCustomerName({ customerId: item.customerId }))
-                                    }}</el-tag>
+                                    style="cursor:pointer;width: auto;text-align: center;" type="info">{{
+                (item.customerId
+                    === "0" ? "默认" : getCustomerName({ customerId: item.customerId }))
+            }}</el-tag>
                             </el-badge>
                         </el-col>
                     </el-row>
@@ -657,6 +658,11 @@ const GetNsList = () => {
         <el-table-column prop="isKeepPush" label="持续推送" width="100">
             <template #default="{ row }">
                 <el-tag :type="row.isKeepPush ? 'success' : ''">{{ row.isKeepPush ? '是' : '否' }}</el-tag>
+            </template>
+        </el-table-column>
+        <el-table-column prop="isNeedPassword" label="是否登录查看血糖" width="150">
+            <template #default="{ row }">
+                <el-tag :type="row.isNeedPassword ? 'success' : ''">{{ row.isNeedPassword ? '是' : '否' }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="isBindWeChat" label="绑定公众号" width="100">
@@ -709,7 +715,8 @@ const GetNsList = () => {
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item :icon="Plus" @click="handleBind(row)">获取公众号绑定二维码</el-dropdown-item>
-                            <el-dropdown-item :icon="MuteNotification" @click="handleUnbind(row)">解除公众号绑定</el-dropdown-item>
+                            <el-dropdown-item :icon="MuteNotification"
+                                @click="handleUnbind(row)">解除公众号绑定</el-dropdown-item>
                             <el-dropdown-item :icon="Plus" @click="handleBindMini(row)">获取小程序绑定二维码</el-dropdown-item>
                             <el-dropdown-item :icon="MuteNotification"
                                 @click="handleUnbindMini(row)">解除小程序绑定</el-dropdown-item>
@@ -835,6 +842,12 @@ const GetNsList = () => {
                 <el-form-item label="持续推送" prop="isKeepPush">
                     <el-radio v-model="formData.isKeepPush" :label="true">是</el-radio>
                     <el-radio v-model="formData.isKeepPush" :label="false">否</el-radio>
+                </el-form-item>
+            </el-tooltip>
+            <el-tooltip content="设置持续推送后,需要重启ns实例一次" placement="top">
+                <el-form-item label="是否登录查看血糖" prop="isNeedPassword">
+                    <el-radio v-model="formData.isNeedPassword" :label="true">是</el-radio>
+                    <el-radio v-model="formData.isNeedPassword" :label="false">否</el-radio>
                 </el-form-item>
             </el-tooltip>
             <el-tooltip content="不需要额外添加https否则会出问题" placement="top">
@@ -976,7 +989,7 @@ const GetNsList = () => {
             </span>
         </template>
     </el-dialog>
-</template> 
+</template>
 <style lang="scss" scoped>
 .flexBox {
     display: flex;
