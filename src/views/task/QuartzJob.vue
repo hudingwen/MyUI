@@ -374,29 +374,29 @@ const HandleSearch = (page) => {
     <el-table-column prop="TriggerType" label="任务类型" width="90" align="center">
       <template #default="{ row }">
         <el-tag :type="row.TriggerType == 1 ? 'success' : ''" disable-transitions>{{ row.TriggerType == 1 ?
-          "Cron" : "Simple" }}</el-tag>
+        "Cron" : "Simple" }}</el-tag>
       </template>
     </el-table-column>
 
     <el-table-column prop="triggerStatus" label="内存状态" width="90" align="center">
       <template #default="{ row }">
         <el-tag :type="row.Triggers[0].triggerStatus == '正常'
-          ? 'success'
-          : 'danger'
-          " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
+        ? 'success'
+        : 'danger'
+        " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
       </template>
     </el-table-column>
 
     <el-table-column prop="IsStart" label="数据库状态" width="100" align="center">
       <template #default="{ row }">
         <el-tag :type="row.IsStart ? 'success' : 'danger'" disable-transitions>{{ row.IsStart ? "运行中" : "停止"
-        }}</el-tag>
+          }}</el-tag>
       </template>
     </el-table-column>
 
     <el-table-column prop="Cron" label="Cron表达式" width="200" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="AssemblyName" label="程序集" width="150" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="ClassName" label="执行类" width="150" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="ClassName" label="执行类" width="350" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="AssemblyName" label="程序集" width="250" show-overflow-tooltip></el-table-column>
     <el-table-column prop="RunTimes" label="累计运行(次)" width="150" show-overflow-tooltip></el-table-column>
     <el-table-column prop="IntervalSecond" label="循环周期(秒)" width="150" show-overflow-tooltip></el-table-column>
     <el-table-column prop="CycleRunTimes" label="循环(次)" width="150" show-overflow-tooltip></el-table-column>
@@ -440,14 +440,15 @@ const HandleSearch = (page) => {
       <el-form-item label="名称" prop="Name">
         <el-input v-model="formData.Name" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="程序集" prop="AssemblyName">
-        <el-input v-model="formData.AssemblyName" auto-complete="off">
+      <el-form-item label="执行类名" prop="ClassName">
+        <el-input v-model="formData.ClassName" auto-complete="off">
           <template #append>
             <el-popover v-model="visibleNamespace" placement="right" :width="400" trigger="click">
               <template #reference>
                 <el-button :icon="Search" @click="GetTaskNameSpace"></el-button>
               </template>
-              <el-table @cell-dblclick="HandleNamespace" :data="tableNamespace" highlight-current-row style="width: 100%">
+              <el-table @cell-dblclick="HandleNamespace" :data="tableNamespace" highlight-current-row
+                style="width: 100%">
                 <el-table-column type="index" width="50"> </el-table-column>
                 <el-table-column property="nameClass" label="类名" min-width="350">
                 </el-table-column>
@@ -459,8 +460,9 @@ const HandleSearch = (page) => {
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item label="执行类名" prop="ClassName">
-        <el-input v-model="formData.ClassName" auto-complete="off"></el-input>
+      <el-form-item label="程序集" prop="AssemblyName">
+        <el-input v-model="formData.AssemblyName" auto-complete="off">
+        </el-input>
       </el-form-item>
       <el-form-item label="执行参数" prop="JobParams">
         <el-input class="textarea" type="textarea" :rows="6" v-model="formData.JobParams"></el-input>
@@ -537,7 +539,7 @@ const HandleSearch = (page) => {
       </span>
     </template>
   </el-dialog>
-</template> 
+</template>
 <style lang="scss" scoped>
 .flexBox {
   display: flex;

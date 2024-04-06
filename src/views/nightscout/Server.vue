@@ -196,6 +196,22 @@ const getServerName = (serverId) => {
   }
   return tag;
 }
+// 复制
+const copy = (row) => {
+  if (!row) {
+    ElMessage.error('请选择要操作的数据!')
+    return;
+  }
+  let elInput = document.createElement('textarea')
+  elInput.value = row.Id
+  document.body.appendChild(elInput)
+  // 选择对象
+  elInput.select()
+  // 执行浏览器复制命令
+  document.execCommand("Copy")
+  elInput.remove()
+  ElMessage.success('复制成功')
+}
 </script>
 <template>
   <!-- 搜索 -->
@@ -219,6 +235,9 @@ const getServerName = (serverId) => {
         </el-form-item>
         <el-form-item class="flexItem">
           <el-button type="danger" plain @click="HandleBatchDel(selectRows)">批量删除</el-button>
+        </el-form-item>
+        <el-form-item class="flexItem">
+          <el-button type="primary" plain @click="copy(currentRow)">复制服务器ID</el-button>
         </el-form-item>
       </el-form>
 
@@ -336,10 +355,10 @@ const getServerName = (serverId) => {
       <el-form-item label="理论实例数量" prop="holdCount">
         <el-input v-model="formData.holdCount" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="是否Mongo" prop="isMongo"> 
+      <el-form-item label="是否Mongo" prop="isMongo">
         <el-switch v-model="formData.isMongo" size="small" active-text="是" inactive-text="否" />
       </el-form-item>
-      <el-form-item label="是否Nginx" prop="isNginx"> 
+      <el-form-item label="是否Nginx" prop="isNginx">
         <el-switch v-model="formData.isNginx" size="small" active-text="是" inactive-text="否" />
       </el-form-item>
       <el-form-item label="说明" prop="remark">
@@ -356,7 +375,7 @@ const getServerName = (serverId) => {
       </span>
     </template>
   </el-dialog>
-</template> 
+</template>
 <style lang="scss" scoped>
 .flexBox {
   display: flex;
