@@ -284,8 +284,8 @@ const HandleLink = (row) => {
   linkData.value = {}
   getSpliceServer({ id: row.id }).then(res => {
     linkData.value.normalApi = res.data.response.normalApi + row.passwordshow;
-    linkData.value.clashApi = res.data.response.clashApi + linkData.value.normalApi;
-    linkData.value.clashApiBackup = res.data.response.clashApiBackup + linkData.value.normalApi;
+    linkData.value.clashApi = res.data.response.clashApi + encodeURIComponent(linkData.value.normalApi);
+    linkData.value.clashApi2 = res.data.response.clashApi2 + encodeURIComponent(linkData.value.normalApi);
     linkData.value.servers = res.data.response.list;
     visibleBook.value = true
   });
@@ -358,9 +358,9 @@ const HandleLink = (row) => {
           </el-row>
           <el-row>
             <el-col>起止时间:<el-link type="success">{{ (row.useList.length > 0 ?
-              row.useList[row.useList.length - 1].moth : '')
-            }}-</el-link><el-link type="success">{{ (row.useList.length > 1 ? row.useList[0].moth :
-  '') }}</el-link></el-col>
+        row.useList[row.useList.length - 1].moth : '')
+                }}-</el-link><el-link type="success">{{ (row.useList.length > 1 ? row.useList[0].moth :
+        '') }}</el-link></el-col>
           </el-row>
           <el-row>
             <el-col>
@@ -424,7 +424,8 @@ const HandleLink = (row) => {
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
-    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon label-position="top">
+    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon
+      label-position="top">
 
       <el-form-item label="用户名" prop="username">
         <el-input v-model="formData.username" auto-complete="off"></el-input>
@@ -455,39 +456,28 @@ const HandleLink = (row) => {
   </el-dialog>
   <!-- 弹窗-订阅信息 -->
   <el-dialog v-model="visibleBook" title="订阅信息" width="550px" :before-close="handleClose">
-    <el-form @submit.prevent label-position="top">
-      <el-form-item label="Clash订阅选择">
-        <p>主用</p>
-        <el-link type="success">{{ linkData.clashApi }}</el-link>
-        <p>备用</p>
-        <el-link type="primary">{{ linkData.clashApiBackup }}</el-link>
-      </el-form-item>
-      <el-form-item label="普通订阅选择">
-        <el-link type="success">{{ linkData.normalApi }}</el-link>
-      </el-form-item>
-      <el-form-item label="单节点选择">
-        <el-form-item>
-          <el-select style="width: 350px;" v-model="linkData.selectServerId" placeholder="请选择要链接的服务器" filterable clearable>
-            <el-option v-for="item in linkData.servers ? linkData.servers : []" :key="item.name" :label="item.name"
-              :value="item.value">
-              <span>{{ item.name }}</span>
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form-item>
-      <el-form-item label="单个链接" v-if="linkData.selectServerId">
-        <el-link type="success">{{ linkData.selectServerId }}</el-link>
-      </el-form-item>
-
-    </el-form>
-
+    <p>Clash订阅</p>
+    <el-text type="success">{{ linkData.clashApi }}</el-text>
+    <p>Clash订阅v2</p>
+    <el-text type="success">{{ linkData.clashApi2 }}</el-text>
+    <p>普通订阅</p>
+    <el-text type="success">{{ linkData.normalApi }}</el-text>
+    <p>单节点选择</p>
+    <el-select style="width: 350px;" v-model="linkData.selectServerId" placeholder="请选择要链接的服务器" filterable clearable>
+      <el-option v-for="item in linkData.servers ? linkData.servers : []" :key="item.name" :label="item.name"
+        :value="item.value">
+        <span>{{ item.name }}</span>
+      </el-option>
+    </el-select>
+    <el-text v-if="linkData.selectServerId" type="success">{{ linkData.selectServerId }}</el-text>
+    
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="visibleBook = false">关闭</el-button>
       </span>
     </template>
   </el-dialog>
-</template> 
+</template>
 <style lang="scss" scoped>
 .flexBox {
   display: flex;
