@@ -68,7 +68,7 @@ const refForm = ref()
 const ruleForm = {
     name: [
         { required: true, message: '字典名称不能为空', trigger: 'change' },
-    ], 
+    ],
     codeOrder: [
         { required: true, message: '排序不能为空', trigger: 'change' },
     ]
@@ -235,6 +235,12 @@ const handleAllDicType = () => {
         <el-table-column prop="name" label="字典名称" width="250"></el-table-column>
         <el-table-column prop="code" label="字典code" width="250"></el-table-column>
         <el-table-column prop="content" label="字典内容" min-width="200"></el-table-column>
+        <el-table-column prop="Enabled" label="是否启用" width="100">
+            <template #default="{ row }">
+                <el-tag v-if="row.Enabled" type="success">启用</el-tag>
+                <el-tag v-if="!row.Enabled" type="danger">禁用</el-tag>
+            </template>
+        </el-table-column>
         <el-table-column prop="codeOrder" label="排序" min-width="200"></el-table-column>
         <el-table-column prop="description" label="字典描述" width="200"></el-table-column>
         <el-table-column prop="pCode" label="字典类型" width="200"></el-table-column>
@@ -273,6 +279,10 @@ const handleAllDicType = () => {
             <el-form-item label="字典内容" prop="content">
                 <el-input v-model="formData.content" auto-complete="off" type="textarea"></el-input>
             </el-form-item>
+            <el-form-item label="是否启用" prop="Enabled">
+                <el-checkbox v-model="formData.Enabled">是否启用</el-checkbox>
+            </el-form-item>
+
             <el-form-item label="排序" prop="codeOrder">
                 <el-input v-model.number="formData.codeOrder" auto-complete="off"></el-input>
             </el-form-item>
@@ -296,7 +306,7 @@ const handleAllDicType = () => {
             </span>
         </template>
     </el-dialog>
-</template> 
+</template>
 <style lang="scss" scoped>
 .flexBox {
     display: flex;
