@@ -19,7 +19,7 @@ const tableTotal = ref(0)
 const refTable = ref()
 const currentRow = ref({})
 const selectRows = ref([])
-const filters = ref({ page: 1, size: 20, key: '', isuse: true })
+const filters = ref({ page: 1, size: 20, key: '', isuse: false })
 
 const HandleSelectChange = (selection) => {
   selectRows.value = selection
@@ -69,7 +69,7 @@ const ruleForm = {
 //新增
 const HandleAdd = () => {
   optionsValue.value = "GB";
-  formData.value = { Pid: 0, CodeRelationship: '0', Status: true }
+  formData.value = { Pid: 0, CodeRelationship: '0', Status: true, quota: 100 }
   dialogVisible.value = true
 }
 //编辑
@@ -458,19 +458,19 @@ const HandleLink = (row) => {
   <el-dialog v-model="visibleBook" title="订阅信息" width="550px" :before-close="handleClose">
     <p>Clash订阅</p>
     <el-text type="success">{{ linkData.clashApi }}</el-text>
-    <p>Clash订阅v2</p>
-    <el-text type="success">{{ linkData.clashApi2 }}</el-text>
+    <!-- <p>Clash订阅v2</p>
+    <el-text type="success">{{ linkData.clashApi2 }}</el-text> -->
     <p>普通订阅</p>
     <el-text type="success">{{ linkData.normalApi }}</el-text>
     <p>单节点选择</p>
-    <el-select style="width: 350px;" v-model="linkData.selectServerId" placeholder="请选择要链接的服务器" filterable clearable>
+    <el-select style="width: 100%;" v-model="linkData.selectServerId" placeholder="请选择要链接的服务器" filterable clearable>
       <el-option v-for="item in linkData.servers ? linkData.servers : []" :key="item.name" :label="item.name"
         :value="item.value">
         <span>{{ item.name }}</span>
       </el-option>
     </el-select>
     <el-text v-if="linkData.selectServerId" type="success">{{ linkData.selectServerId }}</el-text>
-    
+
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="visibleBook = false">关闭</el-button>
