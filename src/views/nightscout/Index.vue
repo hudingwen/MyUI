@@ -535,7 +535,7 @@ const GetNsList = () => {
                 <el-form-item label="服务器" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
                         <el-option v-for="item in nsServer" :key="item.Id"
-                            :label="item.serverName + '(' + item.count + '/' + item.holdCount + ')'" :value="item.Id">
+                            :label="item.serverName + '(' + item.countStop + '/'+ item.countStart + '/'+ item.count + '/' + item.holdCount + ')'" :value="item.Id">
                         </el-option>
                     </el-select>
                 </el-form-item>
