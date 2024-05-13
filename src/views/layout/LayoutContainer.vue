@@ -12,7 +12,8 @@ import {
   Expand,
   Fold,
   Close,
-  ArrowDown
+  ArrowDown,
+  TurnOff
 } from '@element-plus/icons-vue'
 import { ElMessageBox } from 'element-plus'
 import avatar from '@/assets/img/default.png'
@@ -204,6 +205,7 @@ const tagRemove = (tag) => {
                   <el-dropdown-item :icon="User" v-on:click="handleCommand('profile', '基本资料')">基本资料</el-dropdown-item>
                   <el-dropdown-item :icon="Crop" v-on:click="handleCommand('avatar', '更换头像')">更换头像</el-dropdown-item>
                   <el-dropdown-item :icon="EditPen" v-on:click="handleCommand('password', '重置密码')">重置密码</el-dropdown-item>
+                  <el-dropdown-item :icon="TurnOff" v-on:click="handleCommand('auth', '双因子认证')">双因子认证</el-dropdown-item>
                   <el-dropdown-item :icon="SwitchButton"
                     v-on:click="handleCommand('logout', '退出登录')">退出登录</el-dropdown-item>
                 </el-dropdown-menu>

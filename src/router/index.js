@@ -53,6 +53,11 @@ const router = createRouter({
           path: '/test/password',
           component: () => import('@/views/user/UserPassword.vue'),
           meta: { requireAuth: true, title: '重置密码' }
+        },
+        {
+          path: '/test/auth',
+          component: () => import('@/views/user/User2FA.vue'),
+          meta: { requireAuth: true, title: '双因子认证' }
         }
       ]
     },

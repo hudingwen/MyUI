@@ -1,10 +1,10 @@
 <script setup>
 // 登录接口
-import { userLogin, GetNavigationBar, getInfoByToken, getCode } from '@/api/user.js'
+import { userLogin, GetNavigationBar, getInfoByToken, getCode, Get2FAInfo } from '@/api/user.js'
 // 图标
-import { User, Lock, Picture } from '@element-plus/icons-vue'
-
-import { ElMessage } from 'element-plus'
+import { User, Lock, Picture } from '@element-plus/icons-vue' 
+// 消息框
+import { ElMessage ,ElMessageBox} from 'element-plus'
 // 响应式
 import { ref, watch } from 'vue'
 // 记住我
@@ -22,7 +22,8 @@ const formData = ref({
   name: '',
   pass: '',
   code: '',
-  key: ''
+  key: '',
+  authCode: ''
 })
 //验证码
 const imgStr = ref('')
@@ -54,50 +55,86 @@ const login = () => {
     .validate()
     .then((res) => {
       console.info('表单验证成功', res)
-      userLogin(formData.value)
-        .then((resUser) => {
 
-          ElMessage.success('登录成功')
-          console.info("登录信息", resUser)
+      Get2FAInfo({ name: formData.value.name }).then(res => {
 
-          userStore.setToken(resUser.data.response.token)
-          userStore.setTokenType(resUser.data.response.token_type)
-          // 记住我
-          if (userStore.isRemember) {
-            userStore.setName(formData.value.name)
-            userStore.setPass(formData.value.pass)
-          }
-          // 获取用户信息
-          getInfoByToken({ token: userStore.token }).then((userInfo) => {
-            userStore.setUid(userInfo.data.response.Id)
-            userStore.setUserInfo(userInfo.data.response)
 
-            // 获取菜单
-            GetNavigationBar({ uid: userStore.uid }).then((menuInfo) => {
-              userStore.setMenu(menuInfo.data.response.children)
 
-              // 添加vue router路由
-              addDynamicRoutes(userStore.menu)
-              if (userStore.curPage.path && userStore.curPage.path != '/login') {
-                console.info("跳转:", userStore.curPage.path)
-                router.replace(userStore.curPage.path)
-                // userStore.setOneActiveTag(userStore.curPage.path)
-              } else {
-                // 跳转路由
-                console.info("跳转:", "/")
-                router.replace('/')
-              }
-            })
+        ElMessageBox.prompt('请输入验证器中的6位数动态密码', '两步验证', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        })
+          .then(({ value }) => {
+            formData.value.authCode = value
+            userLogin(formData.value)
+              .then((resUser) => {
+
+                ElMessage.success('登录成功')
+                console.info("登录信息", resUser)
+
+                userStore.setToken(resUser.data.response.token)
+                userStore.setTokenType(resUser.data.response.token_type)
+                // 记住我
+                if (userStore.isRemember) {
+                  userStore.setName(formData.value.name)
+                  userStore.setPass(formData.value.pass)
+                }
+                // 获取用户信息
+                getInfoByToken({ token: userStore.token }).then((userInfo) => {
+                  userStore.setUid(userInfo.data.response.Id)
+                  userStore.setUserInfo(userInfo.data.response)
+
+                  // 获取菜单
+                  GetNavigationBar({ uid: userStore.uid }).then((menuInfo) => {
+                    userStore.setMenu(menuInfo.data.response.children)
+
+                    // 添加vue router路由
+                    addDynamicRoutes(userStore.menu)
+                    if (userStore.curPage.path && userStore.curPage.path != '/login') {
+                      console.info("跳转:", userStore.curPage.path)
+                      router.replace(userStore.curPage.path)
+                      // userStore.setOneActiveTag(userStore.curPage.path)
+                    } else {
+                      // 跳转路由
+                      console.info("跳转:", "/")
+                      router.replace('/')
+                    }
+                  })
+                })
+
+
+
+              })
+              .catch((errUser) => {
+                refreshCode()
+                // 在这里处理登录失败的额外操作
+                console.info('登录失败', errUser)
+              })
+          })
+          .catch(() => {
+
           })
 
 
 
-        })
-        .catch((errUser) => {
-          refreshCode()
-          // 在这里处理登录失败的额外操作
-          console.info('登录失败', errUser)
-        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      })
+
     })
     .catch((err) => {
       ElMessage.error('请填写信息');

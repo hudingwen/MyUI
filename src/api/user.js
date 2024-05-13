@@ -4,6 +4,11 @@ import request from '@/utils/request.js'
 export const userLogin = (params) => {
   return request.get('/api/Login/JWTToken3.0', { params: params })
 }
+// 2FA验证
+export const Get2FAInfo = (params) => {
+  return request.get('/api/Login/Get2FAInfo', { params: params })
+}
+
 
 // 获取验证码
 export const getCode = (params) => {
@@ -66,4 +71,20 @@ export const PutMyInfo = params => {
 export const RefreshMyLogo = params => {
   return request.put('/api/user/RefreshMyLogo', params);
 };
+
+
+
+//双因子认证
+export const GetMy2FA = (params) => {
+  return request.get('/api/user//GetMy2FA', { params: params })
+}
+export const ValidMy2FA = (params) => {
+  return request.get('/api/user/ValidMy2FA', { params: params })
+}
+export const CancelMy2FA = (params) => {
+  return request.get('/api/user/CancelMy2FA', { params: params })
+}
+export const GetMyInfo = (params) => {
+  return request.get('/api/user/GetMyInfo', { params: params })
+}
 
