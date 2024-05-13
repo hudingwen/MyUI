@@ -136,7 +136,8 @@ const loginConfim = () => {
 
     })
     .catch((errUser) => {
-      refreshCode()
+      if (needCode.value)
+        refreshCode()
       // 在这里处理登录失败的额外操作
       console.info('登录失败', errUser)
     })

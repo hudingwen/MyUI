@@ -277,9 +277,6 @@ const SubmitReset = () => {
         </el-row>
       </template>
     </el-table-column>
-    <el-table-column prop="Sex" label="性别" width="200"></el-table-column>
-    <el-table-column prop="Age" label="年龄" width="200"></el-table-column>
-    <el-table-column prop="Birth" label="生日" width="200"></el-table-column>
     <el-table-column prop="Status" label="状态" width="90" align="center">
       <template #default="{ row }">
         <el-tag :type="row.Status == 0 ? 'success' : 'danger'" disable-transitions>{{ row.Status == 0 ? "激活" :
@@ -287,8 +284,21 @@ const SubmitReset = () => {
         </el-tag>
       </template>
     </el-table-column>
-    <el-table-column prop="Address" label="地址" width="200"></el-table-column>
+
+    <el-table-column prop="auth2faEnable" label="两步验证(2FA)" width="150" align="center">
+      <template #default="{ row }">
+        <el-tag :type="row.auth2faEnable == true ? 'success' : 'danger'" disable-transitions>{{ row.auth2faEnable == true ? "开启" :
+          "关闭" }}
+        </el-tag>
+      </template>
+    </el-table-column>
+    
     <el-table-column prop="Remark" label="备注" width="200"></el-table-column>
+    <el-table-column prop="Sex" label="性别" width="200"></el-table-column>
+    <el-table-column prop="Age" label="年龄" width="200"></el-table-column>
+    <el-table-column prop="Birth" label="生日" width="200"></el-table-column>
+
+    <el-table-column prop="Address" label="地址" width="200"></el-table-column>
     <el-table-column prop="CreateTime" label="创建时间" width="180">
     </el-table-column>
     <el-table-column prop="ModifyTime" label="更新时间" width="180">
