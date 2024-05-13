@@ -80,7 +80,7 @@ export const RefreshMyLogo = params => {
 
 //双因子认证
 export const GetMy2FA = (params) => {
-  return request.get('/api/user//GetMy2FA', { params: params })
+  return request.get('/api/user/GetMy2FA', { params: params })
 }
 export const ValidMy2FA = (params) => {
   return request.get('/api/user/ValidMy2FA', { params: params })
