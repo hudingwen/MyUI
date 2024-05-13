@@ -68,7 +68,7 @@ const ruleForm = {
 }
 //新增
 const HandleAdd = () => {
-  formData.value = { Enabled: true }
+  formData.value = { Enabled: true, excludeUsers: [], bindUsers: [] }
   dialogVisible.value = true
 }
 //编辑
@@ -190,12 +190,12 @@ const GetSelectUsers = () => {
   });
 }
 //获取用户名称
-const getUserName = (uid)=>{
-    let user = trojanUsers.value.find(t=>t.id == uid)
-    if(user){
-      return user.username
-    }
-    return uid;
+const getUserName = (uid) => {
+  let user = trojanUsers.value.find(t => t.id == uid)
+  if (user) {
+    return user.username
+  }
+  return uid;
 }
 
 </script>
@@ -256,14 +256,14 @@ const getUserName = (uid)=>{
     <el-table-column prop="bindUsers" label="绑定用户" width="250">
       <template #default="{ row }">
         <el-row :gutter="2">
-          <el-col :span="1.5" v-for="uid in row.bindUsers"><el-tag>{{getUserName(uid)}}</el-tag> </el-col>
+          <el-col :span="1.5" v-for="uid in row.bindUsers"><el-tag>{{ getUserName(uid) }}</el-tag> </el-col>
         </el-row>
       </template>
     </el-table-column>
     <el-table-column prop="excludeUsers" label="排除用户" width="250">
       <template #default="{ row }">
         <el-row :gutter="2">
-          <el-col :span="1.5" v-for="uid in row.excludeUsers"><el-tag>{{getUserName(uid)}}</el-tag> </el-col>
+          <el-col :span="1.5" v-for="uid in row.excludeUsers"><el-tag>{{ getUserName(uid) }}</el-tag> </el-col>
         </el-row>
       </template>
     </el-table-column>
@@ -287,7 +287,8 @@ const getUserName = (uid)=>{
   </el-row>
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
-    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon label-position="top">
+    <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon
+      label-position="top">
 
       <el-form-item label="服务器名称" prop="servername">
         <el-input v-model="formData.servername" auto-complete="off"></el-input>
@@ -344,7 +345,7 @@ const getUserName = (uid)=>{
       </span>
     </template>
   </el-dialog>
-</template> 
+</template>
 <style lang="scss" scoped>
 .flexBox {
   display: flex;
