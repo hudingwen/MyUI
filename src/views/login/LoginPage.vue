@@ -1,10 +1,10 @@
 <script setup>
 // 登录接口
-import { userLogin, GetNavigationBar, getInfoByToken, getCode, Get2FAInfo } from '@/api/user.js'
+import { userLogin, GetNavigationBar, getInfoByToken, getCode, Get2FAInfo, GetCodeInfo } from '@/api/user.js'
 // 图标
-import { User, Lock, Picture } from '@element-plus/icons-vue' 
+import { User, Lock, Picture } from '@element-plus/icons-vue'
 // 消息框
-import { ElMessage ,ElMessageBox} from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 // 响应式
 import { ref, watch } from 'vue'
 // 记住我
@@ -27,6 +27,7 @@ const formData = ref({
 })
 //验证码
 const imgStr = ref('')
+const needCode = ref(false)
 const userStore = useUserStore()
 // mounted生命周期
 onMounted(() => {
@@ -36,7 +37,16 @@ onMounted(() => {
     formData.value.name = userStore.name
     formData.value.pass = userStore.pass
   }
-  refreshCode()
+  GetCodeInfo().then(res => {
+    needCode.value = res.data.response
+    if (needCode.value === true) {
+      //需要验证码
+      refreshCode()
+    } else {
+
+    }
+  })
+
 })
 // 监听变量
 watch(() => userStore.isRemember, () => {
@@ -58,80 +68,23 @@ const login = () => {
 
       Get2FAInfo({ name: formData.value.name }).then(res => {
 
-
-
-        ElMessageBox.prompt('请输入验证器中的6位数动态密码', '两步验证', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        })
-          .then(({ value }) => {
-            formData.value.authCode = value
-            userLogin(formData.value)
-              .then((resUser) => {
-
-                ElMessage.success('登录成功')
-                console.info("登录信息", resUser)
-
-                userStore.setToken(resUser.data.response.token)
-                userStore.setTokenType(resUser.data.response.token_type)
-                // 记住我
-                if (userStore.isRemember) {
-                  userStore.setName(formData.value.name)
-                  userStore.setPass(formData.value.pass)
-                }
-                // 获取用户信息
-                getInfoByToken({ token: userStore.token }).then((userInfo) => {
-                  userStore.setUid(userInfo.data.response.Id)
-                  userStore.setUserInfo(userInfo.data.response)
-
-                  // 获取菜单
-                  GetNavigationBar({ uid: userStore.uid }).then((menuInfo) => {
-                    userStore.setMenu(menuInfo.data.response.children)
-
-                    // 添加vue router路由
-                    addDynamicRoutes(userStore.menu)
-                    if (userStore.curPage.path && userStore.curPage.path != '/login') {
-                      console.info("跳转:", userStore.curPage.path)
-                      router.replace(userStore.curPage.path)
-                      // userStore.setOneActiveTag(userStore.curPage.path)
-                    } else {
-                      // 跳转路由
-                      console.info("跳转:", "/")
-                      router.replace('/')
-                    }
-                  })
-                })
-
-
-
-              })
-              .catch((errUser) => {
-                refreshCode()
-                // 在这里处理登录失败的额外操作
-                console.info('登录失败', errUser)
-              })
+        if (res.data.response === true) {
+          //需要验证2FA
+          ElMessageBox.prompt('请输入验证器中的6位数动态密码', '两步验证', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
           })
-          .catch(() => {
+            .then(({ value }) => {
+              formData.value.authCode = value
+              loginConfim()
 
-          })
+            })
+            .catch(() => {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            })
+        } else {
+          loginConfim()
+        }
 
       })
 
@@ -139,6 +92,53 @@ const login = () => {
     .catch((err) => {
       ElMessage.error('请填写信息');
       console.info('表单验证失败', err)
+    })
+}
+//登录
+const loginConfim = () => {
+  userLogin(formData.value)
+    .then((resUser) => {
+
+      ElMessage.success('登录成功')
+      console.info("登录信息", resUser)
+
+      userStore.setToken(resUser.data.response.token)
+      userStore.setTokenType(resUser.data.response.token_type)
+      // 记住我
+      if (userStore.isRemember) {
+        userStore.setName(formData.value.name)
+        userStore.setPass(formData.value.pass)
+      }
+      // 获取用户信息
+      getInfoByToken({ token: userStore.token }).then((userInfo) => {
+        userStore.setUid(userInfo.data.response.Id)
+        userStore.setUserInfo(userInfo.data.response)
+
+        // 获取菜单
+        GetNavigationBar({ uid: userStore.uid }).then((menuInfo) => {
+          userStore.setMenu(menuInfo.data.response.children)
+
+          // 添加vue router路由
+          addDynamicRoutes(userStore.menu)
+          if (userStore.curPage.path && userStore.curPage.path != '/login') {
+            console.info("跳转:", userStore.curPage.path)
+            router.replace(userStore.curPage.path)
+            // userStore.setOneActiveTag(userStore.curPage.path)
+          } else {
+            // 跳转路由
+            console.info("跳转:", "/")
+            router.replace('/')
+          }
+        })
+      })
+
+
+
+    })
+    .catch((errUser) => {
+      refreshCode()
+      // 在这里处理登录失败的额外操作
+      console.info('登录失败', errUser)
     })
 }
 // 注册
@@ -174,7 +174,7 @@ const inputDemoAccount = (name, pass) => {
         <el-input v-model="formData.pass" :prefix-icon="Lock" auto-complete="off" show-password
           placeholder="密码"></el-input>
       </el-form-item>
-      <el-form-item prop="code">
+      <el-form-item prop="code" v-if="needCode">
         <el-row :gutter="5">
           <el-col :span="1.5"><el-input @keyup.enter="login" v-model="formData.code" :prefix-icon="Picture"
               auto-complete="off" placeholder="验证码"></el-input></el-col>

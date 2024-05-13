@@ -8,6 +8,10 @@ export const userLogin = (params) => {
 export const Get2FAInfo = (params) => {
   return request.get('/api/Login/Get2FAInfo', { params: params })
 }
+// 验证码验证
+export const GetCodeInfo = (params) => {
+  return request.get('/api/Login/GetCodeInfo', { params: params })
+}
 
 
 // 获取验证码
