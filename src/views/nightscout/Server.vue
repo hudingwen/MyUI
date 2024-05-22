@@ -257,15 +257,22 @@ const copy = (row) => {
     <el-table-column prop="curInstanceIpSerial" label="实例IP序列" width="110"></el-table-column>
     <el-table-column prop="instanceIpTemplate" label="实例ip模板" width="130"></el-table-column>
     <el-table-column prop="curExposedPort" label="当前端口" width="100"></el-table-column>
-    <el-table-column prop="curServiceSerial" label="当前序列" width="100"></el-table-column>
     <el-table-column prop="mongoIp" label="数据库地址" width="130"></el-table-column>
     <el-table-column prop="mongoLoginName" label="数据库账号" width="100"></el-table-column>
     <el-table-column prop="mongoLoginPassword" label="数据库密码" width="150"></el-table-column>
     <el-table-column prop="mongoPort" label="数据库端口" width="100"></el-table-column>
     <el-table-column prop="holdCount" label="理论实例数量" width="120"></el-table-column>
     <el-table-column prop="remark" label="备注" width="200"></el-table-column>
-    <el-table-column prop="isMongo" label="是否Mongo" width="120"></el-table-column>
-    <el-table-column prop="isNginx" label="是否Nginx" width="120"></el-table-column>
+    <el-table-column prop="isMongo" label="是否Mongo" width="120">
+      <template #default="{ row }">
+        <el-tag :type="row.isMongo ? 'success' : ''">{{ row.isMongo ? '是' : '否' }}</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column prop="isNginx" label="是否Nginx" width="120">
+      <template #default="{ row }">
+        <el-tag :type="row.isNginx ? 'success' : ''">{{ row.isNginx ? '是' : '否' }}</el-tag>
+      </template>
+    </el-table-column>
     <el-table-column prop="mongoServerId" label="关联ssh服务-数据库" width="250">
       <template #default="{ row }">{{ getServerName(row.mongoServerId) }}</template>
     </el-table-column>
@@ -323,9 +330,6 @@ const copy = (row) => {
       <el-form-item label="当前暴露端口" prop="curExposedPort">
         <el-input v-model="formData.curExposedPort" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item label="当前服务序列" prop="curServiceSerial">
-        <el-input v-model="formData.curServiceSerial" auto-complete="off"></el-input>
-      </el-form-item>
       <el-form-item label="数据库地址" prop="mongoIp">
         <el-input v-model="formData.mongoIp" auto-complete="off"></el-input>
       </el-form-item>
@@ -341,14 +345,14 @@ const copy = (row) => {
       <el-form-item label="关联ssh服务-数据库" prop="mongoLoginPassword">
         <el-select class="flexContent" clearable v-model="formData.mongoServerId" placeholder="请选择服务器">
           <el-option v-for="item in nsServer" :key="item.Id"
-            :label="item.serverName + '(' + item.count + '/' + item.holdCount + ')'" :value="item.Id">
+          :label="item.serverName + '(' + item.countStop + '/'+ item.countStart + '/'+ item.count + '/' + item.holdCount + ')'" :value="item.Id">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="关联ssh服务-网关" prop="mongoLoginPassword">
         <el-select class="flexContent" clearable v-model="formData.nginxServerId" placeholder="请选择服务器">
           <el-option v-for="item in nsServer" :key="item.Id"
-            :label="item.serverName + '(' + item.count + '/' + item.holdCount + ')'" :value="item.Id">
+          :label="item.serverName + '(' + item.countStop + '/'+ item.countStart + '/'+ item.count + '/' + item.holdCount + ')'" :value="item.Id">
           </el-option>
         </el-select>
       </el-form-item>

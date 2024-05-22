@@ -801,7 +801,7 @@ const GetNsList = () => {
                 <el-form-item label="部署服务器" prop="serverId">
                     <el-select v-model="formData.serverId" placeholder="请选择">
                         <el-option v-for="item in nsServer" :key="item.Id"
-                            :label="item.serverName + '(' + item.count + '/' + item.holdCount + ')'" :value="item.Id">
+                        :label="item.serverName + '(' + item.countStop + '/'+ item.countStart + '/'+ item.count + '/' + item.holdCount + ')'" :value="item.Id">
                         </el-option>
                     </el-select>
                 </el-form-item>
