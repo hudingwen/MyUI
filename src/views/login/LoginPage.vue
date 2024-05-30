@@ -198,7 +198,7 @@ const inputDemoAccount = (name, pass) => {
         <el-radio-group>
           <el-radio-button label="账号1" @click="inputDemoAccount('test', 'test')"></el-radio-button>
           <el-radio-button label="账号2" @click="inputDemoAccount('test2', 'test2')"></el-radio-button>
-          <el-radio-button label="管理员" @click="inputDemoAccount('admin', 'admin')"></el-radio-button>
+          <el-radio-button label="管理员" @click="inputDemoAccount('blogadmin', 'blogadmin')"></el-radio-button>
         </el-radio-group>
       </div>
       <el-form-item style="width: 100%">
