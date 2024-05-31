@@ -85,7 +85,7 @@ const HandleDel = (row) => {
     }
     ElMessageBox.confirm('确定删除么?')
         .then(() => {
-            delAppleKey({ id: row.Id }).then((res) => {
+            delAppleKey({ id: row.id }).then((res) => {
                 HandleSearch()
                 ElMessage.success('删除成功')
             })
@@ -93,9 +93,6 @@ const HandleDel = (row) => {
         .catch((err) => {
             console.info(err)
         })
-
-
-
 }
 //批量删除
 const HandleBatchDel = (rows) => {
@@ -105,7 +102,7 @@ const HandleBatchDel = (rows) => {
     }
     ElMessageBox.confirm('确定删除么?')
         .then(() => {
-            let ids = rows.map(t => t.Id)
+            let ids = rows.map(t => t.id)
             delBatchAppleKey(ids).then((res) => {
                 HandleSearch()
                 ElMessage.success('删除成功')
@@ -126,7 +123,7 @@ const HandleSubmit = () => {
         }
         ElMessageBox.confirm('确定提交么?')
             .then(() => {
-                if (formData.value.Id) {
+                if (formData.value.id) {
                     //编辑
                     updateAppleKey(formData.value).then((res) => {
                         HandleSearch()
@@ -210,13 +207,13 @@ onMounted(() => {
                 </el-form-item>
                 <!-- <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleEdit(currentRow)">修改</el-button>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleDel(currentRow)">删除</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleBatchDel(selectRows)">批量删除</el-button>
-                </el-form-item> -->
+                </el-form-item>
             </el-form>
 
         </el-col>
@@ -250,7 +247,7 @@ onMounted(() => {
         </el-col>
     </el-row>
     <!-- 弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
+    <el-dialog v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
         <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon
             label-position="top">
             <el-form-item label="生成激活码数量" prop="auth_code">
