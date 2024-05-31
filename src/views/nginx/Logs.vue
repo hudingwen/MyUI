@@ -91,6 +91,7 @@ const HandleSearch = (page) => {
     @row-click="HandleClickRow" border>
     <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column prop="host" label="访问Host" min-width="150"></el-table-column>
+    <el-table-column prop="date" label="最后访问时间" width="200"></el-table-column>  
     <el-table-column prop="requestCount" label="访问量" width="150"></el-table-column>  
     <template #empty>
       <el-empty description="没有数据"></el-empty>
