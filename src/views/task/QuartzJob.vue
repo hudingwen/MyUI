@@ -61,7 +61,6 @@ onMounted(() => {
   HandleSearch()
 })
 
-
 //新增&编辑操作
 const dialogVisible = ref(false)
 const formData = ref({})
@@ -84,7 +83,7 @@ const ruleForm = {
 }
 //新增
 const HandleAdd = () => {
-  formData.value = { Enabled: true }
+  formData.value = { Enabled: true, IntervalSecond: 1, CycleRunTimes: 1, CycleHasRunTimes: 0 }
   dialogVisible.value = true
 }
 //编辑
@@ -176,11 +175,14 @@ const tableNamespace = ref([])
 const HandleNamespace = (row) => {
   visibleNamespace.value = false
   formData.value.AssemblyName = row.nameSpace;
-  formData.value.ClassName = row.nameClass;
+  formData.value.ClassName = row.nameClass; 
+  formData.value.JobGroup = row.name
+  formData.value.Name = row.name
 }
 const GetTaskNameSpace = () => {
   getTaskNameSpace({}).then((res) => {
     tableNamespace.value = res.data.response;
+    visibleNamespace.value = true
   });
 }
 
@@ -192,7 +194,7 @@ const HandleStartJob = (row) => {
     ElMessage.error('请选择要操作的数据!')
     return;
   }
-  ElMessageBox.confirm('确认启动该Job吗?')
+  ElMessageBox.confirm('确认启动任务吗?')
     .then(() => {
       let para = { jobId: row.Id };
       startJob(para).then((res) => {
@@ -210,7 +212,7 @@ const HandleStopJob = (row) => {
     ElMessage.error('请选择要操作的数据!')
     return;
   }
-  ElMessageBox.confirm('确认停止该Job吗?')
+  ElMessageBox.confirm('确认停止任务吗?')
     .then(() => {
       let para = { jobId: row.Id };
       stopJob(para).then((res) => {
@@ -228,7 +230,7 @@ const HandleReCoveryJob = (row) => {
     ElMessage.error('请选择要操作的数据!')
     return;
   }
-  ElMessageBox.confirm('确认重启该Job吗?')
+  ElMessageBox.confirm('确认重启任务吗?')
     .then(() => {
       let para = { jobId: row.Id };
       reCovery(para).then((res) => {
@@ -246,7 +248,7 @@ const HandlePauseJob = (row) => {
     ElMessage.error('请选择要操作的数据!')
     return;
   }
-  ElMessageBox.confirm('确认暂停该Job吗?')
+  ElMessageBox.confirm('确认暂停任务吗?')
     .then(() => {
       let para = { jobId: row.Id };
       pauseJob(para).then((res) => {
@@ -264,7 +266,7 @@ const HandleResumeJob = (row) => {
     ElMessage.error('请选择要操作的数据!')
     return;
   }
-  ElMessageBox.confirm('确认暂停该Job吗?')
+  ElMessageBox.confirm('确认恢复任务吗?')
     .then(() => {
       let para = { jobId: row.Id };
       resumeJob(para).then((res) => {
@@ -282,7 +284,7 @@ const HandleExecuteJob = (row) => {
     ElMessage.error('请选择要操作的数据!')
     return;
   }
-  ElMessageBox.confirm('确认暂停该Job吗?')
+  ElMessageBox.confirm('确认立即执行任务吗?')
     .then(() => {
       let para = { jobId: row.Id };
       ExecuteJob(para).then((res) => {
@@ -443,20 +445,7 @@ const HandleSearch = (page) => {
       <el-form-item label="执行类名" prop="ClassName">
         <el-input v-model="formData.ClassName" auto-complete="off">
           <template #append>
-            <el-popover v-model="visibleNamespace" placement="right" :width="400" trigger="click">
-              <template #reference>
-                <el-button :icon="Search" @click="GetTaskNameSpace"></el-button>
-              </template>
-              <el-table @cell-dblclick="HandleNamespace" :data="tableNamespace" highlight-current-row
-                style="width: 100%">
-                <el-table-column type="index" width="50"> </el-table-column>
-                <el-table-column property="nameClass" label="类名" min-width="350">
-                </el-table-column>
-                <el-table-column property="nameSpace" label="命名空间" width="300">
-                </el-table-column>
-                <el-table-column property="remark" width="100" label="备注"> </el-table-column>
-              </el-table>
-            </el-popover>
+            <el-button :icon="Search" @click="GetTaskNameSpace"></el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -486,12 +475,7 @@ const HandleSearch = (page) => {
           </template>
           <el-input v-model="formData.Cron" auto-complete="off">
             <template #append>
-              <el-popover v-model="visibleNamespace" placement="right" :width="400" trigger="click">
-                <template #reference>
-                  <el-button :icon="Search"></el-button>
-                </template>
-                还未实现
-              </el-popover>
+              <el-button :icon="Search"></el-button>
             </template>
           </el-input>
         </el-tooltip>
@@ -537,6 +521,24 @@ const HandleSearch = (page) => {
           确定
         </el-button>
       </span>
+    </template>
+  </el-dialog>
+
+  <!-- 选择任务弹窗 -->
+  <el-dialog v-model="visibleNamespace" title="选择任务" :before-close="handleClose">
+    <el-table @cell-dblclick="HandleNamespace" :data="tableNamespace" highlight-current-row style="width: 100%">
+      <el-table-column type="index" width="50"> </el-table-column>
+      <el-table-column property="name" label="任务名称" width="280">
+      </el-table-column>
+      <el-table-column property="nameClass" label="类名" width="300">
+      </el-table-column>
+      <el-table-column property="nameSpace" label="命名空间" width="220">
+      </el-table-column>
+      <el-table-column property="description" label="任务描述" show-overflow-tooltip min-width="150">
+      </el-table-column>
+    </el-table>
+    <template #footer>
+
     </template>
   </el-dialog>
 </template>
