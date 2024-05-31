@@ -65,7 +65,7 @@ const ruleForm = {
 }
 //新增
 const HandleAdd = () => {
-    formData.value = { Enabled: true, createCount: 1 }
+    formData.value = { Enabled: true, createCount: 1, createType: 0 }
     dialogVisible.value = true
 }
 //编辑
@@ -256,6 +256,12 @@ onMounted(() => {
             <el-form-item label="生成激活码数量" prop="auth_code">
                 <el-input-number v-model="formData.createCount" :min="1" :max="100" />
             </el-form-item>
+            <el-form-item label="激活码类型" prop="auth_code">  
+                <el-select v-model="formData.createType">
+                    <el-option label="英文" :value="0" />
+                    <el-option label="汉字" :value="1" />
+                </el-select>
+            </el-form-item>
         </el-form>
 
         <template #footer>
@@ -267,7 +273,7 @@ onMounted(() => {
             </span>
         </template>
     </el-dialog>
-</template> 
+</template>
 <style lang="scss" scoped>
 .flexBox {
     display: flex;
