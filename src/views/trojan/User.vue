@@ -8,7 +8,8 @@ import {
   delBatcTrojanUser,
   resetTrojanFlow,
   resetTrojanPass,
-  getSpliceServer
+  getSpliceServer,
+  GetAllServers
 } from '@/api/trojan.js'
 import { ArrowDown } from '@element-plus/icons-vue'
 
@@ -51,8 +52,20 @@ watch(() => filters.value.size, () => {
 //加载数据
 onMounted(() => {
   HandleSearch()
+  getServers()
 })
 
+
+
+//获取服务器列表
+const trojanServersSingle = ref([])
+const trojanServersAll = ref([])
+const getServers = () => {
+  GetAllServers().then(res => {
+    trojanServersSingle.value = res.data.response;//.ilter(t => !t.isAllUser)
+    trojanServersAll.value = res.data.response;//.filter(t => t.isAllUser)
+  })
+}
 
 //新增&编辑操作
 const dialogVisible = ref(false)
@@ -439,6 +452,20 @@ const HandleLink = (row) => {
       <el-form-item label="单位">
         <el-select v-model="optionsValue" placeholder="请选择">
           <el-option v-for="item in options" :key="item.txt" :label="item.txt" :value="item.txt"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="绑定服务器" prop="serverIds">
+        <el-select filterable multiple v-model="formData.serverIds" placeholder="请选择绑定服务器">
+          <el-option v-for="item in trojanServersSingle" :key="item.id" :label="item.servername" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="排除服务器" prop="serverIdsExclude">
+        <el-select filterable multiple v-model="formData.serverIdsExclude" placeholder="请选择排除服务器">
+          <el-option v-for="item in trojanServersAll" :key="item.id" :label="item.servername" :value="item.id">
+          </el-option>
         </el-select>
       </el-form-item>
 

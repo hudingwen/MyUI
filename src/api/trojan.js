@@ -8,7 +8,10 @@ export const getTrojanUser = params => {
 export const GetAllTrojanUser = params => {
   return request.get('/api/Trojan/GetAllTrojanUser', { params: params });
 };
-
+//Server-下拉
+export const GetAllServers = params => {
+  return request.get('/api/Trojan/GetAllServers', { params: params });
+};
 //Trojan-添加用户
 export const addTrojanUser = params => {
   return request.post('/api/Trojan/AddUser', params);
