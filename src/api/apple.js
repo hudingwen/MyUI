@@ -1,5 +1,5 @@
 import request from '@/utils/request.js'
-
+import requestFile from '@/utils/requestFile.js'
 
 //获取激活码
 export const getAppleKey = params => {
@@ -20,4 +20,34 @@ export const delAppleKey = params => {
 //删除激活码 
 export const delBatchAppleKey = params => {
     return request.post('/api/AppleKey/Deletes', params);
+};
+
+
+
+//获取苹果api账号列表
+export const GetAppleApiDicList = params => {
+    return request.get('/api/Apple/GetAppleApiDicList', { params: params });
+};
+//获取配置文件列表
+export const GetProfiles = params => {
+    return request.get('/api/Apple/GetProfiles', { params: params });
+};
+//添加一个设备配置
+export const AddProfileForDevice = params => {
+    return request.get('/api/Apple/AddProfileForDevice', { params: params });
+};
+
+//下载配置文件
+export const DownloadProfile = params => {
+    return requestFile.get('/api/Apple/DownloadProfile', { params: params });
+};
+
+//删除一个设备配置
+export const DelProfile = params => {
+    return request.get('/api/Apple/DelProfile', { params: params });
+};
+
+//获取设备列表
+export const GetDevices = params => {
+    return request.get('/api/Apple/GetDevices', { params: params });
 };

@@ -242,6 +242,7 @@ const HandleDisable = () => {
     <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
         @row-click="HandleClickRow" border>
         <el-table-column type="selection" width="50"></el-table-column>
+        <el-table-column type="index" width="60"></el-table-column>
         <el-table-column prop="title" label="标题/备注" width="250"></el-table-column>
         <el-table-column prop="content" label="内容" min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="remark" label="状态" width="100">

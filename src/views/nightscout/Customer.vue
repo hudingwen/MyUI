@@ -281,6 +281,7 @@ const handleUpload = () => {
     <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
         @row-click="HandleClickRow" border>
         <el-table-column type="selection" width="50"></el-table-column>
+        <el-table-column type="index" width="60"></el-table-column>
         <el-table-column prop="name" label="客户名称" width="250"></el-table-column>
         <el-table-column prop="logo" label="客户logo" min-width="250" show-overflow-tooltip>
 

@@ -222,6 +222,7 @@ onMounted(() => {
     <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
         @row-click="HandleClickRow" border>
         <el-table-column type="selection" width="50"></el-table-column>
+        <el-table-column type="index" width="60"></el-table-column>
         <el-table-column prop="auth_code" label="授权码" width="250"></el-table-column>
         <el-table-column prop="create_date" label="生成时间" width="180"></el-table-column>
         <el-table-column prop="user_time" label="激活时间" width="180"></el-table-column>
