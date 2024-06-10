@@ -51,3 +51,8 @@ export const DelProfile = params => {
 export const GetDevices = params => {
     return request.get('/api/Apple/GetDevices', { params: params });
 };
+
+//获取设备列表(审核中)
+export const GetDevicesProcessing = params => {
+    return request.get('/api/Apple/GetDevicesProcessing', { params: params });
+};

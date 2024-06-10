@@ -7,7 +7,8 @@ import {
     AddProfileForDevice,
     DownloadProfile,
     DelProfile,
-    GetDevices
+    GetDevices,
+    GetDevicesProcessing
 } from '@/api/apple.js'
 import { Base64 } from 'js-base64'
 
@@ -87,7 +88,30 @@ const handleAppendDevice = (row) => {
     //追加设备
     HandleAdd(row.id, row.attributes.name)
 }
+//审核中的设备
+const dialogProcessingDeviceVisible = ref(false)
+const devicesProcessing = ref([])
+const devicesProcessingTotal = ref(0)
+const filtersProcessingDevices = ref({ page: 1, size: 10, kid: '' })
 
+const SearchProcessingDevices = () => {
+    filtersProcessingDevices.value.kid = filters.value.kid
+    GetDevicesProcessing(filtersProcessingDevices.value).then(res => {
+        dialogProcessingDeviceVisible.value = true
+        devicesProcessing.value = res.data.response.data;
+        devicesProcessingTotal.value = res.data.response.meta.paging.total;
+    })
+}
+const handleProcessingDevices = () => {
+    SearchProcessingDevices()
+}
+watch(() => filtersProcessingDevices.value.page, () => {
+    SearchProcessingDevices()
+})
+watch(() => filtersProcessingDevices.value.size, () => {
+    filtersProcessingDevices.value.page = 1
+    SearchProcessingDevices()
+})
 
 //新增&编辑操作
 const dialogVisible = ref(false)
@@ -249,6 +273,9 @@ const downFile = (row) => {
                     <el-button type="primary" :disabled="!filters.kid" plain @click="handleDevices">查看设备</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
+                    <el-button type="warning" :disabled="!filters.kid" plain @click="handleProcessingDevices">查看审核中的设备</el-button>
+                </el-form-item>
+                <el-form-item class="flexItem">
                     <el-button type="primary" :disabled="!currentRow" plain
                         @click="handleAppendDevice(currentRow)">追加设备</el-button>
                 </el-form-item>
@@ -383,6 +410,58 @@ const downFile = (row) => {
         <template #footer>
             <span class="dialog-footer">
                 <el-button type="primary" @click="dialogDeviceVisible = false">关闭</el-button>
+            </span>
+        </template>
+    </el-dialog>
+    <!-- 设备列表 -->
+    <el-dialog v-model="dialogProcessingDeviceVisible" title="设备列表(审核中)" width="85%" :before-close="handleClose">
+
+        <el-table :data="devicesProcessing" highlight-current-row border>
+            <!-- <el-table-column type="selection" width="50"></el-table-column> -->
+            <el-table-column type="index" width="60"></el-table-column>
+            <el-table-column prop="udid" label="设备udid" width="250">
+                <template #default="{ row }">
+                    {{ row.attributes.udid }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="processingTime" label="审核时间" width="150">
+                <template #default="{ row }">
+                    {{ row.attributes.processingTime }} 小时
+                </template>
+            </el-table-column>
+            <el-table-column prop="name" label="用户名称" width="430">
+                <template #default="{ row }">
+                    {{ row.attributes.name }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="platform" label="平台类型" width="250">
+                <template #default="{ row }">
+                    {{ row.attributes.platform }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="deviceClass" label="设备类型" width="250">
+                <template #default="{ row }">
+                    {{ row.attributes.deviceClass }} - {{ row.attributes.model }}
+
+                </template>
+            </el-table-column>
+
+            <template #empty>
+                <el-empty description="没有数据"></el-empty>
+            </template>
+        </el-table>
+        <!-- 分页 -->
+        <el-row>
+            <el-col class="flexBox">
+                <el-pagination class="flexItem" small background layout="total, prev, pager, next, sizes, jumper"
+                    :total="devicesProcessingTotal" v-model:current-page="filtersProcessingDevices.page"
+                    v-model:page-size="filtersProcessingDevices.size" />
+            </el-col>
+        </el-row>
+
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" @click="dialogProcessingDeviceVisible = false">关闭</el-button>
             </span>
         </template>
     </el-dialog>
