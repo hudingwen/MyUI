@@ -316,9 +316,13 @@ onMounted(() => {
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column type="index" width="60"></el-table-column>
         <el-table-column prop="name" label="名称" width="250"></el-table-column>
-        <el-table-column prop="nidName" label="绑定的ns" width="200"></el-table-column>
+        <el-table-column prop="nidName" label="绑定的ns" width="280">
+            <template #default="{ row }">
+                {{ row.nidName }} ({{ row.nidUrl }})
+            </template>
+        </el-table-column>
         <el-table-column prop="gidName" label="绑定的监护账号" width="180"></el-table-column>
-        <el-table-column prop="uidName" label="绑定的监护用户" width="250"></el-table-column>
+        <el-table-column prop="uidName" label="绑定的监护用户" width="280"></el-table-column>
         <el-table-column prop="refreshTime" label="最近一次血糖时间" width="180"></el-table-column>
         <el-table-column prop="startTime" label="开始时间" width="180"></el-table-column>
         <el-table-column prop="endTime" label="结束时间" width="180"></el-table-column>
