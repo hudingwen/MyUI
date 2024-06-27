@@ -193,3 +193,8 @@ export const getAllNsGuardAccount = params => {
 export const getAllNsGuardUser = params => {
     return request.get('/api/Guard/getAllNsGuardUser', { params: params });
 };
+
+//刷新监护账户token
+export const refreshGuardAccount = params => {
+    return request.get('/api/Guard/refreshGuardAccount', { params: params });
+};

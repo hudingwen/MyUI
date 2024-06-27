@@ -323,6 +323,12 @@ onMounted(() => {
         </el-table-column>
         <el-table-column prop="gidName" label="绑定的监护账号" width="180"></el-table-column>
         <el-table-column prop="uidName" label="绑定的监护用户" width="280"></el-table-column>
+        <el-table-column prop="Enabled" label="是否启用" width="120">
+            <template #default="{ row }">
+                <el-tag type="success" v-if="row.Enabled">是</el-tag>
+                <el-tag type="warning" v-else>否</el-tag>
+            </template>
+        </el-table-column>
         <el-table-column prop="refreshTime" label="最近一次血糖时间" width="180"></el-table-column>
         <el-table-column prop="startTime" label="开始时间" width="180"></el-table-column>
         <el-table-column prop="endTime" label="结束时间" width="180"></el-table-column>
@@ -368,6 +374,11 @@ onMounted(() => {
                     </template>
                 </el-input>
                 <el-text type="primary">{{ formData.uidName }}</el-text>
+            </el-form-item>
+            <el-form-item label="是否启用" prop="Enabled">
+                <el-switch style="display: block" v-model="formData.Enabled" active-color="#13ce66" inactive-color="#ff4949"
+                    active-text="是" inactive-text="否">
+                </el-switch>
             </el-form-item>
             <el-form-item label="开始时间" prop="startTime">
                 <el-date-picker type="date" placeholder="选择日期" v-model="formData.startTime" format="YYYY-MM-DD"

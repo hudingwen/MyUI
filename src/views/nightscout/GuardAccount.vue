@@ -5,7 +5,8 @@ import {
     getGuardAccountList,
     addGuardAccount,
     editGuardAccount,
-    delGuardAccount
+    delGuardAccount,
+    refreshGuardAccount
 } from '@/api/nightscout.js'
 
 
@@ -107,6 +108,24 @@ const HandleDel = (row) => {
             console.info(err)
         })
 }
+//刷新token
+const HandleRefresh = (row) => {
+    if (!row) {
+        ElMessage.error('请选择要操作的数据!')
+        return;
+    }
+    ElMessageBox.confirm('确定刷新么?')
+        .then(() => {
+            refreshGuardAccount({ id: row.Id }).then((res) => {
+                HandleSearch()
+                ElMessage.success('刷新成功')
+            })
+        })
+        .catch((err) => {
+            console.info(err)
+        })
+}
+
 //批量删除
 const HandleBatchDel = (rows) => {
     if (!rows || rows.length == 0) {
@@ -126,6 +145,7 @@ const HandleBatchDel = (rows) => {
         })
 
 }
+
 //提交
 const HandleSubmit = () => {
     refForm.value.validate((valid, fields) => {
@@ -207,6 +227,9 @@ onMounted(() => {
                 </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleDel(currentRow)">删除</el-button>
+                </el-form-item>
+                <el-form-item class="flexItem">
+                    <el-button type="primary" plain @click="HandleRefresh(currentRow)">刷新toekn</el-button>
                 </el-form-item>
                 <!-- <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleShowUsers">查看用户</el-button>
