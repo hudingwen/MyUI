@@ -6,7 +6,10 @@ import {
     addGuardAccount,
     editGuardAccount,
     delGuardAccount,
-    refreshGuardAccount
+    refreshGuardAccount,
+    getGuardAccountType,
+    sendSannuoSms,
+    validSannuoSms
 } from '@/api/nightscout.js'
 
 
@@ -17,7 +20,7 @@ const refTable = ref()
 const currentRow = ref({})
 const selectRows = ref([])
 const filters = ref({ page: 1, size: 10, key: '' })
-
+const guardList = ref([])
 const HandleSelectChange = (selection) => {
     selectRows.value = selection
 }
@@ -47,6 +50,7 @@ watch(() => filters.value.size, () => {
 
 //加载数据
 onMounted(() => {
+    GetGuardTypeList()
     HandleSearch()
 })
 
@@ -125,7 +129,23 @@ const HandleRefresh = (row) => {
             console.info(err)
         })
 }
-
+const GetGuardTypeList= ()=>{
+    getGuardAccountType().then(res=>{
+        guardList.value = res.data.response
+    })
+}
+const SendSannuoSms = ()=>{
+    sendSannuoSms({phone:formData.value.loginName}).then(res=>{
+        ElMessage.success('发送成功')
+    })
+}
+const ValidSannuoSms = ()=>{
+    validSannuoSms({phone:formData.value.loginName,code:formData.value.phoneCode}).then(res=>{
+        formData.value.tokenExpire = res.data.response.tokenExpire
+        formData.value.token = res.data.response.access_token
+        ElMessage.success('验证成功,请提交保存账号!')
+    })
+}
 //批量删除
 const HandleBatchDel = (rows) => {
     if (!rows || rows.length == 0) {
@@ -251,11 +271,16 @@ onMounted(() => {
         <el-table-column prop="loginPass" label="登录密码" width="180"></el-table-column>
         <el-table-column prop="guardType" label="账号类型" width="120">
             <template #default="{ row }">
-                <el-tag type="primary" v-if="row.guardType === 100">硅基</el-tag>
-                <el-tag type="primary" v-else>硅基</el-tag>
+                <el-tag type="primary" v-for="item in guardList" v-show="row.guardType === item.code">{{ item.name }}</el-tag> 
             </template>
         </el-table-column>
-        <el-table-column prop="token" label="token" width="350"></el-table-column>
+        <el-table-column prop="guardType" label="账号类型" width="120">
+            <template #default="{ row }">
+                <el-tag type="success" v-if="row.isEffect">有效</el-tag>
+                <el-tag type="danger" v-else>失效</el-tag>
+            </template>
+        </el-table-column>
+        <el-table-column prop="token" label="token" width="350" show-overflow-tooltip></el-table-column>
         <el-table-column prop="tokenExpire" label="token过期时间" width="180"></el-table-column>
         <el-table-column prop="remark" label="备注" min-width="130"></el-table-column>
 
@@ -277,16 +302,21 @@ onMounted(() => {
             <el-form-item label="名称" prop="name">
                 <el-input v-model="formData.name" />
             </el-form-item>
-            <el-form-item label="登录账号" prop="loginName">
+            <el-form-item label="登录账号/手机号" prop="loginName">
                 <el-input v-model="formData.loginName" />
             </el-form-item>
-            <el-form-item label="登录密码" prop="loginPass">
+            <el-form-item label="登录密码(不需要密码的可随便填写)" prop="loginPass">
                 <el-input v-model="formData.loginPass" />
             </el-form-item>
             <el-form-item label="账号类型" prop="guardType">  
                 <el-select v-model="formData.guardType">
-                    <el-option label="硅基" :value="100" /> 
+                    <el-option :label="item.name" v-for="item in guardList" :value="item.code"  /> 
                 </el-select>
+            </el-form-item>
+            <el-form-item label="三诺验证码(第一次或失效时用)" prop="phoneCode" v-show="formData.guardType === '200'">
+                <el-input v-model="formData.phoneCode"  style="margin-bottom: 5px;"/>   
+                <el-button type="primary" plain @click="SendSannuoSms()">发送</el-button> 
+                <el-button type="primary" plain @click="ValidSannuoSms()">验证</el-button>
             </el-form-item>
             <el-form-item label="备注" prop="remark">
                 <el-input v-model="formData.remark" />

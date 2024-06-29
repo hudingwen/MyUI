@@ -198,3 +198,16 @@ export const getAllNsGuardUser = params => {
 export const refreshGuardAccount = params => {
     return request.get('/api/Guard/refreshGuardAccount', { params: params });
 };
+//获取监护账户类型
+export const getGuardAccountType = params => {
+    return request.get('/api/Guard/getGuardAccountType', { params: params });
+};
+//发送三诺验证码
+export const sendSannuoSms = params => {
+    return request.get('/api/Guard/sendSannuoSms', { params: params });
+};
+//验证三诺验证码
+export const validSannuoSms = params => {
+    return request.get('/api/Guard/validSannuoSms', { params: params });
+};
+
