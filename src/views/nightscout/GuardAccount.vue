@@ -274,7 +274,7 @@ onMounted(() => {
                 <el-tag type="primary" v-for="item in guardList" v-show="row.guardType === item.code">{{ item.name }}</el-tag> 
             </template>
         </el-table-column>
-        <el-table-column prop="guardType" label="账号类型" width="120">
+        <el-table-column prop="guardType" label="账号状态" width="120">
             <template #default="{ row }">
                 <el-tag type="success" v-if="row.isEffect">有效</el-tag>
                 <el-tag type="danger" v-else>失效</el-tag>
