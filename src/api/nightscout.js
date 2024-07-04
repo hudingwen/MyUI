@@ -210,4 +210,8 @@ export const sendSannuoSms = params => {
 export const validSannuoSms = params => {
     return request.get('/api/Guard/validSannuoSms', { params: params });
 };
+//用户监护用户实时血糖
+export const getUserNowBloodList = params => {
+    return request.get('/api/Guard/getUserNowBloodList', { params: params });
+};
 

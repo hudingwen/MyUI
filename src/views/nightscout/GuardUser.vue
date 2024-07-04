@@ -8,7 +8,8 @@ import {
     delGuardUser,
     getAllNsUser,
     getAllNsGuardAccount,
-    getAllNsGuardUser
+    getAllNsGuardUser,
+    getUserNowBloodList
 } from '@/api/nightscout.js'
 import {
     Search
@@ -73,7 +74,19 @@ watch(() => nsUserFilter.value.size, () => {
     nsUserFilter.value.page = 1
     handleAllNsUser()
 })
-
+//实时血糖
+const bloodList = ref([])
+const visibleBlood = ref(false)
+const handleUserNowBloodList = (row) => {
+    if (!row) {
+        ElMessage.error('请选择要操作的数据!')
+        return;
+    }
+    getUserNowBloodList({ guardUserid: row.Id }).then(res => {
+        bloodList.value = res.data.response
+        visibleBlood.value = true
+    })
+}
 // 监护账户
 const dialogVisibleNsGuardAccount = ref(false)
 const nsGuardAccountFilter = ref({ page: 1, size: 10, total: 0 })
@@ -300,9 +313,10 @@ onMounted(() => {
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleDel(currentRow)">删除</el-button>
                 </el-form-item>
-                <!-- <el-form-item class="flexItem">
-                    <el-button type="primary" plain @click="HandleShowUsers">查看用户</el-button>
-                </el-form-item> -->
+
+                <el-form-item class="flexItem">
+                    <el-button type="primary" plain @click="handleUserNowBloodList(currentRow)">查看血糖</el-button>
+                </el-form-item>
                 <!-- <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleBatchDel(selectRows)">批量删除</el-button>
                 </el-form-item> -->
@@ -505,6 +519,28 @@ onMounted(() => {
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="dialogVisibleNsGuardUser = false">取消</el-button>
+            </span>
+        </template>
+    </el-dialog>
+    <!-- 弹窗-实时血糖 -->
+    <el-dialog v-model="visibleBlood" title="查看实时血糖" width="450px" :before-close="handleClose">
+
+
+        <!-- 内容 -->
+        <el-table :data="bloodList" highlight-current-row border height="calc(100vh - 350px)">
+            <el-table-column type="index" width="60"></el-table-column>
+            <el-table-column prop="time" label="时间" width="180"></el-table-column>
+            <el-table-column prop="blood" label="血糖" width="100"></el-table-column>
+            <el-table-column prop="trend" label="趋势" width="90"></el-table-column>
+
+            <template #empty>
+                <el-empty description="没有数据"></el-empty>
+            </template>
+        </el-table>
+        <!-- 分页 -->
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="visibleBlood = false">关闭</el-button>
             </span>
         </template>
     </el-dialog>

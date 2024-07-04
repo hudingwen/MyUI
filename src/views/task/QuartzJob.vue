@@ -371,7 +371,7 @@ const HandleSearch = (page) => {
     @row-click="HandleClickRow" border>
     <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column prop="JobGroup" label="任务组" width="200" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="Name" label="任务名称" width="200" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="Name" label="任务名称" width="350" show-overflow-tooltip></el-table-column>
 
     <el-table-column prop="TriggerType" label="任务类型" width="90" align="center">
       <template #default="{ row }">
