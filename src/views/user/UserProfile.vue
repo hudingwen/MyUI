@@ -1,12 +1,10 @@
 <script setup>
+import { yearsPassed } from '@/utils/format.js'
 import { onMounted, ref } from 'vue';
 import {
     PutMyInfo,
     getInfoByToken
 } from '@/api/user.js'
-import {
-    getRoleListPage
-} from '@/api/role.js'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores';
 const userStore = useUserStore()
@@ -23,10 +21,6 @@ const ruleForm = {
 }
 onMounted(() => {
     formData.value = JSON.parse(JSON.stringify(userStore.userInfo))
-    //加载角色
-    getRoleListPage({ size: 9999 }).then((res) => {
-        roles.value = res.data.response.data;
-    });
 })
 
 //提交
@@ -57,14 +51,6 @@ const HandleSubmit = () => {
     })
 
 }
-const getRoleName = (item) => {
-    let find = roles.value.find(t => t.Id == item)
-    if (find) {
-        return find.Name
-    } else {
-        return item
-    }
-}
 </script>
 <template>
     <el-form style="width: 550px;" class="mobile-box" @submit.prevent ref="refForm" :model="formData" :rules="ruleForm"
@@ -83,7 +69,7 @@ const getRoleName = (item) => {
             </el-radio-group>
         </el-form-item>
         <el-form-item label="年龄" prop="Age">
-            <el-input-number v-model="formData.Age" :min="0" :max="200"></el-input-number>
+            {{ yearsPassed(formData.Birth) }} 岁
         </el-form-item>
         <el-form-item label="生日" prop="Birth">
             <el-date-picker type="date" placeholder="选择日期" v-model="formData.Birth"></el-date-picker>
@@ -94,9 +80,14 @@ const getRoleName = (item) => {
         <el-form-item label="备注" prop="Remark">
             <el-input type="textarea" v-model="formData.Remark"></el-input>
         </el-form-item>
+        <el-form-item label="所属部门" prop="RIDs">
+            <el-row :gutter="5">
+                <el-tag>{{ formData.DepartmentName }}</el-tag>
+            </el-row>
+        </el-form-item>
         <el-form-item label="拥有角色" prop="RIDs">
             <el-row :gutter="5">
-                <el-col :span="1.5" v-for="item in formData.RIDs"><el-tag>{{ getRoleName(item) }}</el-tag></el-col>
+                <el-col :span="1.5" v-for="item in formData.RoleNames"><el-tag>{{ item }}</el-tag></el-col>
             </el-row>
         </el-form-item>
         <el-form-item>

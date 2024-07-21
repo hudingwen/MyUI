@@ -242,7 +242,7 @@ const HandleSearch = (page) => {
   </el-row>
   <!-- 内容 -->
   <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
-    @row-click="HandleClickRow" border row-key="Id">
+    @row-click="HandleClickRow" border row-key="Id" height="calc(100vh - 250px)">
     <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column prop="Name" label="菜单/按钮" width="200">
       <template #default="{ row }">
@@ -280,12 +280,12 @@ const HandleSearch = (page) => {
     </template>
   </el-table>
   <!-- 分页 -->
-  <el-row>
+  <!-- <el-row>
     <el-col class="flexBox">
       <el-pagination class="flexItem" small background layout="total, prev, pager, next, sizes, jumper"
         :total="tableTotal" v-model:current-page="filters.page" v-model:page-size="filters.size" />
     </el-col>
-  </el-row>
+  </el-row> -->
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="550px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon
@@ -338,7 +338,7 @@ const HandleSearch = (page) => {
       </el-form-item>
 
       <el-form-item prop="Pid" label="父级菜单">
-        <el-tree-select v-model="formData.Pid" :data="menuTrees" filterable clearable :check-strictly="true" />
+        <el-tree-select :default-expand-all="true" v-model="formData.Pid" :data="menuTrees" filterable clearable :check-strictly="true" />
       </el-form-item>
       <el-form-item prop="Mid" label="API接口">
         <el-select style="width: 100%" v-model="formData.Mid" placeholder="请选择API" filterable>

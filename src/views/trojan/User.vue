@@ -337,7 +337,7 @@ const HandleLink = (row) => {
   </el-row>
   <!-- 内容 -->
   <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
-    @row-click="HandleClickRow" border :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+    @row-click="HandleClickRow" border height="calc(100vh - 300px)">
     <el-table-column type="selection" width="50"></el-table-column>
 
     <el-table-column prop="username" label="用户名" width="200"></el-table-column>

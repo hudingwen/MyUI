@@ -620,7 +620,7 @@ const GetNsList = () => {
     </el-row>
     <!-- 内容 -->
     <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
-        @row-click="HandleClickRow" border>
+        @row-click="HandleClickRow" border height="calc(100vh - 350px)">
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column type="index" width="60"></el-table-column>
         <el-table-column show-overflow-tooltip prop="name" label="名称" width="180"></el-table-column>
@@ -647,32 +647,32 @@ const GetNsList = () => {
         </el-table-column>
         <el-table-column prop="isRefresh" label="自动重启" width="100">
             <template #default="{ row }">
-                <el-tag :type="row.isRefresh ? 'warning' : ''">{{ row.isRefresh ? '是' : '否' }}</el-tag>
+                <el-tag :type="row.isRefresh ? 'warning' : 'primary'">{{ row.isRefresh ? '是' : '否' }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="isConnection" label="高低报警" width="100">
             <template #default="{ row }">
-                <el-tag :type="row.isConnection ? 'success' : ''">{{ row.isConnection ? '是' : '否' }}</el-tag>
+                <el-tag :type="row.isConnection ? 'success' : 'primary'">{{ row.isConnection ? '是' : '否' }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="isKeepPush" label="持续推送" width="100">
             <template #default="{ row }">
-                <el-tag :type="row.isKeepPush ? 'success' : ''">{{ row.isKeepPush ? '是' : '否' }}</el-tag>
+                <el-tag :type="row.isKeepPush ? 'success' : 'primary'">{{ row.isKeepPush ? '是' : '否' }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="isNeedPassword" label="是否登录查看血糖" width="150">
             <template #default="{ row }">
-                <el-tag :type="row.isNeedPassword ? 'success' : ''">{{ row.isNeedPassword ? '是' : '否' }}</el-tag>
+                <el-tag :type="row.isNeedPassword ? 'success' : 'primary'">{{ row.isNeedPassword ? '是' : '否' }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="isBindWeChat" label="绑定公众号" width="100">
             <template #default="{ row }">
-                <el-tag :type="row.isBindWeChat ? 'success' : ''">{{ row.isBindWeChat ? '是' : '否' }}</el-tag>
+                <el-tag :type="row.isBindWeChat ? 'success' : 'primary'">{{ row.isBindWeChat ? '是' : '否' }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="isBindMini" label="绑定小程序" width="100">
             <template #default="{ row }">
-                <el-tag :type="row.isBindMini ? 'success' : ''">{{ row.isBindMini ? '是' : '否' }}</el-tag>
+                <el-tag :type="row.isBindMini ? 'success' : 'primary'">{{ row.isBindMini ? '是' : '否' }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column show-overflow-tooltip prop="status" label="状态" width="90"></el-table-column>
@@ -964,7 +964,7 @@ const GetNsList = () => {
             <el-table-column show-overflow-tooltip prop="content" label="日志" min-width="350"></el-table-column>
             <el-table-column show-overflow-tooltip prop="success" label="状态" width="90">
                 <template #default="{ row }">
-                    <el-tag :type="(row.success ? '' : 'danger')"> {{ (row.success ? '成功' : '失败') }}
+                    <el-tag :type="(row.success ? 'primary' : 'danger')"> {{ (row.success ? '成功' : '失败') }}
                     </el-tag>
                 </template>
             </el-table-column>

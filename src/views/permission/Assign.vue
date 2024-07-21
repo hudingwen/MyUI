@@ -105,20 +105,22 @@ const reverse = (ls) => {
 <template>
   <div style="display: flex;flex-wrap: wrap;">
     <!-- 左边 -->
-    <el-card style="width: 375px;margin-right: 5px;margin-bottom: 5px;">
+    <el-card style="width: 375px;margin-right: 5px;">
       <template #header>
         <div class="card-header">
           <span>角色</span>
           <el-link @click="GetRoles" style="float: right; padding: 3px 0" type="primary">刷新</el-link>
         </div>
       </template>
-      <div style="font-size: 14px; line-height: 32px; cursor: pointer;" v-for="o in roles" :key="o.Id"
-        @click="GetPermissionIds(o.Id)" :class="o.Id == roleid ? 'active' : ''">
-        {{ o.Name }}
-      </div>
+      <el-scrollbar height="calc(100vh - 300px)">
+        <div style="font-size: 14px; line-height: 32px; cursor: pointer;" v-for="o in roles" :key="o.Id"
+          @click="GetPermissionIds(o.Id)" :class="o.Id == roleid ? 'active' : ''">
+          {{ o.Name }}
+        </div>
+      </el-scrollbar>
     </el-card>
     <!-- 右边 -->
-    <el-card style="min-width: 400px;flex: 1;margin-bottom: 5px;">
+    <el-card style="min-width: 400px;flex: 1;">
       <template #header>
         <div class="card-header">
           <span>菜单</span>
@@ -126,30 +128,32 @@ const reverse = (ls) => {
           <el-link v-else type="primary">请选中一个要操作的角色</el-link>
         </div>
       </template>
-      <div>
-        <div class="morechildren">
-          <el-tree ref="treeRef" :data="data5" show-checkbox default-expand-all node-key="value" highlight-current
-            :check-strictly="true">
-            <template #default="{ node, data }">
-              <el-scrollbar class="custom-tree-node-right">
-                <div style="display: flex; justify-content: space-between; /* 左右分布 */">
-                  <span style=" margin-right: 10px; ">{{ node.label }}<el-button @click.prevent="reverse(data.btns)"
-                      v-if="(data.btns && data.btns.length > 1)" style="padding:5px 8px;margin-left:5px;" size="small"
-                      plain type="primary">反选</el-button>
-                  </span>
-                  <el-checkbox-group style=" margin-right: 10px;" v-model="assignBtns">
-                    <el-checkbox style="padding: 0px; margin-right: 5px;" v-for="btn in data.btns" :key="btn.value"
-                      :label="btn.value.toString()">
-                      {{ btn.label }}
-                    </el-checkbox>
-                  </el-checkbox-group>
-                </div>
+      <el-scrollbar height="calc(100vh - 300px)">
+        <div>
+          <div class="morechildren">
+            <el-tree ref="treeRef" :data="data5" show-checkbox default-expand-all node-key="value" highlight-current
+              :check-strictly="true">
+              <template #default="{ node, data }">
+                <el-scrollbar class="custom-tree-node-right">
+                  <div style="display: flex; justify-content: space-between; /* 左右分布 */">
+                    <span style=" margin-right: 10px; ">{{ node.label }}<el-button @click.prevent="reverse(data.btns)"
+                        v-if="(data.btns && data.btns.length > 1)" style="padding:5px 8px;margin-left:5px;" size="small"
+                        plain type="primary">反选</el-button>
+                    </span>
+                    <el-checkbox-group style=" margin-right: 10px;" v-model="assignBtns">
+                      <el-checkbox style="padding: 0px; margin-right: 5px;" v-for="btn in data.btns" :key="btn.value"
+                        :label="btn.value.toString()">
+                        {{ btn.label }}
+                      </el-checkbox>
+                    </el-checkbox-group>
+                  </div>
 
-              </el-scrollbar>
-            </template>
-          </el-tree>
+                </el-scrollbar>
+              </template>
+            </el-tree>
+          </div>
         </div>
-      </div>
+      </el-scrollbar>
     </el-card>
   </div>
 </template> 

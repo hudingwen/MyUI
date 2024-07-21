@@ -197,7 +197,7 @@ onMounted(() => {
   <!-- 内容 -->
   <div style="display: flex;flex-wrap: wrap;">
     <!-- 左边 -->
-    <el-card style="height: 550px;width: 375px;margin-right: 5px;margin-bottom: 5px;">
+    <el-card style="width: 375px;margin-right: 5px;">
       <template #header>
         <div class="card-header">
           <span>菜单</span>
@@ -205,71 +205,74 @@ onMounted(() => {
         </div>
       </template>
 
-      <div class="wechatBox">
-        <div class="wechatItem" :key="index" :class="{ isActive: item.isActive }" v-for="(item, index) in menu.button"
-          @click="HandleWechatFocusItem(item)">{{
-            item.name }}
-          <div class="childBox">
-            <div v-show="item.sub_button.length < 5" class="wechatItem childItem new"
-              @click.stop="HandleWechatAddChild(item)">+</div>
-            <div class="wechatItem childItem" :class="{ isActive: child.isActive }"
-              @click.stop="HandleWechatFocusItem(child)" :key="cIndex" v-for="(child, cIndex) in item.sub_button">{{
-                child.name }}</div>
+      <el-scrollbar height="calc(100vh - 350px)">
+        <div class="wechatBox">
+          <div class="wechatItem" :key="index" :class="{ isActive: item.isActive }" v-for="(item, index) in menu.button"
+            @click="HandleWechatFocusItem(item)">{{
+              item.name }}
+            <div class="childBox">
+              <div v-show="item.sub_button.length < 5" class="wechatItem childItem new"
+                @click.stop="HandleWechatAddChild(item)">+</div>
+              <div class="wechatItem childItem" :class="{ isActive: child.isActive }"
+                @click.stop="HandleWechatFocusItem(child)" :key="cIndex" v-for="(child, cIndex) in item.sub_button">{{
+                  child.name }}</div>
+            </div>
           </div>
+          <div v-show="menu.button.length < 3" class="wechatItem new" @click="HandleWechatAddItem">+</div>
         </div>
-        <div v-show="menu.button.length < 3" class="wechatItem new" @click="HandleWechatAddItem">+</div>
-      </div>
+      </el-scrollbar>
     </el-card>
     <!-- 右边 -->
-    <el-card style="min-width: 400px;flex: 1;margin-bottom: 5px;">
+    <el-card style="min-width: 400px;flex: 1;">
       <template #header>
         <div class="card-header">
           <span>当前节点配置</span>
           <el-button style="float: right;" type="danger" plain @click="HandleDeleteItem"> 删除当前节点 </el-button>
         </div>
       </template>
+      <el-scrollbar height="calc(100vh - 350px)">
+        <el-form @submit.prevent v-if="curItem" :model="curItem" label-width="120px">
+          <el-form-item label="菜单名称">
+            <el-input v-model="curItem.name" />
+          </el-form-item>
+          <el-form-item label="菜单类型">
+            <el-radio-group v-model="curItem.type">
+              <!-- <el-radio :label="'media_id'">发送素材</el-radio> -->
+              <el-radio :label="'click'">发送关键词</el-radio>
+              <el-radio :label="'view'">跳转链接</el-radio>
+              <el-radio :label="'miniprogram'">小程序</el-radio>
+              <el-radio :label="'event'">事件功能</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item v-if="curItem.type == 'click'" label="关键词">
+            <el-input v-model="curItem.key" />
+          </el-form-item>
 
-      <el-form @submit.prevent v-if="curItem" :model="curItem" label-width="120px">
-        <el-form-item label="菜单名称">
-          <el-input v-model="curItem.name" />
-        </el-form-item>
-        <el-form-item label="菜单类型">
-          <el-radio-group v-model="curItem.type">
-            <!-- <el-radio :label="'media_id'">发送素材</el-radio> -->
-            <el-radio :label="'click'">发送关键词</el-radio>
-            <el-radio :label="'view'">跳转链接</el-radio>
-            <el-radio :label="'miniprogram'">小程序</el-radio>
-            <el-radio :label="'event'">事件功能</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item v-if="curItem.type == 'click'" label="关键词">
-          <el-input v-model="curItem.key" />
-        </el-form-item>
-
-        <el-form-item v-if="curItem.type == 'view'" label="跳转链接">
-          <el-input v-model="curItem.url" />
-        </el-form-item>
+          <el-form-item v-if="curItem.type == 'view'" label="跳转链接">
+            <el-input v-model="curItem.url" />
+          </el-form-item>
 
 
-        <el-form-item v-if="curItem.type == 'miniprogram'" label="小程序appid" placeholder="请输入小程序的appid">
-          <el-input v-model="curItem.appid" />
-        </el-form-item>
-        <el-form-item v-if="curItem.type == 'miniprogram'" label="小程序网页路径" placeholder="请输入小程序的页面路径，如：pages/index">
-          <el-input v-model="curItem.pagepath" />
-        </el-form-item>
+          <el-form-item v-if="curItem.type == 'miniprogram'" label="小程序appid" placeholder="请输入小程序的appid">
+            <el-input v-model="curItem.appid" />
+          </el-form-item>
+          <el-form-item v-if="curItem.type == 'miniprogram'" label="小程序网页路径" placeholder="请输入小程序的页面路径，如：pages/index">
+            <el-input v-model="curItem.pagepath" />
+          </el-form-item>
 
-        <el-form-item v-if="curItem.type == 'event'" label="功能事件">
-          <el-radio-group v-model="curItem.key">
-            <el-radio :label="'pic_weixin'">微信相册</el-radio>
-            <el-radio :label="'pic_sysphoto'">拍照发图</el-radio>
-            <el-radio :label="'location_select'">位置选择</el-radio>
-            <el-radio :label="'scancode_push'">微信扫码</el-radio>
-          </el-radio-group>
-        </el-form-item>
+          <el-form-item v-if="curItem.type == 'event'" label="功能事件">
+            <el-radio-group v-model="curItem.key">
+              <el-radio :label="'pic_weixin'">微信相册</el-radio>
+              <el-radio :label="'pic_sysphoto'">拍照发图</el-radio>
+              <el-radio :label="'location_select'">位置选择</el-radio>
+              <el-radio :label="'scancode_push'">微信扫码</el-radio>
+            </el-radio-group>
+          </el-form-item>
 
-      </el-form>
-      <div>{{ menu }}</div>
+        </el-form>
+        <div>{{ menu }}</div>
 
+      </el-scrollbar>
     </el-card>
   </div>
 </template> 

@@ -245,7 +245,7 @@ const copy = (row) => {
   </el-row>
   <!-- 内容 -->
   <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
-    @row-click="HandleClickRow" border>
+    @row-click="HandleClickRow" border height="calc(100vh - 300px)">
     <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column prop="serverName" label="服务器名称" width="250"></el-table-column>
     <el-table-column prop="serverIp" label="服务器ip" width="150"></el-table-column>
@@ -265,12 +265,12 @@ const copy = (row) => {
     <el-table-column prop="remark" label="备注" width="200"></el-table-column>
     <el-table-column prop="isMongo" label="是否Mongo" width="120">
       <template #default="{ row }">
-        <el-tag :type="row.isMongo ? 'success' : ''">{{ row.isMongo ? '是' : '否' }}</el-tag>
+        <el-tag :type="row.isMongo ? 'success' : 'primary'">{{ row.isMongo ? '是' : '否' }}</el-tag>
       </template>
     </el-table-column>
     <el-table-column prop="isNginx" label="是否Nginx" width="120">
       <template #default="{ row }">
-        <el-tag :type="row.isNginx ? 'success' : ''">{{ row.isNginx ? '是' : '否' }}</el-tag>
+        <el-tag :type="row.isNginx ? 'success' : 'primary'">{{ row.isNginx ? '是' : '否' }}</el-tag>
       </template>
     </el-table-column>
     <el-table-column prop="mongoServerId" label="关联ssh服务-数据库" width="250">

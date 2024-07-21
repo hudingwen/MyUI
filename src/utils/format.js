@@ -22,3 +22,20 @@ export const formatDateTime = (date, offset) => {
   let formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
   return formattedDate
 } 
+
+export const yearsPassed = (date) => {
+  if (!date) return 0;
+  
+  const inputDate = new Date(date);
+  const currentDate = new Date();
+  
+  let years = currentDate.getFullYear() - inputDate.getFullYear();
+  
+  // 检查月份和日期，以确定是否需要减少一年
+  const monthDifference = currentDate.getMonth() - inputDate.getMonth();
+  if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < inputDate.getDate())) {
+    years--;
+  }
+  
+  return years;
+} 

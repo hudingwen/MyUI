@@ -183,7 +183,7 @@ onMounted(() => {
   </el-row>
   <!-- 内容 -->
   <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
-    @row-click="HandleClickRow" border>
+    @row-click="HandleClickRow" border height="calc(100vh - 250px)">
     <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column prop="title" label="标题" width="150"></el-table-column>
     <el-table-column prop="template_id" label="模板ID" min-width="200" show-overflow-tooltip></el-table-column>

@@ -206,7 +206,7 @@ const HandleDicData = (row) => {
     </el-row>
     <!-- 内容 -->
     <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
-        @row-click="HandleClickRow" border>
+        @row-click="HandleClickRow" border height="calc(100vh - 300px)">
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column prop="code" label="字典code" width="250">
             <template #default="{ row }">

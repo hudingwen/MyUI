@@ -1,4 +1,7 @@
 <script setup>
+
+import { getDepartmentTree } from '@/api/dep.js'
+import { yearsPassed } from '@/utils/format.js'
 import { onMounted, ref, watch } from 'vue'
 import {
   getUserListPage,
@@ -54,8 +57,14 @@ onMounted(() => {
   getRoleListPage({ size: 9999 }).then((res) => {
     roles.value = res.data.response.data;
   });
+  //获取部门
+  getDepartmentTree().then((res) => {
+    departmentTrees.value = [res.data.response];
+  });
 })
 
+//部门树
+const departmentTrees = ref([])
 
 //新增&编辑操作
 const dialogVisible = ref(false)
@@ -72,7 +81,11 @@ const ruleForm = {
   ],
   LoginPWD: [
     { required: true, message: '密码不能为空', trigger: 'change' },
+  ],
+  DepartmentId: [
+    { required: true, message: '所属部门不能为空', trigger: 'change' },
   ]
+  
 }
 //新增
 const HandleAdd = () => {
@@ -197,6 +210,7 @@ const resetFormRule = {
   LoginPWD2: [
     { required: true, message: '密码不能为空', trigger: 'change' },
   ]
+  
 }
 const HandleResetPass = (row) => {
   if (!row) {
@@ -229,7 +243,7 @@ const SubmitReset = () => {
   })
 
 
-}
+} 
 
 </script>
 <template>
@@ -264,7 +278,7 @@ const SubmitReset = () => {
   </el-row>
   <!-- 内容 -->
   <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
-    @row-click="HandleClickRow" border>
+    @row-click="HandleClickRow" border height="calc(100vh - 300px)">
     <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column prop="RealName" label="昵称" width="200"></el-table-column>
     <el-table-column prop="LoginName" label="登录名" width="200"></el-table-column>
@@ -277,6 +291,14 @@ const SubmitReset = () => {
         </el-row>
       </template>
     </el-table-column>
+
+    <el-table-column prop="RoleNames" label="所属部门" min-width="180" align="center">
+      <template #default="{ row }">
+        {{ row.DepartmentName }}
+      </template>
+    </el-table-column>
+
+    
     <el-table-column prop="Status" label="状态" width="90" align="center">
       <template #default="{ row }">
         <el-tag :type="row.Status == 0 ? 'success' : 'danger'" disable-transitions>{{ row.Status == 0 ? "激活" :
@@ -295,7 +317,11 @@ const SubmitReset = () => {
     
     <el-table-column prop="Remark" label="备注" width="200"></el-table-column>
     <el-table-column prop="Sex" label="性别" width="200"></el-table-column>
-    <el-table-column prop="Age" label="年龄" width="200"></el-table-column>
+    <el-table-column prop="Age" label="年龄" width="200">
+      <template #default="{ row }">
+        {{ yearsPassed(row.Birth) }} 岁
+      </template>
+    </el-table-column>
     <el-table-column prop="Birth" label="生日" width="200"></el-table-column>
 
     <el-table-column prop="Address" label="地址" width="200"></el-table-column>
@@ -328,6 +354,10 @@ const SubmitReset = () => {
       <el-form-item v-if="isAdd" label="密码" prop="LoginPWD">
         <el-input v-model="formData.LoginPWD" show-password auto-complete="off" clearable></el-input>
       </el-form-item>
+      <el-form-item label="所属部门" prop="DepartmentId">
+        <el-tree-select :default-expand-all="true" v-model="formData.DepartmentId" :data="departmentTrees" filterable clearable :check-strictly="true" /> 
+      </el-form-item>
+    
       <el-form-item label="状态" prop="Status">
         <el-select v-model="formData.Status" placeholder="请选择角色状态">
           <el-option label="激活" :value="0"></el-option>
@@ -346,7 +376,7 @@ const SubmitReset = () => {
         </el-radio-group>
       </el-form-item>
       <el-form-item label="年龄" prop="Age">
-        <el-input-number v-model="formData.Age" :min="0" :max="200"></el-input-number>
+          {{ yearsPassed(formData.Birth) }} 岁
       </el-form-item>
       <el-form-item label="生日" prop="Birth">
         <el-date-picker type="date" placeholder="选择日期" v-model="formData.Birth"></el-date-picker>

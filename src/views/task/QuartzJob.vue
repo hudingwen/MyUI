@@ -175,7 +175,7 @@ const tableNamespace = ref([])
 const HandleNamespace = (row) => {
   visibleNamespace.value = false
   formData.value.AssemblyName = row.nameSpace;
-  formData.value.ClassName = row.nameClass; 
+  formData.value.ClassName = row.nameClass;
   formData.value.JobGroup = row.name
   formData.value.Name = row.name
 }
@@ -368,7 +368,7 @@ const HandleSearch = (page) => {
   </el-row>
   <!-- 内容 -->
   <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
-    @row-click="HandleClickRow" border>
+    @row-click="HandleClickRow" border height="calc(100vh - 300px)">
     <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column prop="JobGroup" label="任务组" width="200" show-overflow-tooltip></el-table-column>
     <el-table-column prop="Name" label="任务名称" width="350" show-overflow-tooltip></el-table-column>
@@ -376,23 +376,23 @@ const HandleSearch = (page) => {
     <el-table-column prop="TriggerType" label="任务类型" width="90" align="center">
       <template #default="{ row }">
         <el-tag :type="row.TriggerType == 1 ? 'success' : ''" disable-transitions>{{ row.TriggerType == 1 ?
-        "Cron" : "Simple" }}</el-tag>
+          "Cron" : "Simple" }}</el-tag>
       </template>
     </el-table-column>
 
     <el-table-column prop="triggerStatus" label="内存状态" width="90" align="center">
       <template #default="{ row }">
         <el-tag :type="row.Triggers[0].triggerStatus == '正常'
-        ? 'success'
-        : 'danger'
-        " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
+          ? 'success'
+          : 'danger'
+          " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
       </template>
     </el-table-column>
 
     <el-table-column prop="IsStart" label="数据库状态" width="100" align="center">
       <template #default="{ row }">
         <el-tag :type="row.IsStart ? 'success' : 'danger'" disable-transitions>{{ row.IsStart ? "运行中" : "停止"
-          }}</el-tag>
+        }}</el-tag>
       </template>
     </el-table-column>
 
