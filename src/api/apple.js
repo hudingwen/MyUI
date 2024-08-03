@@ -21,7 +21,10 @@ export const delAppleKey = params => {
 export const delBatchAppleKey = params => {
     return request.post('/api/AppleKey/Deletes', params);
 };
-
+//生成key
+export const CreateKey = params => {
+    return request.get('/api/AppleKey/CreateKey', { params: params });
+};
 
 
 //获取苹果api账号列表

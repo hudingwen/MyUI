@@ -342,7 +342,7 @@ const HandleSearch = (page) => {
       </el-form-item>
       <el-form-item prop="Mid" label="API接口">
         <el-select style="width: 100%" v-model="formData.Mid" placeholder="请选择API" filterable>
-          <el-option :key="0" :value="0" :label="'无需api'"></el-option>
+          <el-option key="0" value="0" :label="'无需api'"></el-option>
           <el-option v-for="item in modules" :key="item.Id" :value="item.Id" :label="item.LinkUrl">
             <span style="float: left">{{ item.LinkUrl }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{

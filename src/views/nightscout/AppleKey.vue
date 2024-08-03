@@ -6,7 +6,8 @@ import {
     delAppleKey,
     delBatchAppleKey,
     addAppleKey,
-    updateAppleKey
+    updateAppleKey,
+    CreateKey
 } from '@/api/apple.js'
 
 
@@ -47,7 +48,7 @@ watch(() => filters.value.size, () => {
 
 //加载数据
 onMounted(() => {
-    HandleSearch()
+    // HandleSearch()
 })
 
 
@@ -184,13 +185,57 @@ onMounted(() => {
 
 })
 
+// 生成key
+const dialogKey = ref(false)
+const formDataKey = ref({
+    id: '',
+    key: '',
+    needTime: false,
+    times: 0,
+    day: 0,
+    hour: 0,
+    min: 0,
+    sec: 0
+})
+const refFormKey = ref()
+const ruleFormKey = {
+    id: [
+        { required: true, message: 'id不能为空', trigger: 'change' },
+    ],
+    key: [
+        { required: true, message: 'key不能为空', trigger: 'change' },
+    ]
+}
+const handleCacTime = () => {
+    formDataKey.value.times = formDataKey.value.day * 60 * 60 * 24 * 1000 + formDataKey.value.hour * 60 * 60 * 1000 + formDataKey.value.min * 60 * 1000 + formDataKey.value.sec * 1000
+}
+const HandleKey = () => {
+    dialogKey.value = true
+}
+const SubmitKey = () => {
+    CreateKey(formDataKey.value).then(res => {
+        ElNotification({
+            title: '生成成功',
+            message: res.data.response,
+            duration: 0,
+        })
+        dialogKey.value = false
+    })
+}
 </script>
 <template>
     <!-- 搜索 -->
     <el-row>
         <el-col>
             <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
-                <el-form-item label="关键词" class="flexItem" label-width="90">
+
+
+
+                <el-form-item class="flexItem">
+                    <el-button type="primary" plain @click="HandleKey">生成密码计算器</el-button>
+                </el-form-item>
+
+                <!-- <el-form-item label="关键词" class="flexItem" label-width="90">
                     <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
                 </el-form-item>
                 <el-form-item label="状态" class="flexItem" label-width="90">
@@ -205,15 +250,12 @@ onMounted(() => {
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleAdd">添加</el-button>
                 </el-form-item>
-                <!-- <el-form-item class="flexItem">
-                    <el-button type="primary" plain @click="HandleEdit(currentRow)">修改</el-button>
-                </el-form-item> -->
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleDel(currentRow)">删除</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleBatchDel(selectRows)">批量删除</el-button>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
 
         </el-col>
@@ -254,7 +296,7 @@ onMounted(() => {
             <el-form-item label="生成激活码数量" prop="auth_code">
                 <el-input-number v-model="formData.createCount" :min="1" :max="100" />
             </el-form-item>
-            <el-form-item label="激活码类型" prop="auth_code">  
+            <el-form-item label="激活码类型" prop="auth_code">
                 <el-select v-model="formData.createType">
                     <el-option label="英文" :value="0" />
                     <el-option label="汉字" :value="1" />
@@ -266,6 +308,41 @@ onMounted(() => {
             <span class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
                 <el-button type="primary" @click="HandleSubmit">
+                    确定
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
+
+    <!-- 生成key -->
+    <el-dialog v-model="dialogKey" title="密码计算器" width="450px" :before-close="handleClose">
+        <el-form @submit.prevent ref="refFormKey" :model="formData" :rules="ruleFormKey" label-width="120px" status-icon
+            label-position="top">
+            <el-form-item label="id" prop="id">
+                <el-input v-model="formDataKey.id" />
+            </el-form-item>
+
+            <el-form-item label="key" prop="key">
+                <el-input v-model="formDataKey.key" />
+            </el-form-item>
+
+
+            <el-form-item label="是否需要时间" prop="key">
+                <el-checkbox v-model="formDataKey.needTime" label="是否需要时间" />
+
+                <el-row>
+                    <el-col><el-input @change="handleCacTime" v-model="formDataKey.day" placeholder="" />天</el-col>
+                    <el-col><el-input @change="handleCacTime" v-model="formDataKey.hour" placeholder="" />时</el-col>
+                    <el-col><el-input @change="handleCacTime" v-model="formDataKey.min" placeholder="" />分</el-col>
+                    <el-col><el-input @change="handleCacTime" v-model="formDataKey.sec" placeholder="" />秒</el-col>
+                </el-row>
+            </el-form-item>
+        </el-form>
+
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="dialogKey = false">取消</el-button>
+                <el-button type="primary" @click="SubmitKey">
                     确定
                 </el-button>
             </span>
@@ -289,5 +366,5 @@ onMounted(() => {
     .flexContent {
         width: 200px;
     }
-}
+} 
 </style>

@@ -8,7 +8,7 @@ import { ElLoading, ElMessageBox, ElMessage } from 'element-plus'
 const instance = axios.create({
   // 基地址
   baseURL,
-  timeout: 120000
+  timeout: 120000000
 })
 var loadingCount = 0
 var loadingInstance = null
