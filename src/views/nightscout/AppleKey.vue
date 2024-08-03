@@ -189,7 +189,7 @@ onMounted(() => {
 const dialogKey = ref(false)
 const formDataKey = ref({
     id: '',
-    key: '',
+    key: '670489857',
     needTime: false,
     times: 0,
     day: 0,
