@@ -48,7 +48,7 @@ watch(() => filters.value.size, () => {
 
 //加载数据
 onMounted(() => {
-    // HandleSearch()
+    HandleSearch()
 })
 
 
@@ -213,14 +213,30 @@ const HandleKey = () => {
     dialogKey.value = true
 }
 const SubmitKey = () => {
-    CreateKey(formDataKey.value).then(res => {
-        ElNotification({
-            title: '生成成功',
-            message: res.data.response,
-            duration: 0,
+
+
+    refFormKey.value.validate((valid, fields) => {
+        if (!valid && fields) {
+            for (let key in fields)
+                ElMessage.error(fields[key][0].message)
+            return;
+        }
+
+        CreateKey(formDataKey.value).then(res => {
+            ElNotification({
+                title: '生成成功',
+                message: res.data.response.auth_code,
+                duration: 0,
+            })
+            dialogKey.value = false
+            HandleSearch()
         })
-        dialogKey.value = false
+
     })
+
+
+
+
 }
 </script>
 <template>
@@ -231,31 +247,32 @@ const SubmitKey = () => {
 
 
 
-                <el-form-item class="flexItem">
-                    <el-button type="primary" plain @click="HandleKey">生成密码计算器</el-button>
-                </el-form-item>
 
-                <!-- <el-form-item label="关键词" class="flexItem" label-width="90">
+
+                <el-form-item label="关键词" class="flexItem" label-width="90">
                     <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
                 </el-form-item>
-                <el-form-item label="状态" class="flexItem" label-width="90">
+                <!-- <el-form-item label="状态" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.status" placeholder="请选择要搜索的状态">
                         <el-option label="已激活" :value="1"></el-option>
                         <el-option label="未启用" :value="0"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
-                    <el-button type="primary" plain @click="HandleAdd">添加</el-button>
+                    <el-button type="primary" plain @click="HandleKey">生成密码计算器</el-button>
                 </el-form-item>
+                <!-- <el-form-item class="flexItem">
+                    <el-button type="primary" plain @click="HandleAdd">添加</el-button>
+                </el-form-item> -->
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleDel(currentRow)">删除</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleBatchDel(selectRows)">批量删除</el-button>
-                </el-form-item> -->
+                </el-form-item>
             </el-form>
 
         </el-col>
@@ -265,18 +282,24 @@ const SubmitKey = () => {
         @row-click="HandleClickRow" border height="calc(100vh - 300px)">
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column type="index" width="60"></el-table-column>
-        <el-table-column prop="auth_code" label="授权码" width="250"></el-table-column>
+        <el-table-column prop="auth_code" label="授权码" min-width="250"></el-table-column>
+        <el-table-column prop="record_id" label="id" width="150"></el-table-column>
+        <el-table-column prop="record_key" label="key" width="150"></el-table-column>
         <el-table-column prop="create_date" label="生成时间" width="180"></el-table-column>
-        <el-table-column prop="user_time" label="激活时间" width="180"></el-table-column>
+        <!-- <el-table-column prop="user_time" label="激活时间" width="180"></el-table-column> -->
         <el-table-column prop="expiry_date" label="到期时间" width="180"></el-table-column>
-        <el-table-column prop="uuid" label="设备码" width="360"></el-table-column>
-        <el-table-column prop="status" label="状态" width="100">
+        <el-table-column prop="create_day" label="天" width="90"></el-table-column>
+        <el-table-column prop="create_hour" label="时" width="90"></el-table-column>
+        <el-table-column prop="create_min" label="分" width="90"></el-table-column>
+        <el-table-column prop="create_sec" label="秒" width="90"></el-table-column>
+        <!-- <el-table-column prop="uuid" label="设备码" width="360"></el-table-column> -->
+        <!-- <el-table-column prop="status" label="状态" width="100">
             <template #default="{ row }">
                 <el-tag v-if="row.status === 1" type="success">已激活</el-tag>
                 <el-tag v-if="row.status === 0">未启用</el-tag>
             </template>
-        </el-table-column>
-        <el-table-column prop="comment" label="备注" width="130"></el-table-column>
+        </el-table-column> -->
+        <!-- <el-table-column prop="comment" label="备注" width="130"></el-table-column> -->
 
         <template #empty>
             <el-empty description="没有数据"></el-empty>
@@ -331,10 +354,14 @@ const SubmitKey = () => {
                 <el-checkbox v-model="formDataKey.needTime" label="是否需要时间" />
 
                 <el-row :gutter="10">
-                    <el-col ><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime" v-model.number="formDataKey.day" placeholder="" />天</el-col>
-                    <el-col ><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime" v-model.number="formDataKey.hour" placeholder="" />时</el-col>
-                    <el-col ><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime" v-model.number="formDataKey.min" placeholder="" />分</el-col>
-                    <el-col ><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime" v-model.number="formDataKey.sec" placeholder="" />秒</el-col>
+                    <el-col><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime"
+                            v-model.number="formDataKey.day" placeholder="" />天</el-col>
+                    <el-col><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime"
+                            v-model.number="formDataKey.hour" placeholder="" />时</el-col>
+                    <el-col><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime"
+                            v-model.number="formDataKey.min" placeholder="" />分</el-col>
+                    <el-col><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime"
+                            v-model.number="formDataKey.sec" placeholder="" />秒</el-col>
                 </el-row>
             </el-form-item>
         </el-form>
@@ -366,5 +393,4 @@ const SubmitKey = () => {
     .flexContent {
         width: 200px;
     }
-} 
-</style>
+}</style>
