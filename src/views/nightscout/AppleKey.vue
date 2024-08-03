@@ -316,7 +316,7 @@ const SubmitKey = () => {
 
     <!-- 生成key -->
     <el-dialog v-model="dialogKey" title="密码计算器" width="450px" :before-close="handleClose">
-        <el-form @submit.prevent ref="refFormKey" :model="formData" :rules="ruleFormKey" label-width="120px" status-icon
+        <el-form @submit.prevent ref="refFormKey" :model="formDataKey" :rules="ruleFormKey" label-width="120px" status-icon
             label-position="top">
             <el-form-item label="id" prop="id">
                 <el-input v-model="formDataKey.id" />
@@ -327,14 +327,14 @@ const SubmitKey = () => {
             </el-form-item>
 
 
-            <el-form-item label="是否需要时间" prop="key">
+            <el-form-item label="">
                 <el-checkbox v-model="formDataKey.needTime" label="是否需要时间" />
 
-                <el-row>
-                    <el-col><el-input @change="handleCacTime" v-model="formDataKey.day" placeholder="" />天</el-col>
-                    <el-col><el-input @change="handleCacTime" v-model="formDataKey.hour" placeholder="" />时</el-col>
-                    <el-col><el-input @change="handleCacTime" v-model="formDataKey.min" placeholder="" />分</el-col>
-                    <el-col><el-input @change="handleCacTime" v-model="formDataKey.sec" placeholder="" />秒</el-col>
+                <el-row :gutter="10">
+                    <el-col ><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime" v-model.number="formDataKey.day" placeholder="" />天</el-col>
+                    <el-col ><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime" v-model.number="formDataKey.hour" placeholder="" />时</el-col>
+                    <el-col ><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime" v-model.number="formDataKey.min" placeholder="" />分</el-col>
+                    <el-col ><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime" v-model.number="formDataKey.sec" placeholder="" />秒</el-col>
                 </el-row>
             </el-form-item>
         </el-form>
