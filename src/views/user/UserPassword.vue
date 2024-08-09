@@ -7,16 +7,19 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import router from '@/router'
 import { useUserStore } from '@/stores';
 const userStore = useUserStore()
-// 重置密码
+// 修改密码
 const resetFormData = ref({})
 const dialogResetVisible = ref(false)
 const resetForm = ref()
 const resetFormRule = {
+  OldPWD: [
+    { required: true, message: '旧密码不能为空', trigger: 'change' },
+  ],
   LoginPWD: [
-    { required: true, message: '密码不能为空', trigger: 'change' },
+    { required: true, message: '新密码不能为空', trigger: 'change' },
   ],
   LoginPWD2: [
-    { required: true, message: '密码不能为空', trigger: 'change' },
+    { required: true, message: '新密码不能为空', trigger: 'change' },
   ]
 }
 
@@ -32,10 +35,10 @@ const SubmitReset = () => {
       ElMessage.error('确认密码不一致!')
       return;
     }
-    ElMessageBox.confirm('确定重置么?')
+    ElMessageBox.confirm('确定修改么?')
       .then(() => {
         ResetMyPass(resetFormData.value).then((res) => {
-          ElMessage.success(res.data.msg || '重置成功')
+          ElMessage.success(res.data.msg || '修改成功')
           dialogResetVisible.value = false
           // 清除本地的数据 (token + user信息)
           userStore.logout()
@@ -52,6 +55,9 @@ const SubmitReset = () => {
     :rules="resetFormRule" label-width="80px" status-icon label-position="top">
     <el-form-item label="昵称" prop="RealName">
       <el-input v-model="userStore.userInfo.RealName" auto-complete="off" disabled></el-input>
+    </el-form-item>
+    <el-form-item label="旧密码" prop="OldPWD">
+      <el-input v-model="resetFormData.OldPWD" show-password auto-complete="off" clearable></el-input>
     </el-form-item>
     <el-form-item label="新密码" prop="LoginPWD">
       <el-input v-model="resetFormData.LoginPWD" show-password auto-complete="off" clearable></el-input>

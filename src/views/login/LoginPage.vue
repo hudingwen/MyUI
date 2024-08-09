@@ -168,11 +168,11 @@ const inputDemoAccount = (name, pass) => {
       class="login-container">
       <h3 class="title">系统登录</h3>
       <el-form-item prop="name">
-        <el-input v-model="formData.name" :prefix-icon="User" type="text" auto-complete="off"
+        <el-input v-model="formData.name" @keyup.enter="login" :prefix-icon="User" type="text" auto-complete="off"
           placeholder="账号"></el-input>
       </el-form-item>
       <el-form-item prop="pass">
-        <el-input v-model="formData.pass" :prefix-icon="Lock" auto-complete="off" show-password
+        <el-input v-model="formData.pass" @keyup.enter="login" :prefix-icon="Lock" auto-complete="off" show-password
           placeholder="密码"></el-input>
       </el-form-item>
       <el-form-item prop="code" v-if="needCode">
