@@ -291,7 +291,30 @@ const HandleSearch = (page) => {
 onMounted(() => {
 
 })
+//查看调度任务
+const visibleTask = ref(false)
+const taskList = ref([])
+const filtersTask = ref({ page: 1, size: 10, key: '', tableTotal: 0 })
+import { getTaskListPage2 } from '@/api/task.js'
 
+watch(() => filtersTask.value.page, () => {
+    HandleSearchTask()
+})
+watch(() => filtersTask.value.size, () => {
+    filters.value.page = 1
+    HandleSearchTask()
+})
+
+const HandleSearchTask = (page) => {
+
+    if (page) filtersTask.value.page = page
+
+    getTaskListPage2(filtersTask.value).then(res => {
+        visibleTask.value = true
+        taskList.value = res.data.response.data;
+        filtersTask.value.tableTotal = res.data.response.dataCount;
+    });
+}
 </script>
 <template>
     <!-- 搜索 -->
@@ -316,6 +339,10 @@ onMounted(() => {
 
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="handleUserNowBloodList(currentRow)">查看血糖</el-button>
+                </el-form-item>
+
+                <el-form-item class="flexItem">
+                    <el-button type="primary" plain @click="HandleSearchTask()">查看所有任务</el-button>
                 </el-form-item>
                 <!-- <el-form-item class="flexItem">
                     <el-button type="danger" plain @click="HandleBatchDel(selectRows)">批量删除</el-button>
@@ -541,6 +568,90 @@ onMounted(() => {
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="visibleBlood = false">关闭</el-button>
+            </span>
+        </template>
+    </el-dialog>
+
+    <!-- 弹窗-调度任务 -->
+    <el-dialog v-model="visibleTask" title="调度任务" width="85%" :before-close="handleClose">
+        <el-form @submit.prevent :inline="true" :model="filtersTask" class="flexBox">
+            <el-form-item label="关键词" class="flexItem" label-width="90">
+                <el-input class="flexContent" v-model.trim="filtersTask.key" placeholder="请输入搜索关键词" clearable />
+            </el-form-item>
+            <el-form-item class="flexItem">
+                <el-button type="primary" plain @click="HandleSearchTask(1)">查询</el-button>
+            </el-form-item>
+        </el-form>
+
+        <!-- 内容 -->
+        <el-table :data="taskList" highlight-current-row border height="calc(100vh - 300px)">
+            <!-- <el-table-column type="selection" width="50"></el-table-column> -->
+            <el-table-column prop="JobGroup" label="任务组" width="200" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="Name" label="任务名称" width="350" show-overflow-tooltip></el-table-column>
+
+            <el-table-column prop="TriggerType" label="任务类型" width="90" align="center">
+                <template #default="{ row }">
+                    <el-tag :type="row.TriggerType == 1 ? 'success' : ''" disable-transitions>{{ row.TriggerType == 1 ?
+                        "Cron" : "Simple" }}</el-tag>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="triggerStatus" label="内存状态" width="90" align="center">
+                <template #default="{ row }">
+                    <el-tag :type="row.Triggers[0].triggerStatus == '正常'
+                        ? 'success'
+                        : 'danger'
+                        " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="IsStart" label="数据库状态" width="100" align="center">
+                <template #default="{ row }">
+                    <el-tag :type="row.IsStart ? 'success' : 'danger'" disable-transitions>{{ row.IsStart ? "运行中" : "停止"
+                    }}</el-tag>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="Cron" label="Cron表达式" width="200" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="ClassName" label="执行类" width="350" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="AssemblyName" label="程序集" width="250" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="RunTimes" label="累计运行(次)" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="IntervalSecond" label="循环周期(秒)" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="CycleRunTimes" label="循环(次)" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="CycleHasRunTimes" label="已循环(次)" width="150" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="BeginTime" label="开始时间" width="200" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="EndTime" label="结束时间" width="200" show-overflow-tooltip></el-table-column>
+
+            <el-table-column label="日志" fixed="right">
+                <template #default="{ row }">
+
+                    <el-tooltip effect="dark" placement="top">
+
+                        <template #content> <span v-html="row.Remark"></span> </template>
+                        <el-tag>Log</el-tag>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="CreateTime" label="创建时间" width="180">
+            </el-table-column>
+            <el-table-column prop="ModifyTime" label="更新时间" width="180">
+            </el-table-column>
+            <template #empty>
+                <el-empty description="没有数据"></el-empty>
+            </template>
+        </el-table>
+        <!-- 分页 -->
+        <el-row>
+            <el-col class="flexBox">
+                <el-pagination class="flexItem" small background layout="total, prev, pager, next, sizes, jumper"
+                    :total="filtersTask.tableTotal" v-model:current-page="filtersTask.page"
+                    v-model:page-size="filtersTask.size" />
+            </el-col>
+        </el-row>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="visibleTask = false">关闭</el-button>
             </span>
         </template>
     </el-dialog>

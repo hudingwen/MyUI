@@ -5,6 +5,9 @@ import request from '@/utils/request.js'
 export const getTaskListPage = params => {
   return request.get('/api/TasksQz/get', { params: params });
 };
+export const getTaskListPage2 = params => {
+  return request.get('/api2/TasksQz/get', { params: params });
+};
 export const removeTask = params => {
   return request.delete('/api/TasksQz/delete', { params: params });
 };
