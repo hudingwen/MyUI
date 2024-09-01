@@ -147,71 +147,71 @@ export const addNsCustomer = params => {
 
 //获取监护账号列表
 export const getGuardAccountList = params => {
-    return request.get('/api/Guard/getGuardAccountList', { params: params });
+    return request.get('/api2/Guard/getGuardAccountList', { params: params });
 };
 //添加监护账号
 export const addGuardAccount = params => {
-    return request.post('/api/Guard/addGuardAccount', params);
+    return request.post('/api2/Guard/addGuardAccount', params);
 };
 //编辑监护账号
 export const editGuardAccount = params => {
-    return request.post('/api/Guard/editGuardAccount', params);
+    return request.post('/api2/Guard/editGuardAccount', params);
 };
 //删除监护账户 
 export const delGuardAccount = params => {
-    return request.delete('/api/Guard/delGuardAccount', { params: params });
+    return request.delete('/api2/Guard/delGuardAccount', { params: params });
 };
 
 //获取监护用户
 export const getGuardUserList = params => {
-    return request.get('/api/Guard/getGuardUserList', { params: params });
+    return request.get('/api2/Guard/getGuardUserList', { params: params });
 };
 //添加监护用户
 export const addGuardUser = params => {
-    return request.post('/api/Guard/addGuardUser', params);
+    return request.post('/api2/Guard/addGuardUser', params);
 };
 //编辑监护用户
 export const editGuardUser = params => {
-    return request.post('/api/Guard/editGuardUser', params);
+    return request.post('/api2/Guard/editGuardUser', params);
 };
 //删除监护用户
 export const delGuardUser = params => {
-    return request.delete('/api/Guard/delGuardUser', { params: params });
+    return request.delete('/api2/Guard/delGuardUser', { params: params });
 };
 
 
 
 //获取所有nightscout用户
 export const getAllNsUser = params => {
-    return request.get('/api/Guard/getAllNsUser', { params: params });
+    return request.get('/api2/Guard/getAllNsUser', { params: params });
 };
 //获取所有监护账号
 export const getAllNsGuardAccount = params => {
-    return request.get('/api/Guard/getAllNsGuardAccount', { params: params });
+    return request.get('/api2/Guard/getAllNsGuardAccount', { params: params });
 };
 //获取所有监护用户
 export const getAllNsGuardUser = params => {
-    return request.get('/api/Guard/getAllNsGuardUser', { params: params });
+    return request.get('/api2/Guard/getAllNsGuardUser', { params: params });
 };
 
 //刷新监护账户token
 export const refreshGuardAccount = params => {
-    return request.get('/api/Guard/refreshGuardAccount', { params: params });
+    return request.get('/api2/Guard/refreshGuardAccount', { params: params });
 };
 //获取监护账户类型
 export const getGuardAccountType = params => {
-    return request.get('/api/Guard/getGuardAccountType', { params: params });
+    return request.get('/api2/Guard/getGuardAccountType', { params: params });
 };
 //发送三诺验证码
 export const sendSannuoSms = params => {
-    return request.get('/api/Guard/sendSannuoSms', { params: params });
+    return request.get('/api2/Guard/sendSannuoSms', { params: params });
 };
 //验证三诺验证码
 export const validSannuoSms = params => {
-    return request.get('/api/Guard/validSannuoSms', { params: params });
+    return request.get('/api2/Guard/validSannuoSms', { params: params });
 };
 //用户监护用户实时血糖
 export const getUserNowBloodList = params => {
-    return request.get('/api/Guard/getUserNowBloodList', { params: params });
+    return request.get('/api2/Guard/getUserNowBloodList', { params: params });
 };
 
