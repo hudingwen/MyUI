@@ -927,6 +927,15 @@ const GetNsList = () => {
                         :value="item.key"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="德康账号" prop="bridgeUserName">
+                <el-input v-model="formData.bridgeUserName"></el-input>
+            </el-form-item>
+            <el-form-item label="德康密码" prop="bridgePassword">
+                <el-input v-model="formData.bridgePassword"></el-input>
+            </el-form-item>
+            <el-form-item label="德康服务地区 US-美国 EU-美国以外" prop="bridgeServer">
+                <el-input v-model="formData.bridgeServer"></el-input>
+            </el-form-item>
         </el-form>
         <template #footer>
             <span class="dialog-footer">
