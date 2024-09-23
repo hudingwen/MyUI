@@ -7,9 +7,14 @@ import {
     delBatchAppleKey,
     addAppleKey,
     updateAppleKey,
-    CreateKey
+    CreateKey,
+    CreateKey2
 } from '@/api/apple.js'
 
+import {
+    GetDic,
+    GetDicData
+} from '@/api/dic.js'
 
 // 表格初始化
 const tableData = ref([])
@@ -49,8 +54,18 @@ watch(() => filters.value.size, () => {
 //加载数据
 onMounted(() => {
     HandleSearch()
+    GetDicList()
 })
 
+//获取字典
+const activationCode = ref([])
+const GetDicList = () => {
+    GetDicData({ code: 'activation_code' }).then((res) => {
+        activationCode.value = res.data.response
+    })
+
+
+}
 
 //新增&编辑操作
 const dialogVisible = ref(false)
@@ -189,7 +204,7 @@ onMounted(() => {
 const dialogKey = ref(false)
 const formDataKey = ref({
     id: '',
-    key: '670489857',
+    key: '',
     needTime: false,
     times: 0,
     day: 0,
@@ -204,7 +219,28 @@ const ruleFormKey = {
     ],
     key: [
         { required: true, message: 'key不能为空', trigger: 'change' },
+    ],
+    pass_type: [
+        { required: true, message: '卡密类型不能为空', trigger: 'change' },
     ]
+
+}
+const handleChangePassType = (val) => {
+    if (val == 'auth001') {
+        formDataKey.value.key = '670489857'
+    } else if (val == 'auth002') {
+        formDataKey.value.key = ''
+    } else {
+
+    }
+}
+const getPassTypeName = (passType) => {
+    let findRow = activationCode.value.find(t => t.content == passType)
+    if (findRow) {
+        return findRow.name
+    } else {
+        return passType
+    }
 }
 const handleCacTime = () => {
     formDataKey.value.times = formDataKey.value.day * 60 * 60 * 24 * 1000 + formDataKey.value.hour * 60 * 60 * 1000 + formDataKey.value.min * 60 * 1000 + formDataKey.value.sec * 1000
@@ -212,6 +248,7 @@ const handleCacTime = () => {
 const HandleKey = () => {
     dialogKey.value = true
 }
+
 const SubmitKey = () => {
 
 
@@ -222,15 +259,34 @@ const SubmitKey = () => {
             return;
         }
 
-        CreateKey(formDataKey.value).then(res => {
+        if (formDataKey.value.pass_type == 'auth001') {
+            CreateKey(formDataKey.value).then(res => {
+                ElNotification({
+                    title: '生成成功',
+                    message: res.data.response.auth_code,
+                    duration: 0,
+                })
+                dialogKey.value = false
+                HandleSearch()
+            })
+        } else if (formDataKey.value.pass_type == 'auth002') {
+            CreateKey2(formDataKey.value).then(res => {
+                ElNotification({
+                    title: '生成成功',
+                    message: res.data.response.auth_code,
+                    duration: 0,
+                })
+                dialogKey.value = false
+                HandleSearch()
+            })
+        } else {
             ElNotification({
-                title: '生成成功',
-                message: res.data.response.auth_code,
+                title: '生成失败',
+                message: '还未实现',
                 duration: 0,
             })
-            dialogKey.value = false
-            HandleSearch()
-        })
+        }
+
 
     })
 
@@ -245,10 +301,6 @@ const SubmitKey = () => {
         <el-col>
             <el-form @submit.prevent :inline="true" :model="filters" class="flexBox">
 
-
-
-
-
                 <el-form-item label="关键词" class="flexItem" label-width="90">
                     <el-input class="flexContent" v-model.trim="filters.key" placeholder="请输入搜索关键词" clearable />
                 </el-form-item>
@@ -262,7 +314,7 @@ const SubmitKey = () => {
                     <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
-                    <el-button type="primary" plain @click="HandleKey">生成密码计算器</el-button>
+                    <el-button type="primary" plain @click="HandleKey">激活码生成</el-button>
                 </el-form-item>
                 <!-- <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleAdd">添加</el-button>
@@ -283,6 +335,11 @@ const SubmitKey = () => {
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column type="index" width="60"></el-table-column>
         <el-table-column prop="auth_code" label="授权码" min-width="250"></el-table-column>
+        <el-table-column prop="pass_type" label="授权码类型" width="150">
+            <template #default="{ row }">
+                <el-tag>{{ getPassTypeName(row.pass_type) }}</el-tag>
+            </template>
+        </el-table-column>
         <el-table-column prop="record_id" label="id" width="150"></el-table-column>
         <el-table-column prop="record_key" label="key" width="150"></el-table-column>
         <el-table-column prop="create_date" label="生成时间" width="180"></el-table-column>
@@ -298,7 +355,7 @@ const SubmitKey = () => {
                 <el-tag v-if="row.status === 1" type="success">已激活</el-tag>
                 <el-tag v-if="row.status === 0">未启用</el-tag>
             </template>
-        </el-table-column> -->
+</el-table-column> -->
         <!-- <el-table-column prop="comment" label="备注" width="130"></el-table-column> -->
 
         <template #empty>
@@ -338,21 +395,28 @@ const SubmitKey = () => {
     </el-dialog>
 
     <!-- 生成key -->
-    <el-dialog v-model="dialogKey" title="密码计算器" width="450px" :before-close="handleClose">
-        <el-form @submit.prevent ref="refFormKey" :model="formDataKey" :rules="ruleFormKey" label-width="120px" status-icon
-            label-position="top">
-            <el-form-item label="id" prop="id">
+    <el-dialog v-model="dialogKey" title="激活码生成" width="450px" :before-close="handleClose">
+        <el-form @submit.prevent ref="refFormKey" :model="formDataKey" :rules="ruleFormKey" label-width="120px"
+            status-icon label-position="top">
+
+            <el-form-item label="卡密类型" prop="pass_type">
+                <el-select @change="handleChangePassType" filterable style="width: 100%;" clearable
+                    v-model="formDataKey.pass_type" placeholder="请选择卡密类型">
+                    <el-option :key="item.content" v-for="item in activationCode" :label="item.name"
+                        :value="item.content"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="id" prop="id" v-if="formDataKey.pass_type">
                 <el-input v-model="formDataKey.id" />
             </el-form-item>
 
-            <el-form-item label="key" prop="key">
+            <el-form-item v-if="formDataKey.pass_type == 'auth001'" label="key" prop="key">
                 <el-input v-model="formDataKey.key" />
             </el-form-item>
 
 
-            <el-form-item label="">
+            <el-form-item v-if="formDataKey.pass_type == 'auth001'" label="">
                 <el-checkbox v-model="formDataKey.needTime" label="是否需要时间" />
-
                 <el-row :gutter="10">
                     <el-col><el-input style="width: 100px;margin-bottom: 10px;" @change="handleCacTime"
                             v-model.number="formDataKey.day" placeholder="" />天</el-col>
@@ -393,4 +457,5 @@ const SubmitKey = () => {
     .flexContent {
         width: 200px;
     }
-}</style>
+}
+</style>
