@@ -48,7 +48,7 @@ const tableTotal = ref(0)
 const refTable = ref()
 const currentRow = ref({})
 const selectRows = ref([])
-const filters = ref({ page: 1, size: 10, key: '' })
+const filters = ref({ page: 1, size: 10, key: '', isShowExpire: false, isShowSoonExpire: false })
 
 const HandleSelectChange = (selection) => {
     selectRows.value = selection
@@ -74,7 +74,18 @@ watch(() => filters.value.size, () => {
     filters.value.page = 1
     HandleSearch()
 })
-
+//到期
+watch(() => filters.value.isShowExpire, (newValue,oldValue) => {
+    if(newValue){
+        filters.value.isShowSoonExpire = false
+    }
+})
+//即将到期
+watch(() => filters.value.isShowSoonExpire, (newValue,oldValue) => {
+    if(newValue){
+        filters.value.isShowExpire = false
+    }
+})
 
 
 //加载数据
@@ -535,7 +546,8 @@ const GetNsList = () => {
                 <el-form-item label="服务器" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
                         <el-option v-for="item in nsServer" :key="item.Id"
-                            :label="item.serverName + '(' + item.countStop + '/'+ item.countStart + '/'+ item.count + '/' + item.holdCount + ')'" :value="item.Id">
+                            :label="item.serverName + '(' + item.countStop + '/' + item.countStart + '/' + item.count + '/' + item.holdCount + ')'"
+                            :value="item.Id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -557,6 +569,13 @@ const GetNsList = () => {
                         <el-option label="停止" :value="true"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="" class="flexItem" label-width="120">
+                    <el-checkbox v-model="filters.isShowExpire" label="查看到期用户" size="small" />
+                </el-form-item>
+                <el-form-item label="" class="flexItem" label-width="120">
+                    <el-checkbox v-model="filters.isShowSoonExpire" label="查看即将到期用户" size="small" />
+                </el-form-item>
+
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
                 </el-form-item>
@@ -801,7 +820,8 @@ const GetNsList = () => {
                 <el-form-item label="部署服务器" prop="serverId">
                     <el-select v-model="formData.serverId" placeholder="请选择">
                         <el-option v-for="item in nsServer" :key="item.Id"
-                        :label="item.serverName + '(' + item.countStop + '/'+ item.countStart + '/'+ item.count + '/' + item.holdCount + ')'" :value="item.Id">
+                            :label="item.serverName + '(' + item.countStop + '/' + item.countStart + '/' + item.count + '/' + item.holdCount + ')'"
+                            :value="item.Id">
                         </el-option>
                     </el-select>
                 </el-form-item>
