@@ -277,8 +277,9 @@ const handleUploadAppUrl = () => {
         <el-table-column type="index" width="60"></el-table-column>
         <el-table-column prop="appName" label="app名称" width="250"></el-table-column>
         <el-table-column prop="appDescription" label="app描述" width="250"></el-table-column>
-        <el-table-column prop="appVersion" label="app版本" width="250"></el-table-column>
+        <el-table-column prop="appVersion" label="app版本" width="150"></el-table-column>
         <el-table-column prop="appPackage" label="app包路径" width="250"></el-table-column>
+        <el-table-column prop="appSort" label="app排序" width="250"></el-table-column>
         <el-table-column prop="appIcon" label="app图标地址" width="250">
             <template #default="{ row }">
                 <el-image style="width: 40px; height: 40px;margin-top: 5px;border: 1px solid silver;" :src="row.appIcon"
@@ -332,7 +333,9 @@ const handleUploadAppUrl = () => {
             <el-form-item label="app包路径" prop="appPackage">
                 <el-input type="textarea" v-model="formData.appPackage" auto-complete="off"></el-input>
             </el-form-item>
-
+            <el-form-item label="app排序" prop="appSort">
+                <el-input-number v-model="formData.appSort" :min="0" :step="10"  auto-complete="off"/> 
+            </el-form-item>
             <el-form-item label="app图标地址" prop="logo">
                 <el-input v-model="formData.appIcon" auto-complete="off"></el-input>
                 <el-row :gutter="5">

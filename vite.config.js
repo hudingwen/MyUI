@@ -33,9 +33,17 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "http://localhost:9291",
+        // target: "https://api.aiwanyun.cn",
         changeOrigin: true,
         // 前端api路由重新,比如api要重写成api2
         // rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      "/img": {
+        target: "http://localhost:82",
+        // target: "https://api.aiwanyun.cn",
+        changeOrigin: true,
+        // 前端api路由重新,比如api要重写成api2
+        rewrite: (path) => path.replace(/^\/img/, ""),
       },
     },
   },
