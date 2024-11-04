@@ -252,6 +252,13 @@ const getUserName = (uid)=>{
         </el-row>
       </template>
     </el-table-column>
+    <el-table-column prop="excludeUsers" label="排除用户" width="250">
+      <template #default="{ row }">
+        <el-row :gutter="2">
+          <el-col :span="1.5" v-for="uid in row.excludeUsers"><el-tag>{{ getUserName(uid) }}</el-tag> </el-col>
+        </el-row>
+      </template>
+    </el-table-column>
 
     <el-table-column prop="CreateTime" label="创建时间" width="180">
     </el-table-column>
@@ -286,6 +293,13 @@ const getUserName = (uid)=>{
       </el-form-item>
       <el-form-item label="绑定用户" prop="bindUsers" v-if="!formData.isAllUser">
         <el-select filterable multiple v-model="formData.bindUsers" placeholder="请选择绑定用户">
+          <el-option v-for="item in trojanUsers" :key="item.id" :label="item.username" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      
+      <el-form-item label="排除用户" prop="excludeUsers" v-if="formData.isAllUser">
+        <el-select filterable multiple v-model="formData.excludeUsers" placeholder="请选择排除用户">
           <el-option v-for="item in trojanUsers" :key="item.id" :label="item.username" :value="item.id">
           </el-option>
         </el-select>

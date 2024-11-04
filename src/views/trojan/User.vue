@@ -60,10 +60,27 @@ onMounted(() => {
 //获取服务器列表
 const trojanServersSingle = ref([])
 const trojanServersAll = ref([])
+
+
+const trojanCusServersSingle = ref([])
+const trojanCusServersAll = ref([])
+
+
+const trojanUrlServersSingle = ref([])
+const trojanUrlServersAll = ref([])
+
 const getServers = () => {
   GetAllServers().then(res => {
-    trojanServersSingle.value = res.data.response;//.ilter(t => !t.isAllUser)
-    trojanServersAll.value = res.data.response;//.filter(t => t.isAllUser)
+    trojanServersSingle.value = res.data.response.dataServer.filter(t => !t.isAllUser)
+    trojanServersAll.value = res.data.response.dataServer.filter(t => t.isAllUser)
+
+    
+    trojanCusServersSingle.value = res.data.response.dataCus.filter(t => !t.isAllUser)
+    trojanCusServersAll.value = res.data.response.dataCus.filter(t => t.isAllUser)
+
+    
+    trojanUrlServersSingle.value = res.data.response.dataUrl.filter(t => !t.isAllUser)
+    trojanUrlServersAll.value = res.data.response.dataUrl.filter(t => t.isAllUser)
   })
 }
 
@@ -465,6 +482,34 @@ const HandleLink = (row) => {
       <el-form-item label="排除服务器" prop="serverIdsExclude">
         <el-select filterable multiple v-model="formData.serverIdsExclude" placeholder="请选择排除服务器">
           <el-option v-for="item in trojanServersAll" :key="item.id" :label="item.servername" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="Cus绑定服务器" prop="serverCusIds">
+        <el-select filterable multiple v-model="formData.serverCusIds" placeholder="请选择绑定服务器">
+          <el-option v-for="item in trojanCusServersSingle" :key="item.id" :label="item.servername" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="排除Cus服务器" prop="serverCusIdsExclude">
+        <el-select filterable multiple v-model="formData.serverCusIdsExclude" placeholder="请选择排除服务器">
+          <el-option v-for="item in trojanCusServersAll" :key="item.id" :label="item.servername" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="Url绑定服务器" prop="serverUrlIds">
+        <el-select filterable multiple v-model="formData.serverUrlIds" placeholder="请选择绑定服务器">
+          <el-option v-for="item in trojanUrlServersSingle" :key="item.id" :label="item.servername" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="排除Url服务器" prop="serverUrlIdsExclude">
+        <el-select filterable multiple v-model="formData.serverUrlIdsExclude" placeholder="请选择排除服务器">
+          <el-option v-for="item in trojanUrlServersAll" :key="item.id" :label="item.servername" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>

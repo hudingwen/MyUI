@@ -325,7 +325,7 @@ const getUserName = (uid) => {
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="排除用户" prop="excludeUsers">
+      <el-form-item label="排除用户" prop="excludeUsers" v-if="formData.isAllUser">
         <el-select filterable multiple v-model="formData.excludeUsers" placeholder="请选择排除用户">
           <el-option v-for="item in trojanUsers" :key="item.id" :label="item.username" :value="item.id">
           </el-option>
