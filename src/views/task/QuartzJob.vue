@@ -376,23 +376,23 @@ const HandleSearch = (page) => {
     <el-table-column prop="TriggerType" label="任务类型" width="90" align="center">
       <template #default="{ row }">
         <el-tag :type="row.TriggerType == 1 ? 'success' : ''" disable-transitions>{{ row.TriggerType == 1 ?
-          "Cron" : "Simple" }}</el-tag>
+        "Cron" : "Simple" }}</el-tag>
       </template>
     </el-table-column>
 
     <el-table-column prop="triggerStatus" label="内存状态" width="90" align="center">
       <template #default="{ row }">
         <el-tag :type="row.Triggers[0].triggerStatus == '正常'
-          ? 'success'
-          : 'danger'
-          " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
+        ? 'success'
+        : 'danger'
+        " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
       </template>
     </el-table-column>
 
     <el-table-column prop="IsStart" label="数据库状态" width="100" align="center">
       <template #default="{ row }">
         <el-tag :type="row.IsStart ? 'success' : 'danger'" disable-transitions>{{ row.IsStart ? "运行中" : "停止"
-        }}</el-tag>
+          }}</el-tag>
       </template>
     </el-table-column>
 
@@ -410,8 +410,12 @@ const HandleSearch = (page) => {
       <template #default="{ row }">
 
         <el-tooltip effect="dark" placement="top">
-
-          <template #content> <span v-html="row.Remark"></span> </template>
+          <template #content>
+            <el-scrollbar style="width: 100%;height: 200px;">
+              <div v-html="row.Remark">
+              </div>
+            </el-scrollbar>
+          </template>
           <el-tag>Log</el-tag>
         </el-tooltip>
       </template>

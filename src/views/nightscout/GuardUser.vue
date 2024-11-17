@@ -411,14 +411,15 @@ const HandleSearchTask = (page) => {
             <el-form-item label="绑定的监护用户" prop="uid">
                 <el-input v-model="formData.uid" :disabled="true">
                     <template #append>
-                        <el-button :icon="Search" @click="handleAllNsGuardUser()" :disabled="formData.gid ? false : true" />
+                        <el-button :icon="Search" @click="handleAllNsGuardUser()"
+                            :disabled="formData.gid ? false : true" />
                     </template>
                 </el-input>
                 <el-text type="primary">{{ formData.uidName }}</el-text>
             </el-form-item>
             <el-form-item label="是否启用" prop="Enabled">
-                <el-switch style="display: block" v-model="formData.Enabled" active-color="#13ce66" inactive-color="#ff4949"
-                    active-text="是" inactive-text="否">
+                <el-switch style="display: block" v-model="formData.Enabled" active-color="#13ce66"
+                    inactive-color="#ff4949" active-text="是" inactive-text="否">
                 </el-switch>
             </el-form-item>
             <el-form-item label="开始时间" prop="startTime">
@@ -592,23 +593,23 @@ const HandleSearchTask = (page) => {
             <el-table-column prop="TriggerType" label="任务类型" width="90" align="center">
                 <template #default="{ row }">
                     <el-tag :type="row.TriggerType == 1 ? 'success' : ''" disable-transitions>{{ row.TriggerType == 1 ?
-                        "Cron" : "Simple" }}</el-tag>
+                "Cron" : "Simple" }}</el-tag>
                 </template>
             </el-table-column>
 
             <el-table-column prop="triggerStatus" label="内存状态" width="90" align="center">
                 <template #default="{ row }">
                     <el-tag :type="row.Triggers[0].triggerStatus == '正常'
-                        ? 'success'
-                        : 'danger'
-                        " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
+                ? 'success'
+                : 'danger'
+                " disable-transitions>{{ row.Triggers[0].triggerStatus }}</el-tag>
                 </template>
             </el-table-column>
 
             <el-table-column prop="IsStart" label="数据库状态" width="100" align="center">
                 <template #default="{ row }">
                     <el-tag :type="row.IsStart ? 'success' : 'danger'" disable-transitions>{{ row.IsStart ? "运行中" : "停止"
-                    }}</el-tag>
+                        }}</el-tag>
                 </template>
             </el-table-column>
 
@@ -624,10 +625,13 @@ const HandleSearchTask = (page) => {
 
             <el-table-column label="日志" fixed="right">
                 <template #default="{ row }">
-
                     <el-tooltip effect="dark" placement="top">
-
-                        <template #content> <span v-html="row.Remark"></span> </template>
+                        <template #content>
+                            <el-scrollbar style="width: 100%;height: 200px;">
+                                <div v-html="row.Remark">
+                                </div>
+                            </el-scrollbar>
+                        </template>
                         <el-tag>Log</el-tag>
                     </el-tooltip>
                 </template>
