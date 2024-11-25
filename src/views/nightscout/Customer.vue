@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, nextTick } from 'vue'
 import {
     getNsCustomer,
     delNsCustomer,
@@ -13,7 +13,36 @@ import {
 import {
     upload
 } from '@/api/customer.js'
+
 import { ElMessageBox, ElMessage } from 'element-plus'
+
+
+// 富文本
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
+
+import { onBeforeUnmount, shallowRef } from 'vue'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+
+// 编辑器实例，必须用 shallowRef
+const editorRef = shallowRef()
+
+// 内容 HTML
+const valueHtml = ref('')
+
+const toolbarConfig = {}
+const editorConfig = { placeholder: '请输入内容...' }
+
+// 组件销毁时，也及时销毁编辑器
+onBeforeUnmount(() => {
+    const editor = editorRef.value
+    if (editor == null) return
+    editor.destroy()
+})
+
+const handleCreated = (editor) => {
+    editorRef.value = editor // 记录 editor 实例，重要！
+}
+
 // 表格初始化
 const tableData = ref([])
 const tableTotal = ref(0)
@@ -68,6 +97,10 @@ const ruleForm = {
 const HandleAdd = () => {
     formData.value = { Enabled: true }
     dialogVisible.value = true
+    nextTick(() => {
+        editorRef.value.setHtml('')
+    })
+
 }
 //编辑
 const HandleEdit = (row) => {
@@ -76,7 +109,12 @@ const HandleEdit = (row) => {
         return;
     }
     formData.value = JSON.parse(JSON.stringify(row))
+    valueHtml.value = formData.value.introduce
+
     dialogVisible.value = true
+    nextTick(() => {
+        editorRef.value.setHtml(formData.value.introduce)
+    })
 }
 //删除
 const HandleDel = (row) => {
@@ -127,6 +165,7 @@ const HandleSubmit = () => {
         }
         ElMessageBox.confirm('确定提交么?')
             .then(() => {
+                formData.value.introduce = editorRef.value.getHtml()
                 if (formData.value.Id) {
                     //编辑
                     updateNsCustomer(formData.value).then((res) => {
@@ -315,7 +354,7 @@ const handleUpload = () => {
         </el-col>
     </el-row>
     <!-- 弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
+    <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="85%" :before-close="handleClose">
         <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon
             label-position="top">
 
@@ -327,26 +366,31 @@ const handleUpload = () => {
             </el-form-item>
             <el-form-item label="客户logo" prop="logo">
                 <el-input v-model="formData.logo" auto-complete="off"></el-input>
-                <el-image style="width: 200px; height: 200px;margin-top: 5px;border: 1px solid silver;"
-                    :src="formData.logo" :preview-src-list="[formData.logo]">
-                    <template #error>
-                        <div class="image-slot">
-                            还未上传
-                        </div>
-                    </template>
-                </el-image>
-                <el-row :gutter="5">
-                    <el-col :span="1.5" class="flexBox">
-                        <el-upload :auto-upload="false" action="" @change="handleChange" :show-file-list="false">
-                            <template #trigger>
-                                <el-button class="flexItem" size="small" type="primary">选择图片</el-button>
-                            </template>
-                        </el-upload>
-                        <el-button size="small" class="flexItem" type="primary" :loading="loading"
-                            @click="click">获取截图</el-button>
-                        <el-button size="small" class="flexItem" type="primary" @click="handleUpload">上传头像</el-button>
-                    </el-col>
-                </el-row>
+                <div>
+                    <el-image style="width: 200px; height: 200px;margin-top: 5px;border: 1px solid silver;"
+                        :src="formData.logo" :preview-src-list="[formData.logo]">
+                        <template #error>
+                            <div class="image-slot">
+                                还未上传
+                            </div>
+                        </template>
+                    </el-image>
+                </div>
+                <div>
+                    <el-row :gutter="5">
+                        <el-col :span="1.5" class="flexBox">
+                            <el-upload :auto-upload="false" action="" @change="handleChange" :show-file-list="false">
+                                <template #trigger>
+                                    <el-button class="flexItem" size="small" type="primary">选择图片</el-button>
+                                </template>
+                            </el-upload>
+                            <el-button size="small" class="flexItem" type="primary" :loading="loading"
+                                @click="click">获取截图</el-button>
+                            <el-button size="small" class="flexItem" type="primary"
+                                @click="handleUpload">上传头像</el-button>
+                        </el-col>
+                    </el-row>
+                </div>
                 <div style="width: 300px;height: 520px;margin-top: 5px;">
                     <vue-cropper ref="cropper" style="height: 300px;" :img="option.img" :outputSize="option.size"
                         :outputType="option.outputType" :info="true" :full="option.full" :canMove="option.canMove"
@@ -365,6 +409,17 @@ const handleUpload = () => {
                 </div>
             </el-form-item>
 
+
+            <el-form-item label="首页介绍" prop="remark">
+                <div style="border: 1px solid #ccc">
+                    <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig"
+                        :mode="mode" />
+                    <Editor style="height: 500px; overflow-y: hidden;" v-model="valueHtml" :defaultConfig="editorConfig"
+                        :mode="mode" @onCreated="handleCreated" />
+                </div>
+            </el-form-item>
+
+
         </el-form>
 
         <template #footer>
@@ -376,7 +431,7 @@ const handleUpload = () => {
             </span>
         </template>
     </el-dialog>
-</template> 
+</template>
 <style lang="scss" scoped>
 .flexBox {
     display: flex;
