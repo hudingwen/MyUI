@@ -30,7 +30,21 @@ const editorRef = shallowRef()
 const valueHtml = ref('')
 
 const toolbarConfig = {}
-const editorConfig = { placeholder: '请输入内容...' }
+const editorConfig = {
+    placeholder: '请输入内容...',
+    MENU_CONF: {
+        uploadImage: {
+            server: '/api/Upload/upForEditor',
+            fieldName: 'file',
+            maxFileSize: 10 * 1024 * 1024, // 10M
+        },
+        uploadVideo: {
+            server: '/api/Upload/upForEditor',
+            fieldName: 'file',
+            maxFileSize: 500 * 1024 * 1024, // 500M
+        }
+    }
+}
 
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
@@ -221,6 +235,17 @@ const uploadInfo = ref([])
 const initData = () => {
     GetDicData({ code: 'uploadInfo' }).then((res) => {
         uploadInfo.value = res.data.response
+
+        //富文本
+
+        var uploadUrl = uploadInfo.value.find(t => t.code == 'uploadUrl')
+        var uploadName = uploadInfo.value.find(t => t.code == 'uploadName')
+        var uploadPass = uploadInfo.value.find(t => t.code == 'uploadPass')
+
+        editorConfig.MENU_CONF.uploadImage.server = uploadUrl.content + editorConfig.MENU_CONF.uploadImage.server + '?uploadName=' + encodeURIComponent(uploadName.content) + '&uploadPass=' + encodeURIComponent(uploadPass.content)
+        editorConfig.MENU_CONF.uploadVideo.server = uploadUrl.content + editorConfig.MENU_CONF.uploadVideo.server + '?uploadName=' + encodeURIComponent(uploadName.content) + '&uploadPass=' + encodeURIComponent(uploadPass.content)
+
+
     })
 }
 // 图片选择
