@@ -11,7 +11,7 @@ const tableTotal = ref(0)
 const refTable = ref()
 const currentRow = ref({})
 const selectRows = ref([])
-const filters = ref({ page: 1, size: 10, key: '', payStatus: 2 })
+const filters = ref({ page: 1, size: 10, key: '', payStatus: '' })
 
 const HandleSelectChange = (selection) => {
   selectRows.value = selection
