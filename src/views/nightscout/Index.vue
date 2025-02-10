@@ -97,7 +97,7 @@ onMounted(() => {
 //新增&编辑操作
 const dialogVisible = ref(false)
 const formData = ref(
-    { cdn: '', position_arr: [], plugins_arr: [], Enabled: true, money: 0, startTime: '', endTime: '', isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认' }
+    { cdn: '', position_arr: [], plugins_arr: [], Enabled: true, money: 0, startTime: '', endTime: '', isRefresh: false, isConnection: true, isKeepPush: false, status: '', resource: '' }
 )
 const refForm = ref()
 const ruleForm = {
@@ -140,7 +140,7 @@ const ruleForm = {
 const HandleAdd = () => {
     let startTime = formatDate(new Date());
     let endTime = formatDate(new Date(), 365);
-    formData.value = { isNeedPassword: false, customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: [], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 0, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '未确认' }
+    formData.value = { isNeedPassword: false, customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: ['北京市'], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 150, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '推广' }
     dialogVisible.value = true
 }
 //编辑
@@ -528,8 +528,7 @@ const handleCDN = () => {
 const customerList = ref([])
 const GetNsList = () => {
     getNsCustomer({ size: 9999 }).then(res => {
-        customerList.value = res.data.response.data;
-        customerList.value.unshift({ Id: "0", name: '默认' })
+        customerList.value = res.data.response.data; 
     });
 }
 
@@ -791,7 +790,7 @@ const GetNsList = () => {
             <el-tooltip class="item" content="不需要额外添加https否则会出问题,修改后需要重启ns实例" placement="top">
                 <el-form-item label="访问地址" prop="url">
                     <el-input v-model="formData.url" placeholder="如不填写,则自动生成">
-                        <template slot="prepend">https://</template>
+                      <template #prepend>https://</template>
                     </el-input>
                 </el-form-item>
             </el-tooltip>
@@ -881,8 +880,7 @@ const GetNsList = () => {
                 <el-select v-model="formData.status" placeholder="请选择状态">
                     <el-option label="未启用" value="未启用"></el-option>
                     <el-option label="试用中" value="试用中"></el-option>
-                    <el-option label="已付费" value="已付费"></el-option>
-                    <el-option label="已到期" value="已到期"></el-option>
+                    <el-option label="已付费" value="已付费"></el-option> 
                 </el-select>
             </el-form-item>
             <el-form-item label="来源" prop="resource">
