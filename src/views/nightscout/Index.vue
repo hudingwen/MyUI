@@ -140,7 +140,7 @@ const ruleForm = {
 const HandleAdd = () => {
     let startTime = formatDate(new Date());
     let endTime = formatDate(new Date(), 365);
-    formData.value = { isNeedPassword: false, customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: ['北京市'], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 150, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '推广' }
+    formData.value = { isNeedPassword: false, customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: ['北京市'], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 150, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '介绍' }
     dialogVisible.value = true
 }
 //编辑
