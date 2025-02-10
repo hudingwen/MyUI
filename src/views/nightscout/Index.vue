@@ -625,8 +625,7 @@ const GetNsList = () => {
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleCustomer(item.customerId)"
                                     style="cursor:pointer;width: auto;text-align: center;" type="info">{{
-                (item.customerId
-                    === "0" ? "默认" : getCustomerName({ customerId: item.customerId }))
+                (getCustomerName({ customerId: item.customerId }))
             }}</el-tag>
                             </el-badge>
                         </el-col>
