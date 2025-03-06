@@ -420,10 +420,8 @@ const HandleLink = (row) => {
           </template>
         </el-popover>
       </template>
-    </el-table-column>
-    <el-table-column prop="CreateTime" label="创建时间" width="180">
-    </el-table-column>
-    <el-table-column prop="ModifyTime" label="更新时间" width="180">
+    </el-table-column> 
+    <el-table-column prop="CreateTime" label="更新时间" width="180">
     </el-table-column>
     <el-table-column prop="passwordshow" label="操作" width="150" fixed="right">
       <template #default="{ row }">
