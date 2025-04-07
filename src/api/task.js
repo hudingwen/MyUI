@@ -26,6 +26,9 @@ export const stopJob = params => {
 export const reCovery = params => {
   return request.get('/api/TasksQz/ReCovery', { params: params });
 };
+export const reCovery2 = params => {
+  return request.get('/api2/TasksQz/ReCovery', { params: params });
+};
 export const pauseJob = params => {
   return request.get('/api/TasksQz/PauseJob', { params: params });
 };
@@ -43,4 +46,7 @@ export const GetTaskOverview = params => {
 };
 export const ExecuteJob = params => {
   return request.get('/api/TasksQz/ExecuteJob', { params: params });
+};
+export const ExecuteJob2 = params => {
+  return request.get('/api2/TasksQz/ExecuteJob', { params: params });
 };

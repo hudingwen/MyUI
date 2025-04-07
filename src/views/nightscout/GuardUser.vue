@@ -20,6 +20,7 @@ const tableData = ref([])
 const tableTotal = ref(0)
 const refTable = ref()
 const currentRow = ref({})
+const currentRow2 = ref({})
 const selectRows = ref([])
 const filters = ref({ page: 1, size: 10, key: '' })
 
@@ -27,6 +28,9 @@ const HandleSelectChange = (selection) => {
     selectRows.value = selection
 }
 const HandleClickRow = (val) => {
+    currentRow.value = val
+}
+const HandleClickRow2 = (val) => {
     currentRow.value = val
 }
 const HandleClearTable = () => {
@@ -171,6 +175,42 @@ const ruleForm = {
         { required: true, message: '结束时间不能为空', trigger: 'change' },
     ]
 }
+// 重启任务
+const HandleReCoveryJob = (row) => {
+    if (!row) {
+        ElMessage.error('请选择要操作的数据!')
+        return;
+    }
+    ElMessageBox.confirm('确认重启任务吗?')
+        .then(() => {
+            let para = { jobId: row.Id };
+            reCovery2(para).then((res) => {
+                HandleSearch()
+                ElMessage.success(res.data.msg || '操作成功')
+            });
+        })
+        .catch((err) => {
+            console.info(err)
+        })
+}
+// 立即执行
+const HandleExecuteJob = (row) => {
+  if (!row) {
+    ElMessage.error('请选择要操作的数据!')
+    return;
+  }
+  ElMessageBox.confirm('确认立即执行任务吗?')
+    .then(() => {
+      let para = { jobId: row.Id };
+      ExecuteJob(para).then((res) => {
+        HandleSearch()
+        ElMessage.success(res.data.msg || '操作成功')
+      });
+    })
+    .catch((err) => {
+      console.info(err)
+    })
+}
 //查看用户列表
 const HandleShowUsers = (row) => {
     if (!row) {
@@ -295,7 +335,7 @@ onMounted(() => {
 const visibleTask = ref(false)
 const taskList = ref([])
 const filtersTask = ref({ page: 1, size: 10, key: '', tableTotal: 0 })
-import { getTaskListPage2 } from '@/api/task.js'
+import { getTaskListPage2, reCovery2,ExecuteJob2 } from '@/api/task.js'
 
 watch(() => filtersTask.value.page, () => {
     HandleSearchTask()
@@ -582,10 +622,17 @@ const HandleSearchTask = (page) => {
             <el-form-item class="flexItem">
                 <el-button type="primary" plain @click="HandleSearchTask(1)">查询</el-button>
             </el-form-item>
+            <el-form-item class="flexItem">
+                <el-button type="primary" plain @click="HandleReCoveryJob(currentRow2)">重启任务</el-button>
+            </el-form-item>
+
+            <el-form-item class="flexItem">
+                <el-button type="primary" plain @click="HandleExecuteJob(currentRow2)">立即执行一次</el-button>
+            </el-form-item>
         </el-form>
 
         <!-- 内容 -->
-        <el-table :data="taskList" highlight-current-row border height="calc(100vh - 300px)">
+        <el-table :data="taskList" highlight-current-row   @row-click="HandleClickRow" border height="calc(100vh - 300px)">
             <!-- <el-table-column type="selection" width="50"></el-table-column> -->
             <el-table-column prop="JobGroup" label="任务组" width="200" show-overflow-tooltip></el-table-column>
             <el-table-column prop="Name" label="任务名称" width="350" show-overflow-tooltip></el-table-column>
