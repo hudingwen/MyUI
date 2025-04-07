@@ -31,7 +31,7 @@ const HandleClickRow = (val) => {
     currentRow.value = val
 }
 const HandleClickRow2 = (val) => {
-    currentRow.value = val
+    currentRow2.value = val
 }
 const HandleClearTable = () => {
     //当前表格数据
@@ -195,21 +195,21 @@ const HandleReCoveryJob = (row) => {
 }
 // 立即执行
 const HandleExecuteJob = (row) => {
-  if (!row) {
-    ElMessage.error('请选择要操作的数据!')
-    return;
-  }
-  ElMessageBox.confirm('确认立即执行任务吗?')
-    .then(() => {
-      let para = { jobId: row.Id };
-      ExecuteJob(para).then((res) => {
-        HandleSearch()
-        ElMessage.success(res.data.msg || '操作成功')
-      });
-    })
-    .catch((err) => {
-      console.info(err)
-    })
+    if (!row) {
+        ElMessage.error('请选择要操作的数据!')
+        return;
+    }
+    ElMessageBox.confirm('确认立即执行任务吗?')
+        .then(() => {
+            let para = { jobId: row.Id };
+            ExecuteJob2(para).then((res) => {
+                HandleSearch()
+                ElMessage.success(res.data.msg || '操作成功')
+            });
+        })
+        .catch((err) => {
+            console.info(err)
+        })
 }
 //查看用户列表
 const HandleShowUsers = (row) => {
@@ -335,7 +335,7 @@ onMounted(() => {
 const visibleTask = ref(false)
 const taskList = ref([])
 const filtersTask = ref({ page: 1, size: 10, key: '', tableTotal: 0 })
-import { getTaskListPage2, reCovery2,ExecuteJob2 } from '@/api/task.js'
+import { getTaskListPage2, reCovery2, ExecuteJob2 } from '@/api/task.js'
 
 watch(() => filtersTask.value.page, () => {
     HandleSearchTask()
@@ -632,7 +632,8 @@ const HandleSearchTask = (page) => {
         </el-form>
 
         <!-- 内容 -->
-        <el-table :data="taskList" highlight-current-row   @row-click="HandleClickRow" border height="calc(100vh - 300px)">
+        <el-table :data="taskList" highlight-current-row @row-click="HandleClickRow2" border
+            height="calc(100vh - 300px)">
             <!-- <el-table-column type="selection" width="50"></el-table-column> -->
             <el-table-column prop="JobGroup" label="任务组" width="200" show-overflow-tooltip></el-table-column>
             <el-table-column prop="Name" label="任务名称" width="350" show-overflow-tooltip></el-table-column>
