@@ -273,7 +273,8 @@ const downFile = (row) => {
                     <el-button type="primary" :disabled="!filters.kid" plain @click="handleDevices">查看设备</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
-                    <el-button type="warning" :disabled="!filters.kid" plain @click="handleProcessingDevices">查看审核中的设备</el-button>
+                    <el-button type="warning" :disabled="!filters.kid" plain
+                        @click="handleProcessingDevices">查看审核中的设备</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="primary" :disabled="!currentRow" plain

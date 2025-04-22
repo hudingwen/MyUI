@@ -9,6 +9,7 @@ import {
     RefreshNightscout,
     GetWeChatCode,
     GetWeChatMiniCode,
+    GetWeChatMiniCodeFix,
     UnbindWeChat,
     UnbindWeChatMini,
     GetLog,
@@ -75,14 +76,14 @@ watch(() => filters.value.size, () => {
     HandleSearch()
 })
 //到期
-watch(() => filters.value.isShowExpire, (newValue,oldValue) => {
-    if(newValue){
+watch(() => filters.value.isShowExpire, (newValue, oldValue) => {
+    if (newValue) {
         filters.value.isShowSoonExpire = false
     }
 })
 //即将到期
-watch(() => filters.value.isShowSoonExpire, (newValue,oldValue) => {
-    if(newValue){
+watch(() => filters.value.isShowSoonExpire, (newValue, oldValue) => {
+    if (newValue) {
         filters.value.isShowExpire = false
     }
 })
@@ -299,6 +300,9 @@ const bindUrl = ref('')
 // 小程序绑定显示
 const showMini = ref(false)
 const miniUrl = ref('')
+// 小程序绑定修复显示
+const showMiniFix = ref(false)
+const miniUrlFix = ref('')
 // 操作日志
 const logForm = ref({ page: 1, size: 10, total: 0 })
 const showLog = ref(false)
@@ -381,6 +385,14 @@ const handleBindMini = (row) => {
         showMini.value = true
         miniUrl.value = res.data.response
     })
+}
+// 小程序绑定二维码修复
+const handleFixMini = (row) => {
+    GetWeChatMiniCodeFix({ nsid: row.Id }).then(res => {
+        showMiniFix.value = true
+        miniUrlFix.value = res.data.response
+    })
+
 }
 // 取消公众号绑定
 const handleUnbind = (row) => {
@@ -528,7 +540,7 @@ const handleCDN = () => {
 const customerList = ref([])
 const GetNsList = () => {
     getNsCustomer({ size: 9999 }).then(res => {
-        customerList.value = res.data.response.data; 
+        customerList.value = res.data.response.data;
     });
 }
 
@@ -597,7 +609,7 @@ const GetNsList = () => {
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleTag(item.name)"
                                     style="cursor:pointer;width: 60px;text-align: center;">{{
-                (item.name ? item.name : '未确认') }}</el-tag>
+                                        (item.name ? item.name : '未确认') }}</el-tag>
                             </el-badge>
                         </el-col>
                     </el-row>
@@ -610,7 +622,7 @@ const GetNsList = () => {
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleTag(item.name)"
                                     style="cursor:pointer;width: 60px;text-align: center;" type="info">{{ (item.name ?
-                item.name : '未确认')
+                                        item.name : '未确认')
                                     }}</el-tag>
                             </el-badge>
                         </el-col>
@@ -625,8 +637,8 @@ const GetNsList = () => {
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleCustomer(item.customerId)"
                                     style="cursor:pointer;width: auto;text-align: center;" type="info">{{
-                (getCustomerName({ customerId: item.customerId }))
-            }}</el-tag>
+                                        (getCustomerName({ customerId: item.customerId }))
+                                    }}</el-tag>
                             </el-badge>
                         </el-col>
                     </el-row>
@@ -754,6 +766,8 @@ const GetNsList = () => {
                                 @click="copy('https://' + row.url + '/api/v1/entries')">复制entries地址</el-dropdown-item>
                             <el-dropdown-item :icon="CopyDocument"
                                 @click="copy('https://' + row.url + ' ' + row.passwd + '\n' + 'https://' + row.passwd + '@' + row.url + '/api/v1')">复制url+passwd+api</el-dropdown-item>
+                            <el-dropdown-item v-if="row.miniUrl" :icon="CopyDocument"
+                                @click="handleFixMini(row)">获取小程序访问修复二维码</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -789,7 +803,7 @@ const GetNsList = () => {
             <el-tooltip class="item" content="不需要额外添加https否则会出问题,修改后需要重启ns实例" placement="top">
                 <el-form-item label="访问地址" prop="url">
                     <el-input v-model="formData.url" placeholder="如不填写,则自动生成">
-                      <template #prepend>https://</template>
+                        <template #prepend>https://</template>
                     </el-input>
                 </el-form-item>
             </el-tooltip>
@@ -879,7 +893,7 @@ const GetNsList = () => {
                 <el-select v-model="formData.status" placeholder="请选择状态">
                     <el-option label="未启用" value="未启用"></el-option>
                     <el-option label="试用中" value="试用中"></el-option>
-                    <el-option label="已付费" value="已付费"></el-option> 
+                    <el-option label="已付费" value="已付费"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="来源" prop="resource">
@@ -972,13 +986,23 @@ const GetNsList = () => {
             </span>
         </template>
     </el-dialog>
-    <!-- 微信绑定二维码 -->
+    <!-- 小程序绑定二维码 -->
     <el-dialog title="小程序绑定二维码" v-model="showMini" width="300px" :before-close="handleClose">
         <el-image style="width: 250px; height: 250px" :src="'data:image/png;base64,' + miniUrl">
         </el-image>
         <template #footer>
             <span class="dialog-footer">
                 <el-button type="primary" @click="showMini = false">关闭</el-button>
+            </span>
+        </template>
+    </el-dialog>
+    <!-- 小程序修复二维码 -->
+    <el-dialog title="小程序修复二维码" v-model="showMiniFix" width="300px" :before-close="handleClose">
+        <el-image style="width: 250px; height: 250px" :src="'data:image/png;base64,' + miniUrlFix">
+        </el-image>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" @click="showMiniFix = false">关闭</el-button>
             </span>
         </template>
     </el-dialog>

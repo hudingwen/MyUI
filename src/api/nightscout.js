@@ -29,6 +29,10 @@ export const GetWeChatCode = params => {
 export const GetWeChatMiniCode = params => {
     return request.get('/api/Nightscout/GetBindQR', { params: params });
 };
+// 获取小程序修复绑定
+export const GetWeChatMiniCodeFix = params => {
+    return request.get('/api/Nightscout/GetFixQR', { params: params });
+};
 // 解除公众号绑定
 export const UnbindWeChat = params => {
     return request.get('/api/Nightscout/UnbindWeChat', { params: params });
