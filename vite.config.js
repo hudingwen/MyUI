@@ -31,18 +31,28 @@ export default defineConfig({
   server: {
     open: true, // 服务启动时是否自动打开浏览器
     proxy: {
-      "/api": {
-        target: "http://localhost:9291",
-        // target: "https://api.aiwanyun.cn",
+      "/api/": {
+        target: "http://localhost:9291", 
         changeOrigin: true,
-        // 前端api路由重新,比如api要重写成api2
+        // 前端api路由重新,比如api去掉
         // rewrite: (path) => path.replace(/^\/api/, ""),
+        rewrite: (path) => { 
+          return path
+        }
       },
-      "/img": {
-        target: "http://localhost:82",
-        // target: "https://api.aiwanyun.cn",
+      "/api2/": {
+        target: "http://localhost:9291", 
         changeOrigin: true,
-        // 前端api路由重新,比如api要重写成api2
+        // 前端api路由重新,比如api2要重写成api
+        rewrite: (path) => { 
+          var newPath = path.replace(/^\/api2/, '/api')  
+          return newPath
+        }
+      },
+      "/img/": {
+        target: "http://localhost:82", 
+        changeOrigin: true,
+        // 前端api路由重新,比如img去掉
         rewrite: (path) => path.replace(/^\/img/, ""),
       },
     },

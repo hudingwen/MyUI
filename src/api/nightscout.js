@@ -219,3 +219,10 @@ export const getUserNowBloodList = params => {
     return request.get('/api2/Guard/getUserNowBloodList', { params: params });
 };
 
+//初始化ns api token
+export const InitNsApiToken = params => {
+    return request.get('/api/Nightscout/InitNsApiToken', { params: params });
+};
+
+
+

@@ -20,7 +20,8 @@ import {
     getAllNsServer,
     GetCDNList,
     ChangeCDN,
-    getNsCustomer
+    getNsCustomer,
+    InitNsApiToken
 } from '@/api/nightscout.js'
 import {
     GetDic,
@@ -420,6 +421,22 @@ const handleUnbindMini = (row) => {
             console.info(err)
         })
 }
+
+// 添加api token
+const handleToken = (row, tokenForceRefresh, title) => {
+    ElMessageBox.confirm("确定为[" + row.name + "]" + title + "吗？")
+        .then(() => {
+            InitNsApiToken({ id: row.Id, tokenForceRefresh: tokenForceRefresh }).then(res => {
+                ElMessage.success(res.data.msg || '成功')
+                HandleSearch();
+            })
+        })
+        .catch((err) => {
+            console.info(err)
+        })
+}
+
+
 // 重启实例
 const handleRefresh = (row) => {
     ElMessageBox.confirm("确认重启刷新[" + row.name + "]的NS服务？")
@@ -609,7 +626,7 @@ const GetNsList = () => {
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleTag(item.name)"
                                     style="cursor:pointer;width: 60px;text-align: center;">{{
-                                        (item.name ? item.name : '未确认') }}</el-tag>
+                (item.name ? item.name : '未确认') }}</el-tag>
                             </el-badge>
                         </el-col>
                     </el-row>
@@ -622,7 +639,7 @@ const GetNsList = () => {
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleTag(item.name)"
                                     style="cursor:pointer;width: 60px;text-align: center;" type="info">{{ (item.name ?
-                                        item.name : '未确认')
+                item.name : '未确认')
                                     }}</el-tag>
                             </el-badge>
                         </el-col>
@@ -637,8 +654,8 @@ const GetNsList = () => {
                             <el-badge :max="999999999" :value="item.count">
                                 <el-tag @click="HandleCustomer(item.customerId)"
                                     style="cursor:pointer;width: auto;text-align: center;" type="info">{{
-                                        (getCustomerName({ customerId: item.customerId }))
-                                    }}</el-tag>
+                (getCustomerName({ customerId: item.customerId }))
+            }}</el-tag>
                             </el-badge>
                         </el-col>
                     </el-row>
@@ -766,7 +783,21 @@ const GetNsList = () => {
                                 @click="copy('https://' + row.url + '/api/v1/entries')">复制entries地址</el-dropdown-item>
                             <el-dropdown-item :icon="CopyDocument"
                                 @click="copy('https://' + row.url + ' ' + row.passwd + '\n' + 'https://' + row.passwd + '@' + row.url + '/api/v1')">复制url+passwd+api</el-dropdown-item>
-                            <el-dropdown-item v-if="row.miniUrl" :icon="CopyDocument"
+
+
+                            <el-dropdown-item v-if="!row.nsToken" :icon="Plus"
+                                @click="handleToken(row, false, '添加api')">添加api token</el-dropdown-item>
+
+                            <el-dropdown-item v-if="row.nsToken" :icon="Plus"
+                                @click="handleToken(row, false, '刷新api')">刷新api token</el-dropdown-item>
+
+                            <el-dropdown-item v-if="row.nsToken" :icon="Plus"
+                                @click="handleToken(row, true, '重置api')">重置api token</el-dropdown-item>
+
+                            <el-dropdown-item :icon="CopyDocument" v-if="row.nsToken" @click="copy(row.nsToken)">复制api
+                                token</el-dropdown-item>
+
+                            <el-dropdown-item v-if="row.miniUrl" :icon="Plus"
                                 @click="handleFixMini(row)">获取小程序访问修复二维码</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
