@@ -142,7 +142,24 @@ const ruleForm = {
 const HandleAdd = () => {
     let startTime = formatDate(new Date());
     let endTime = formatDate(new Date(), 365);
-    formData.value = { isNeedPassword: false, customerId: "0", nsMemory: defaultNsMemory.value, nsVersion: defaultNsVersion.value, cdn: defaultCDN.value, position_arr: ['北京市'], plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key))), Enabled: true, money: 150, startTime: startTime, endTime: endTime, isRefresh: false, isConnection: true, isKeepPush: false, status: '未启用', resource: '介绍' }
+    formData.value = {
+        isNeedPassword: false
+        , customerId: "0"
+        , nsMemory: defaultNsMemory.value
+        , nsVersion: defaultNsVersion.value
+        , cdn: defaultCDN.value, position_arr: ['北京市']
+        , plugins_arr: JSON.parse(JSON.stringify(plugins.value.map(t => t.key)))
+        , Enabled: true
+        , money: 150
+        , startTime: startTime
+        , endTime: endTime
+        , isRefresh: false
+        , isConnection: true
+        , isKeepPush: false
+        , status: '未启用'
+        , resource: '介绍'
+        , isConnection: nsWaring.value.content == '1' ? true : false
+    }
     dialogVisible.value = true
 }
 //编辑
@@ -204,17 +221,19 @@ const HandleSubmit = () => {
                 if (formData.value.Id) {
                     //编辑
                     updateNightscout(formData.value).then((res) => {
-                        HandleSearch()
                         dialogVisible.value = false
+                        HandleSearch() 
                         HandleAllNsServer()
+                        handleSummary()
                         ElMessage.success(res.data.msg || '添加成功')
                     })
                 } else {
                     //新增
                     addNightscout(formData.value).then((res) => {
-                        HandleSearch()
                         dialogVisible.value = false
+                        HandleSearch()
                         HandleAllNsServer()
+                        handleSummary()
                         ElMessage.success(res.data.msg || '编辑成功')
                     })
                 }
@@ -272,6 +291,12 @@ const GetDicList = () => {
     GetDicData({ code: 'NsVersionList' }).then((res) => {
         nsVersion.value = res.data.response
     })
+    GetDicData({ code: 'NSInfo', key: 'nsWaring' }).then((res) => {
+        if (res.data.response && res.data.response.length > 0) {
+            nsWaring.value = res.data.response[0]
+        }
+
+    })
 
 
 }
@@ -287,6 +312,11 @@ const defaultNsVersion = ref('')
 const defaultNsMemory = ref('')
 //Nightscout可用版本列表
 const nsVersion = ref([])
+//ns用户默认是否高低报警
+const nsWaring = ref({
+    // 0-不报警 1-报警
+    content: '1'
+})
 //插件列表
 const plugins = ref([])
 //汇总统计
@@ -560,6 +590,16 @@ const GetNsList = () => {
         customerList.value = res.data.response.data;
     });
 }
+const GetServerUseInfo = (server)=>{
+    if(server){
+        let less = server.holdCount - server.countStart
+        if(less<0) less= 0
+        return server.serverName + '(' + '正在运行:' + server.countStart + '/最多运行:' + server.holdCount + '/已经闲置:'+ server.countStop + '/累积创建:'  + server.count + '/还可创建:'  + less + ')'
+        // return server.serverName + '(' + server.countStop + '/' + server.countStart + '/' + server.count + '/' + server.holdCount + ')'
+    }else{
+        return ''
+    }
+}
 
 </script>
 <template>
@@ -574,7 +614,7 @@ const GetNsList = () => {
                 <el-form-item label="服务器" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
                         <el-option v-for="item in nsServer" :key="item.Id"
-                            :label="item.serverName + '(' + item.countStop + '/' + item.countStart + '/' + item.count + '/' + item.holdCount + ')'"
+                            :label="GetServerUseInfo(item)"
                             :value="item.Id">
                         </el-option>
                     </el-select>
@@ -863,7 +903,7 @@ const GetNsList = () => {
                 <el-form-item label="部署服务器" prop="serverId">
                     <el-select v-model="formData.serverId" placeholder="请选择">
                         <el-option v-for="item in nsServer" :key="item.Id"
-                            :label="item.serverName + '(' + item.countStop + '/' + item.countStart + '/' + item.count + '/' + item.holdCount + ')'"
+                            :label="GetServerUseInfo(item)"
                             :value="item.Id">
                         </el-option>
                     </el-select>
