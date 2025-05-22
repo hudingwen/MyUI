@@ -29,6 +29,7 @@ import {
 } from '@/api/dic.js'
 import { formatDate } from '@/utils/format.js'
 import {
+    Pointer,
     ArrowDown,
     Plus,
     MuteNotification,
@@ -138,6 +139,25 @@ const ruleForm = {
 
 
 }
+//预览
+const viewData = ref([])
+const showView = ref(false)
+const HandleView = () => {
+    if (selectRows.value.length) {
+        //多个
+        viewData.value = selectRows.value
+        showView.value = true
+    } else if (currentRow.value && currentRow.value.Id) {
+        //单个
+        viewData.value = [currentRow.value]
+        showView.value = true
+    } else {
+        ElMessage.error('请选择要操作的数据!')
+    }
+}
+const showUrl = (row) => {
+    window.open('https://' + row.url)
+}
 //新增
 const HandleAdd = () => {
     let startTime = formatDate(new Date());
@@ -222,7 +242,7 @@ const HandleSubmit = () => {
                     //编辑
                     updateNightscout(formData.value).then((res) => {
                         dialogVisible.value = false
-                        HandleSearch() 
+                        HandleSearch()
                         HandleAllNsServer()
                         handleSummary()
                         ElMessage.success(res.data.msg || '添加成功')
@@ -590,13 +610,13 @@ const GetNsList = () => {
         customerList.value = res.data.response.data;
     });
 }
-const GetServerUseInfo = (server)=>{
-    if(server){
+const GetServerUseInfo = (server) => {
+    if (server) {
         let less = server.holdCount - server.countStart
-        if(less<0) less= 0
-        return server.serverName + '(' + '正在运行:' + server.countStart + '/最多运行:' + server.holdCount + '/已经闲置:'+ server.countStop + '/累积创建:'  + server.count + '/还可创建:'  + less + ')'
+        if (less < 0) less = 0
+        return server.serverName + '(' + '正在运行:' + server.countStart + '/最多运行:' + server.holdCount + '/已经闲置:' + server.countStop + '/累积创建:' + server.count + '/还可创建:' + less + ')'
         // return server.serverName + '(' + server.countStop + '/' + server.countStart + '/' + server.count + '/' + server.holdCount + ')'
-    }else{
+    } else {
         return ''
     }
 }
@@ -613,8 +633,7 @@ const GetServerUseInfo = (server)=>{
                 </el-form-item>
                 <el-form-item label="服务器" class="flexItem" label-width="90">
                     <el-select class="flexContent" clearable v-model="filters.serverId" placeholder="请选择要搜索的服务器">
-                        <el-option v-for="item in nsServer" :key="item.Id"
-                            :label="GetServerUseInfo(item)"
+                        <el-option v-for="item in nsServer" :key="item.Id" :label="GetServerUseInfo(item)"
                             :value="item.Id">
                         </el-option>
                     </el-select>
@@ -646,6 +665,9 @@ const GetServerUseInfo = (server)=>{
 
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleSearch(1)">查询</el-button>
+                </el-form-item>
+                <el-form-item class="flexItem">
+                    <el-button type="primary" plain @click="HandleView">预览</el-button>
                 </el-form-item>
                 <el-form-item class="flexItem">
                     <el-button type="primary" plain @click="HandleAdd">添加</el-button>
@@ -712,7 +734,9 @@ const GetServerUseInfo = (server)=>{
         <el-table-column show-overflow-tooltip prop="name" label="名称" width="180"></el-table-column>
         <el-table-column show-overflow-tooltip prop="url" label="访问地址" width="250">
             <template #default="{ row }">
-                {{ (row.url ? 'https://' : '') }}{{ row.url }}
+                <el-icon @click="showUrl(row)" style="cursor: pointer;">
+                    <Pointer />
+                </el-icon> {{ (row.url ? 'https://' : '') }}{{ row.url }}
             </template>
         </el-table-column>
         <el-table-column show-overflow-tooltip prop="passwd" label="密码" width="150"></el-table-column>
@@ -902,8 +926,7 @@ const GetServerUseInfo = (server)=>{
             <el-tooltip content="修改后自动迁移实例并重启" placement="top">
                 <el-form-item label="部署服务器" prop="serverId">
                     <el-select v-model="formData.serverId" placeholder="请选择">
-                        <el-option v-for="item in nsServer" :key="item.Id"
-                            :label="GetServerUseInfo(item)"
+                        <el-option v-for="item in nsServer" :key="item.Id" :label="GetServerUseInfo(item)"
                             :value="item.Id">
                         </el-option>
                     </el-select>
@@ -1100,13 +1123,26 @@ const GetServerUseInfo = (server)=>{
                     :total="logForm.total" v-model:current-page="logForm.page" v-model:page-size="logForm.size" />
             </el-col>
         </el-row>
-
-
-
-
         <template #footer>
             <span class="dialog-footer">
                 <el-button type="primary" @click="showLog = false">关闭</el-button>
+            </span>
+        </template>
+    </el-dialog>
+
+    <!-- 预览 -->
+    <el-dialog title="预览" v-model="showView" width="100%" :before-close="handleClose">
+        <div class="iframe-container">
+            <div v-for="(item, index) in viewData" :key="index">
+                <div style="position: absolute;  width: 200px;height: 50px;cursor: pointer;" @click="showUrl(item)">
+                </div>
+                <iframe :src="'https://'+item.url" class="iframe-box"></iframe>
+            </div>
+
+        </div>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" @click="showView = false">关闭</el-button>
             </span>
         </template>
     </el-dialog>
@@ -1128,5 +1164,25 @@ const GetServerUseInfo = (server)=>{
     .flexContent {
         width: 200px;
     }
+}
+
+.iframe-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* 允许换行 */
+    gap: 16px;
+    /* iframe 之间的间距 */
+    padding: 16px;
+}
+
+.iframe-box {
+    width: 400px;
+    height: 650px;
+    border: none;
+    /* 去除边框 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* 可选：添加一点阴影美化 */
+    border-radius: 8px;
+    /* 可选：圆角 */
 }
 </style>
