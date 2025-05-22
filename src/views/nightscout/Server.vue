@@ -247,7 +247,14 @@ const copy = (row) => {
   <el-table ref="refTable" :data="tableData" highlight-current-row @selection-change="HandleSelectChange"
     @row-click="HandleClickRow" border height="calc(100vh - 300px)">
     <el-table-column type="selection" width="50"></el-table-column>
-    <el-table-column prop="serverName" label="服务器名称" width="250"></el-table-column>
+    <el-table-column prop="serverName" label="服务器名称" width="250">
+      <template #default="{ row }">
+        <el-badge :value="'内存占用:'+row.memory +'%'" :offset="[10, 10]">
+          {{ row.serverName }}
+        </el-badge>
+
+      </template>
+    </el-table-column>
     <el-table-column prop="serverIp" label="服务器ip" width="150"></el-table-column>
     <el-table-column prop="serverHost" label="服务器host" width="150"></el-table-column>
     <el-table-column prop="serverLoginName" label="服务器账号" width="100"></el-table-column>
@@ -345,14 +352,16 @@ const copy = (row) => {
       <el-form-item label="关联ssh服务-数据库" prop="mongoLoginPassword">
         <el-select class="flexContent" clearable v-model="formData.mongoServerId" placeholder="请选择服务器">
           <el-option v-for="item in nsServer" :key="item.Id"
-          :label="item.serverName + '(' + item.countStop + '/'+ item.countStart + '/'+ item.count + '/' + item.holdCount + ')'" :value="item.Id">
+            :label="item.serverName + '(' + item.countStop + '/' + item.countStart + '/' + item.count + '/' + item.holdCount + ')'"
+            :value="item.Id">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="关联ssh服务-网关" prop="mongoLoginPassword">
         <el-select class="flexContent" clearable v-model="formData.nginxServerId" placeholder="请选择服务器">
           <el-option v-for="item in nsServer" :key="item.Id"
-          :label="item.serverName + '(' + item.countStop + '/'+ item.countStart + '/'+ item.count + '/' + item.holdCount + ')'" :value="item.Id">
+            :label="item.serverName + '(' + item.countStop + '/' + item.countStart + '/' + item.count + '/' + item.holdCount + ')'"
+            :value="item.Id">
           </el-option>
         </el-select>
       </el-form-item>
