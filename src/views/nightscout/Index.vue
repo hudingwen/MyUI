@@ -825,10 +825,10 @@ const GetServerUseInfo = (server) => {
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item :icon="Plus" @click="handleBind(row)">获取公众号绑定二维码</el-dropdown-item>
-                            <el-dropdown-item :icon="MuteNotification"
+                            <el-dropdown-item :icon="MuteNotification" v-if="row.isBindWeChat"
                                 @click="handleUnbind(row)">解除公众号绑定</el-dropdown-item>
                             <el-dropdown-item :icon="Plus" @click="handleBindMini(row)">获取小程序绑定二维码</el-dropdown-item>
-                            <el-dropdown-item :icon="MuteNotification"
+                            <el-dropdown-item :icon="MuteNotification" v-if="row.isBindMini"
                                 @click="handleUnbindMini(row)">解除小程序绑定</el-dropdown-item>
                             <el-dropdown-item :icon="Refresh" @click="handleRefresh(row)">重启实例</el-dropdown-item>
                             <el-dropdown-item :icon="CircleCloseFilled" @click="handleStop(row)">停止实例</el-dropdown-item>
@@ -1133,7 +1133,7 @@ const GetServerUseInfo = (server) => {
     <!-- 预览 -->
     <el-dialog title="预览" v-model="showView" width="100%" :before-close="handleClose">
         <div class="iframe-container">
-            <div v-for="(item, index) in viewData" :key="index">
+            <div v-for="(item, index) in viewData" :key="index" class="inner-box">
                 <div style="position: absolute;  width: 200px;height: 50px;cursor: pointer;" @click="showUrl(item)">
                 </div>
                 <iframe :src="'https://'+item.url" class="iframe-box"></iframe>
@@ -1175,9 +1175,21 @@ const GetServerUseInfo = (server) => {
     padding: 16px;
 }
 
+.inner-box {
+    width: 350px;
+}
+
+// 手机端自适应
+@media screen and (max-width:600px) {
+
+    .inner-box {
+        width: 100%;
+    }
+}
+
 .iframe-box {
-    width: 400px;
-    height: 650px;
+    width: 100%;
+    height: 550px;
     border: none;
     /* 去除边框 */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
