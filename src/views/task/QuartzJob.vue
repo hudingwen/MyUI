@@ -460,6 +460,10 @@ const HandleSearch = (page) => {
       <el-form-item label="执行参数" prop="JobParams">
         <el-input class="textarea" type="textarea" :rows="6" v-model="formData.JobParams"></el-input>
       </el-form-item>
+      
+      <el-form-item label="任务数据(一般不要改动)" prop="StoreData">
+        <el-input class="textarea" type="textarea" :rows="2" v-model="formData.StoreData"></el-input>
+      </el-form-item>
       <el-form-item prop="TriggerType" label="是否Cron">
         <el-switch v-model="formData.TriggerType" :active-value="1" :inactive-value="0"> </el-switch>
         <span style="margin-left: 5px; color: #aaa">(1：Cron模式，0：Simple模式)</span>
