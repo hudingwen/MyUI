@@ -846,9 +846,9 @@ const GetServerUseInfo = (server) => {
                             <el-dropdown-item :icon="CopyDocument"
                                 @click="copy('https://' + row.url + '/api/v1/entries')">复制entries地址</el-dropdown-item>
                             <el-dropdown-item :icon="CopyDocument"
-                                @click="copy('https://' + row.url + ' ' + row.passwd + '\n' + 'https://' + row.passwd + '@' + row.url + '/api/v1')">复制url+passwd+api</el-dropdown-item>
+                                @click="copy('https://' + row.url + '\n' + row.passwd + '\n' + row.nsToken + '\n' + 'https://' + row.passwd + '@' + row.url + '/api/v1')">复制url+passwd+api</el-dropdown-item>
 
-
+                                
                             <el-dropdown-item v-if="!row.nsToken" :icon="Plus"
                                 @click="handleToken(row, false, '添加api')">添加api token</el-dropdown-item>
 
