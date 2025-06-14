@@ -130,22 +130,27 @@ const reverse = (ls) => {
       </template>
       <el-scrollbar height="calc(100vh - 300px)">
         <div>
-          <div class="morechildren">
+          <div class="morechildren" >
+
             <el-tree ref="treeRef" :data="data5" show-checkbox default-expand-all node-key="value" highlight-current
               :check-strictly="true">
               <template #default="{ node, data }">
-                <el-scrollbar class="custom-tree-node-right">
+                <span style=" margin-right: 10px;  position: relative; ">{{ node.label }}<el-button
+                    @click.stop="reverse(data.btns)" v-if="(data.btns && data.btns.length > 1)"
+                    style="padding:5px 8px;margin-left:5px;" size="small" plain type="primary">反选</el-button>
+                </span>
+                <el-scrollbar class="custom-tree-node-right" @click.stop>
                   <div style="display: flex; justify-content: space-between; /* 左右分布 */">
-                    <span style=" margin-right: 10px; ">{{ node.label }}<el-button @click.prevent="reverse(data.btns)"
-                        v-if="(data.btns && data.btns.length > 1)" style="padding:5px 8px;margin-left:5px;" size="small"
-                        plain type="primary">反选</el-button>
+
+                    <span>
+                      <el-checkbox-group style=" margin-right: 10px;" v-model="assignBtns">
+                        <el-checkbox @click.stop style="padding: 0px; margin-right: 5px;" v-for="btn in data.btns"
+                          :key="btn.value" :label="btn.value">
+                          {{ btn.label }}
+                        </el-checkbox>
+                      </el-checkbox-group>
                     </span>
-                    <el-checkbox-group style=" margin-right: 10px;" v-model="assignBtns">
-                      <el-checkbox style="padding: 0px; margin-right: 5px;" v-for="btn in data.btns" :key="btn.value"
-                        :label="btn.value.toString()">
-                        {{ btn.label }}
-                      </el-checkbox>
-                    </el-checkbox-group>
+
                   </div>
 
                 </el-scrollbar>
@@ -156,7 +161,7 @@ const reverse = (ls) => {
       </el-scrollbar>
     </el-card>
   </div>
-</template> 
+</template>
 <style lang="scss" scoped>
 .card-header {
   display: flex;
