@@ -30,6 +30,11 @@ export const CreateKey = params => {
 export const CreateKey2 = params => {
     return request.get('/api/AppleKey/CreateKey2', { params: params });
 };
+//生成key3
+export const CreateKey3 = params => {
+    return request.get('/api/AppleKey/CreateKey3', { params: params });
+};
+
 
 
 //获取苹果api账号列表

@@ -8,7 +8,8 @@ import {
     addAppleKey,
     updateAppleKey,
     CreateKey,
-    CreateKey2
+    CreateKey2,
+    CreateKey3
 } from '@/api/apple.js'
 
 import {
@@ -271,6 +272,16 @@ const SubmitKey = () => {
             })
         } else if (formDataKey.value.pass_type == 'auth002') {
             CreateKey2(formDataKey.value).then(res => {
+                ElNotification({
+                    title: '生成成功',
+                    message: res.data.response.auth_code,
+                    duration: 0,
+                })
+                dialogKey.value = false
+                HandleSearch()
+            })
+        } else if (formDataKey.value.pass_type == 'auth003') {
+            CreateKey3(formDataKey.value).then(res => {
                 ElNotification({
                     title: '生成成功',
                     message: res.data.response.auth_code,
