@@ -8,6 +8,7 @@ import {
     delGuardAccount,
     refreshGuardAccount,
     getGuardAccountType,
+    getLibreArea,
     sendSannuoSms,
     validSannuoSms
 } from '@/api/nightscout.js'
@@ -21,6 +22,7 @@ const currentRow = ref({})
 const selectRows = ref([])
 const filters = ref({ page: 1, size: 10, key: '' })
 const guardList = ref([])
+const libreList = ref([])
 const HandleSelectChange = (selection) => {
     selectRows.value = selection
 }
@@ -51,6 +53,7 @@ watch(() => filters.value.size, () => {
 //加载数据
 onMounted(() => {
     GetGuardTypeList()
+    GetLibreAreaList()
     HandleSearch()
 })
 
@@ -71,10 +74,14 @@ const ruleForm = {
     ],
     guardType: [
         { required: true, message: '账号类型不能为空', trigger: 'change' },
+    ],
+    loginArea: [
+        { required: true, message: '雅培登录地区不能为空', trigger: 'change' },
     ]
+
 }
 //查看用户列表
-const HandleShowUsers =(row)=>{
+const HandleShowUsers = (row) => {
     if (!row) {
         ElMessage.error('请选择要操作的数据!')
         return;
@@ -129,18 +136,24 @@ const HandleRefresh = (row) => {
             console.info(err)
         })
 }
-const GetGuardTypeList= ()=>{
-    getGuardAccountType().then(res=>{
+const GetGuardTypeList = () => {
+    getGuardAccountType().then(res => {
         guardList.value = res.data.response
     })
 }
-const SendSannuoSms = ()=>{
-    sendSannuoSms({phone:formData.value.loginName}).then(res=>{
+const GetLibreAreaList = () => {
+    getLibreArea().then(res => {
+        libreList.value = res.data.response
+    })
+}
+
+const SendSannuoSms = () => {
+    sendSannuoSms({ phone: formData.value.loginName }).then(res => {
         ElMessage.success('发送成功')
     })
 }
-const ValidSannuoSms = ()=>{
-    validSannuoSms({phone:formData.value.loginName,code:formData.value.phoneCode}).then(res=>{
+const ValidSannuoSms = () => {
+    validSannuoSms({ phone: formData.value.loginName, code: formData.value.phoneCode }).then(res => {
         formData.value.tokenExpire = res.data.response.tokenExpire
         formData.value.token = res.data.response.access_token
         ElMessage.success('验证成功,请提交保存账号!')
@@ -266,12 +279,13 @@ onMounted(() => {
         @row-click="HandleClickRow" border height="calc(100vh - 300px)">
         <el-table-column type="selection" width="50"></el-table-column>
         <el-table-column type="index" width="60"></el-table-column>
-        <el-table-column prop="name" label="名称" width="250"></el-table-column> 
+        <el-table-column prop="name" label="名称" width="250"></el-table-column>
         <el-table-column prop="loginName" label="登录账号" width="180"></el-table-column>
         <el-table-column prop="loginPass" label="登录密码" width="180"></el-table-column>
         <el-table-column prop="guardType" label="账号类型" width="120">
             <template #default="{ row }">
-                <el-tag type="primary" v-for="item in guardList" v-show="row.guardType === item.code">{{ item.name }}</el-tag> 
+                <el-tag type="primary" v-for="item in guardList" v-show="row.guardType === item.code">{{ item.name
+                    }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="guardType" label="账号状态" width="120">
@@ -308,16 +322,23 @@ onMounted(() => {
             <el-form-item label="登录密码(不需要密码的可随便填写)" prop="loginPass">
                 <el-input v-model="formData.loginPass" />
             </el-form-item>
-            <el-form-item label="账号类型" prop="guardType">  
+            <el-form-item label="账号类型" prop="guardType">
                 <el-select v-model="formData.guardType">
-                    <el-option :label="item.name" v-for="item in guardList" :value="item.code"  /> 
+                    <el-option :label="item.name" v-for="item in guardList" :value="item.code" />
                 </el-select>
             </el-form-item>
             <el-form-item label="三诺验证码(第一次或失效时用)" prop="phoneCode" v-show="formData.guardType === '200'">
-                <el-input v-model="formData.phoneCode"  style="margin-bottom: 5px;"/>   
-                <el-button type="primary" plain @click="SendSannuoSms()">发送</el-button> 
+                <el-input v-model="formData.phoneCode" style="margin-bottom: 5px;" />
+                <el-button type="primary" plain @click="SendSannuoSms()">发送</el-button>
                 <el-button type="primary" plain @click="ValidSannuoSms()">验证</el-button>
             </el-form-item>
+
+            <el-form-item label="雅培登录地区" prop="loginArea" v-show="formData.guardType === '600'">
+                <el-select v-model="formData.loginArea">
+                    <el-option :label="item.name" v-for="item in libreList" :value="item.code" />
+                </el-select>
+            </el-form-item>
+
             <el-form-item label="备注" prop="remark">
                 <el-input v-model="formData.remark" />
             </el-form-item>
@@ -333,7 +354,7 @@ onMounted(() => {
         </template>
     </el-dialog>
 
-    
+
 </template>
 <style lang="scss" scoped>
 .flexBox {

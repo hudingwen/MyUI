@@ -206,6 +206,10 @@ export const refreshGuardAccount = params => {
 export const getGuardAccountType = params => {
     return request.get('/api2/Guard/getGuardAccountType', { params: params });
 };
+//获取雅培地区
+export const getLibreArea = params => {
+    return request.get('/api2/Guard/getLibreArea', { params: params });
+};
 //发送三诺验证码
 export const sendSannuoSms = params => {
     return request.get('/api2/Guard/sendSannuoSms', { params: params });
