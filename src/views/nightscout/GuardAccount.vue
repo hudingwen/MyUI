@@ -284,7 +284,7 @@ onMounted(() => {
         <el-table-column prop="loginPass" label="登录密码" width="180"></el-table-column>
         <el-table-column prop="guardType" label="账号类型" width="120">
             <template #default="{ row }">
-                <el-tag type="primary" v-for="item in guardList" v-show="row.guardType === item.code">{{ item.name
+                <el-tag type="primary" v-for="item in guardList" v-if="row.guardType === item.code">{{ item.name
                     }}</el-tag>
             </template>
         </el-table-column>
@@ -327,13 +327,13 @@ onMounted(() => {
                     <el-option :label="item.name" v-for="item in guardList" :value="item.code" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="三诺验证码(第一次或失效时用)" prop="phoneCode" v-show="formData.guardType === '200'">
+            <el-form-item label="三诺验证码(第一次或失效时用)" prop="phoneCode" v-if="formData.guardType === '200'">
                 <el-input v-model="formData.phoneCode" style="margin-bottom: 5px;" />
                 <el-button type="primary" plain @click="SendSannuoSms()">发送</el-button>
                 <el-button type="primary" plain @click="ValidSannuoSms()">验证</el-button>
             </el-form-item>
 
-            <el-form-item label="雅培登录地区" prop="loginArea" v-show="formData.guardType === '600'">
+            <el-form-item label="雅培登录地区" prop="loginArea" v-if="formData.guardType === '600'">
                 <el-select v-model="formData.loginArea">
                     <el-option :label="item.name" v-for="item in libreList" :value="item.code" />
                 </el-select>
