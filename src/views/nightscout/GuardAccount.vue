@@ -234,6 +234,13 @@ const HandleSearch = (page) => {
         tableTotal.value = res.data.response.dataCount;
     });
 }
+//获取监护类型
+const getGuardType = (guardType) => {
+    var findRow = guardList.value.find(t => t.code == guardType) 
+    if(findRow)
+        return findRow.name
+    return guardType
+}
 
 // 其他
 onMounted(() => {
@@ -284,8 +291,8 @@ onMounted(() => {
         <el-table-column prop="loginPass" label="登录密码" width="180"></el-table-column>
         <el-table-column prop="guardType" label="账号类型" width="120">
             <template #default="{ row }">
-                <el-tag type="primary" v-for="item in guardList" v-if="row.guardType === item.code">{{ item.name
-                    }}</el-tag>
+
+                <el-tag type="primary">{{ getGuardType(row.guardType) }}</el-tag>
             </template>
         </el-table-column>
         <el-table-column prop="guardType" label="账号状态" width="120">
