@@ -345,6 +345,9 @@ onMounted(() => {
                     <el-option :label="item.name" v-for="item in libreList" :value="item.code" />
                 </el-select>
             </el-form-item>
+            <el-form-item label="软件版本" prop="appVersion" v-if="formData.guardType === '600'">
+                 <el-input v-model="formData.appVersion" />
+            </el-form-item>
 
             <el-form-item label="备注" prop="remark">
                 <el-input v-model="formData.remark" />
