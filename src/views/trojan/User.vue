@@ -451,7 +451,7 @@ const HandleLink = (row) => {
     </el-col>
   </el-row>
   <!-- 弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon
       label-position="top">
 
@@ -525,7 +525,7 @@ const HandleLink = (row) => {
     </template>
   </el-dialog>
   <!-- 弹窗-订阅信息 -->
-  <el-dialog v-model="visibleBook" title="订阅信息" width="550px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="visibleBook" title="订阅信息" width="550px" :before-close="handleClose">
     <p>Clash订阅</p>
     <el-text type="success">{{ linkData.clashApi }}</el-text>
     <!-- <p>Clash订阅v2</p>

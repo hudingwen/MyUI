@@ -437,7 +437,7 @@ const HandleSearch = (page) => {
     </el-col>
   </el-row>
   <!-- 弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="550px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="550px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="90px" status-icon
       label-position="top">
       <el-form-item label="任务组" prop="JobGroup">
@@ -533,7 +533,7 @@ const HandleSearch = (page) => {
   </el-dialog>
 
   <!-- 选择任务弹窗 -->
-  <el-dialog v-model="visibleNamespace" title="选择任务" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="visibleNamespace" title="选择任务" :before-close="handleClose">
     <el-table @cell-dblclick="HandleNamespace" :data="tableNamespace" highlight-current-row style="width: 100%">
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column property="name" label="任务名称" width="280">

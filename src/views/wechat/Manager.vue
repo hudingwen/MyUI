@@ -378,7 +378,7 @@ const HandleSubmitMedia = (row) => {
     </el-col>
   </el-row>
   <!-- 弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="!isAdd ? '编辑' : '添加'" width="550px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" :title="!isAdd ? '编辑' : '添加'" width="550px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="150px" status-icon label-position="top">
 
       <el-form-item label="微信公众号ID" prop="publicAccount">
@@ -427,7 +427,7 @@ const HandleSubmitMedia = (row) => {
   </el-dialog>
 
   <!-- 编辑关注 -->
-  <el-dialog v-model="visibleFocus" title="编辑关注" width="550px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="visibleFocus" title="编辑关注" width="550px" :before-close="handleClose">
     <el-form @submit.prevent ref="refFocus" :model="formData" :rules="ruleFocus" label-width="150px" status-icon label-position="top">
       <el-form-item label="微信公众号ID" prop="publicAccount">
         <el-input v-model="formData.publicAccount" auto-complete="off" :disabled="!isAdd"></el-input>
@@ -492,7 +492,7 @@ const HandleSubmitMedia = (row) => {
   </el-dialog>
 
   <!-- 素材选择 -->
-  <el-dialog v-model="visibleMedia" title="编辑关注" width="550px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="visibleMedia" title="编辑关注" width="550px" :before-close="handleClose">
     <el-table :data="mediaList" style="width: 100%" highlight-current-row>
       <el-table-column prop="name" label="名称" min-width="250" show-overflow-tooltip>
       </el-table-column>

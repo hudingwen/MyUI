@@ -64,7 +64,7 @@ const onSelectFile = (uploadFile) => {
 }
 </script>
 <template>
-  <el-dialog v-model="dialogVisible" :title="formModel.id ? '编辑' : '添加'" width="30%" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" :title="formModel.id ? '编辑' : '添加'" width="30%" :before-close="handleClose">
 
 
 

@@ -120,7 +120,7 @@ const handleClose = (done) => {
   </el-result>
 
   <!-- 验证 -->
-  <el-dialog v-model="authDialogVisible" title="开启2FA" :before-close="handleClose" style="width: 350px;">
+  <el-dialog :draggable="true" v-model="authDialogVisible" title="开启2FA" :before-close="handleClose" style="width: 350px;">
 
     <el-form class="mobile-box" @submit.prevent ref="authForm" :model="authFormData" :rules="authFormRule"
       label-width="80px" status-icon label-position="top">
@@ -146,7 +146,7 @@ const handleClose = (done) => {
   </el-dialog>
 
   <!-- 取消 -->
-  <el-dialog v-model="cancelDialogVisible" title="关闭2FA" :before-close="handleClose" style="width: 350px;">
+  <el-dialog :draggable="true" v-model="cancelDialogVisible" title="关闭2FA" :before-close="handleClose" style="width: 350px;">
 
     <el-form class="mobile-box" @submit.prevent ref="cancelForm" :model="cancelFormData" :rules="cancelFormRule"
       label-width="80px" status-icon label-position="top">

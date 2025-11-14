@@ -2,23 +2,12 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // 打包时间戳,防止打包部署后用户页面出现缓存问题
 const timestamp = new Date().getTime()
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    // 暂时取消按需导入,因为按需导入会出现用户等待时间,不友好
-    // 按需自动导入elementPlus,不需要手动import否则样式会出错 
-    // AutoImport({
-    //   resolvers: [ElementPlusResolver()]
-    // }),
-    // Components({
-    //   resolvers: [ElementPlusResolver()]
-    // })
   ],
   base: '/', //路由前缀
   resolve: {
@@ -32,25 +21,26 @@ export default defineConfig({
     open: true, // 服务启动时是否自动打开浏览器
     proxy: {
       "/api/": {
-        target: "http://localhost:9291", 
+        target: "https://api.aiwanyun.cn",
+        // target: "http://localhost:9291", 
         changeOrigin: true,
         // 前端api路由重新,比如api去掉
         // rewrite: (path) => path.replace(/^\/api/, ""),
-        rewrite: (path) => { 
+        rewrite: (path) => {
           return path
         }
       },
       "/api2/": {
-        target: "http://localhost:9291", 
+        target: "http://localhost:9291",
         changeOrigin: true,
         // 前端api路由重新,比如api2要重写成api
-        rewrite: (path) => { 
-          var newPath = path.replace(/^\/api2/, '/api')  
+        rewrite: (path) => {
+          var newPath = path.replace(/^\/api2/, '/api')
           return newPath
         }
       },
       "/img/": {
-        target: "http://localhost:82", 
+        target: "http://localhost:82",
         changeOrigin: true,
         // 前端api路由重新,比如img去掉
         rewrite: (path) => path.replace(/^\/img/, ""),

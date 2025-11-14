@@ -235,7 +235,7 @@ const HandleSearch = (page) => {
     </el-col>
   </el-row>
   <!-- 弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="isAdd ? '添加' : '编辑'" width="450px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" :title="isAdd ? '添加' : '编辑'" width="450px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon label-position="top">
       <el-form-item label="客户代码" prop="CompanyID">
         <el-input v-model="formData.CompanyID" auto-complete="off" :disabled="!isAdd"></el-input>

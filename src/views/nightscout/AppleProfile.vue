@@ -338,7 +338,7 @@ const downFile = (row) => {
         </el-col>
     </el-row>
     <!-- 弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
         <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon
             label-position="top">
             <el-form-item label="苹果账号" prop="kid">
@@ -368,7 +368,7 @@ const downFile = (row) => {
     </el-dialog>
 
     <!-- 设备列表 -->
-    <el-dialog v-model="dialogDeviceVisible" title="设备列表" width="85%" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogDeviceVisible" title="设备列表" width="85%" :before-close="handleClose">
 
         <el-table :data="devices" highlight-current-row border>
             <!-- <el-table-column type="selection" width="50"></el-table-column> -->
@@ -415,7 +415,7 @@ const downFile = (row) => {
         </template>
     </el-dialog>
     <!-- 设备列表 -->
-    <el-dialog v-model="dialogProcessingDeviceVisible" title="设备列表(审核中)" width="85%" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogProcessingDeviceVisible" title="设备列表(审核中)" width="85%" :before-close="handleClose">
 
         <el-table :data="devicesProcessing" highlight-current-row border>
             <!-- <el-table-column type="selection" width="50"></el-table-column> -->

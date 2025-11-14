@@ -885,7 +885,7 @@ const GetServerUseInfo = (server) => {
         </el-col>
     </el-row>
     <!-- 弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" :before-close="handleClose">
         <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="200px" status-icon
             label-position="top">
 
@@ -1072,7 +1072,7 @@ const GetServerUseInfo = (server) => {
         </template>
     </el-dialog>
     <!-- 微信绑定二维码 -->
-    <el-dialog title="微信绑定二维码" v-model="showBind" width="300px" :before-close="handleClose">
+    <el-dialog :draggable="true" title="微信绑定二维码" v-model="showBind" width="300px" :before-close="handleClose">
         <qrcode-vue :value="bindUrl" :size="250" level="H" />
         <template #footer>
             <span class="dialog-footer">
@@ -1081,7 +1081,7 @@ const GetServerUseInfo = (server) => {
         </template>
     </el-dialog>
     <!-- 小程序绑定二维码 -->
-    <el-dialog title="小程序绑定二维码" v-model="showMini" width="300px" :before-close="handleClose">
+    <el-dialog :draggable="true" title="小程序绑定二维码" v-model="showMini" width="300px" :before-close="handleClose">
         <el-image style="width: 250px; height: 250px" :src="'data:image/png;base64,' + miniUrl">
         </el-image>
         <template #footer>
@@ -1091,7 +1091,7 @@ const GetServerUseInfo = (server) => {
         </template>
     </el-dialog>
     <!-- 小程序修复二维码 -->
-    <el-dialog title="小程序修复二维码" v-model="showMiniFix" width="300px" :before-close="handleClose">
+    <el-dialog :draggable="true" title="小程序修复二维码" v-model="showMiniFix" width="300px" :before-close="handleClose">
         <el-image style="width: 250px; height: 250px" :src="'data:image/png;base64,' + miniUrlFix">
         </el-image>
         <template #footer>
@@ -1101,7 +1101,7 @@ const GetServerUseInfo = (server) => {
         </template>
     </el-dialog>
     <!-- 操作日志 -->
-    <el-dialog title="操作日志" v-model="showLog" width="600px" :before-close="handleClose">
+    <el-dialog :draggable="true" title="操作日志" v-model="showLog" width="600px" :before-close="handleClose">
         <el-table :data="tableLog" highlight-current-row border>
             <el-table-column type="index" width="60"></el-table-column>
             <el-table-column show-overflow-tooltip prop="CreateTime" label="创建时间" width="180"></el-table-column>
@@ -1131,7 +1131,7 @@ const GetServerUseInfo = (server) => {
     </el-dialog>
 
     <!-- 预览 -->
-    <el-dialog title="预览" v-model="showView" width="100%" :before-close="handleClose">
+    <el-dialog :draggable="true" title="预览" v-model="showView" width="100%" :before-close="handleClose">
         <div class="iframe-container">
             <div v-for="(item, index) in viewData" :key="index" class="inner-box">
                 <div style="position: absolute;  width: 200px;height: 50px;cursor: pointer;" @click="showUrl(item)">

@@ -381,7 +381,7 @@ const SubmitKey = () => {
         </el-col>
     </el-row>
     <!-- 弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogVisible" :title="formData.id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
         <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon
             label-position="top">
             <el-form-item label="生成激活码数量" prop="auth_code">
@@ -406,7 +406,7 @@ const SubmitKey = () => {
     </el-dialog>
 
     <!-- 生成key -->
-    <el-dialog v-model="dialogKey" title="激活码生成" width="450px" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogKey" title="激活码生成" width="450px" :before-close="handleClose">
         <el-form @submit.prevent ref="refFormKey" :model="formDataKey" :rules="ruleFormKey" label-width="120px"
             status-icon label-position="top">
 

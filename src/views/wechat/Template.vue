@@ -196,7 +196,7 @@ onMounted(() => {
   </el-table>
 
   <!-- 弹窗 -->
-  <el-dialog v-model="dialogVisible" title="模拟消息" width="550px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" title="模拟消息" width="550px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" label-width="120px" status-icon label-position="top">
 
       <el-form-item label="公众号" prop="id">

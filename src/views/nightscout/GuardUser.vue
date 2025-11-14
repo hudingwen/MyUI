@@ -426,7 +426,7 @@ const HandleSearchTask = (page) => {
         </el-col>
     </el-row>
     <!-- 弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
         <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon
             label-position="top">
             <el-form-item label="名称" prop="name">
@@ -487,7 +487,7 @@ const HandleSearchTask = (page) => {
 
 
     <!-- 弹窗-ns用户 -->
-    <el-dialog v-model="dialogVisibleNsUser" title="请选择ns用户" width="450px" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogVisibleNsUser" title="请选择ns用户" width="450px" :before-close="handleClose">
         <!-- 内容 -->
         <el-row :gutter="10" style="margin-bottom: 10px;">
             <el-col :span="18">
@@ -529,7 +529,7 @@ const HandleSearchTask = (page) => {
         </template>
     </el-dialog>
     <!-- 弹窗-监护账户 -->
-    <el-dialog v-model="dialogVisibleNsGuardAccount" title="请选择监护账户" width="450px" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogVisibleNsGuardAccount" title="请选择监护账户" width="450px" :before-close="handleClose">
 
 
         <!-- 内容 -->
@@ -560,7 +560,7 @@ const HandleSearchTask = (page) => {
         </template>
     </el-dialog>
     <!-- 弹窗-监护用户 -->
-    <el-dialog v-model="dialogVisibleNsGuardUser" title="请选择监护用户" width="450px" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogVisibleNsGuardUser" title="请选择监护用户" width="450px" :before-close="handleClose">
 
 
         <!-- 内容 -->
@@ -591,7 +591,7 @@ const HandleSearchTask = (page) => {
         </template>
     </el-dialog>
     <!-- 弹窗-实时血糖 -->
-    <el-dialog v-model="visibleBlood" title="查看实时血糖" width="450px" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="visibleBlood" title="查看实时血糖" width="450px" :before-close="handleClose">
 
 
         <!-- 内容 -->
@@ -614,7 +614,7 @@ const HandleSearchTask = (page) => {
     </el-dialog>
 
     <!-- 弹窗-调度任务 -->
-    <el-dialog v-model="visibleTask" title="调度任务" width="85%" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="visibleTask" title="调度任务" width="85%" :before-close="handleClose">
         <el-form @submit.prevent :inline="true" :model="filtersTask" class="flexBox">
             <el-form-item label="关键词" class="flexItem" label-width="90">
                 <el-input class="flexContent" v-model.trim="filtersTask.key" placeholder="请输入搜索关键词" clearable />

@@ -350,7 +350,7 @@ const handleUpload = () => {
         <el-table-column prop="logo" label="客户logo" min-width="250" show-overflow-tooltip>
 
             <template #default="{ row }">
-                <el-image style="width: 40px; height: 40px;margin-top: 5px;border: 1px solid silver;" :src="row.logo"
+                <el-image :preview-teleported="true" style="width: 40px; height: 40px;margin-top: 5px;border: 1px solid silver;" :src="row.logo"
                     :preview-src-list="[row.logo]">
                     <template #error>
                         <div class="image-slot">
@@ -379,7 +379,7 @@ const handleUpload = () => {
         </el-col>
     </el-row>
     <!-- 弹窗 -->
-    <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="85%" :before-close="handleClose">
+    <el-dialog :draggable="true" v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="85%" :before-close="handleClose">
         <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="120px" status-icon
             label-position="top">
 

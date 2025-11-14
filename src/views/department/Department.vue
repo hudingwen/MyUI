@@ -226,7 +226,7 @@ const HandleSearch = (page) => {
     </el-col>
   </el-row> -->
   <!-- 弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" :title="formData.Id ? '编辑' : '添加'" width="450px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon
       label-position="top">
 

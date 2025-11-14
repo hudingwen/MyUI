@@ -341,7 +341,7 @@ const SubmitReset = () => {
     </el-col>
   </el-row>
   <!-- 弹窗 -->
-  <el-dialog v-model="dialogVisible" :title="isAdd ? '添加' : '编辑'" width="450px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" :title="isAdd ? '添加' : '编辑'" width="450px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="80px" status-icon
       label-position="top">
 
@@ -398,7 +398,7 @@ const SubmitReset = () => {
     </template>
   </el-dialog>
 
-  <el-dialog v-model="dialogResetVisible" title="密码重置" width="450px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogResetVisible" title="密码重置" width="450px" :before-close="handleClose">
 
     <el-form @submit.prevent ref="resetForm" :model="resetFormData" :rules="resetFormRule" label-width="80px" status-icon
       label-position="top">

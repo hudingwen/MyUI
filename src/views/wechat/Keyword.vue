@@ -338,7 +338,7 @@ watch(() => filters.value.size, () => {
 
   <!-- 弹窗 -->
   <!-- 编辑关注 -->
-  <el-dialog v-model="dialogVisible" title="编辑关注" width="550px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="dialogVisible" title="编辑关注" width="550px" :before-close="handleClose">
     <el-form @submit.prevent ref="refForm" :model="formData" :rules="ruleForm" label-width="150px" status-icon
       label-position="top">
 
@@ -398,7 +398,7 @@ watch(() => filters.value.size, () => {
   </el-dialog>
 
   <!-- 素材选择 -->
-  <el-dialog v-model="visibleMedia" title="编辑关注" width="550px" :before-close="handleClose">
+  <el-dialog :draggable="true" v-model="visibleMedia" title="编辑关注" width="550px" :before-close="handleClose">
     <el-table :data="mediaList" style="width: 100%" highlight-current-row>
       <el-table-column prop="name" label="名称" min-width="250" show-overflow-tooltip>
       </el-table-column>
